@@ -1,0 +1,15 @@
+[bootstrap]
+main_collection = /main/main.collectionc
+
+[script]
+shared_state = 1
+
+[display]
+width = 640
+height = 1136
+
+[project]
+title = extension-proto
+
+[library]
+include_dirs = extension-proto

@@ -1,0 +1,44 @@
+- name: proto
+  type: table
+  desc: Compile and use protobuf messages from Lua
+  members:
+
+#*****************************************************************************************************
+
+    - name: encode_person
+      type: function
+      parameters:
+      - name: msg
+        type: table
+      returns:
+      - name: msg
+        type: string
+
+    - name: decode_person
+      type: function
+      parameters:
+      - name: msg
+        type: string
+      returns:
+      - name: msg
+        type: table
+
+#*****************************************************************************************************
+
+    - name: encode_team
+      type: function
+      parameters:
+      - name: msg
+        type: table
+      returns:
+      - name: msg
+        type: string
+
+    - name: decode_team
+      type: function
+      parameters:
+      - name: msg
+        type: string
+      returns:
+      - name: msg
+        type: table

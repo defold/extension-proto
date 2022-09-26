@@ -1,0 +1,66 @@
+{
+    "messages": [
+        {
+            "package": "",
+            "filename": "person.proto",
+            "name": "Person",
+            "name_lower": "person",
+            "type": "Message",
+            "properties": [
+                {
+                    "name": "id",
+                    "type": 5,
+                    "type_name": "",
+                    "repeated": false,
+                    "required": true
+                },
+                {
+                    "name": "name",
+                    "type": 9,
+                    "type_name": "",
+                    "repeated": false,
+                    "required": true
+                },
+                {
+                    "name": "email",
+                    "type": 9,
+                    "type_name": "",
+                    "repeated": false,
+                    "required": false
+                }
+            ]
+        },
+        {
+            "package": "",
+            "filename": "team.proto",
+            "name": "Team",
+            "name_lower": "team",
+            "type": "Message",
+            "properties": [
+                {
+                    "name": "members",
+                    "type": 11,
+                    "type_name": ".Person",
+                    "repeated": true,
+                    "required": false
+                },
+                {
+                    "name": "numbers",
+                    "type": 5,
+                    "type_name": "",
+                    "repeated": true,
+                    "required": false
+                }
+            ]
+        }
+    ],
+    "enums": [],
+    "files": [
+        {
+            "filename": "person.proto"
+        },
+        {
+            "filename": "team.proto"
+        }
+    ]
+}

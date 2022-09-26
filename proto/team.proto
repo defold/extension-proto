@@ -1,0 +1,8 @@
+syntax = "proto2";
+
+import "person.proto";
+
+message Team {
+  repeated Person members = 1;
+  repeated int32 numbers = 2;
+}
