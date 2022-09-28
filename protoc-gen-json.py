@@ -6,7 +6,7 @@ import json
 
 from google.protobuf.compiler import plugin_pb2 as plugin
 from google.protobuf.descriptor_pb2 import DescriptorProto, EnumDescriptorProto, FieldDescriptorProto
-
+from google.protobuf.type_pb2 import Field
 
 def traverse(proto_file):
 
@@ -30,43 +30,96 @@ def traverse(proto_file):
     )
 
 def generate_code(request, response):
+    messages = []
+    enums = []
+    files = []
     output = {
-        "messages": [],
-        "enums": [],
-        "files": [],
+        "messages": messages,
+        "enums": enums,
+        "files": files,
     }
     for proto_file in request.proto_file:
         for item, package in traverse(proto_file):
             file = {
                 "filename": proto_file.name,
+                "filename_h": proto_file.name.replace(".proto", ".pb-c.h")
             }
-            output.get("files").append(file)
+            files.append(file)
 
             data = {
-                'package': proto_file.package or '',
-                'filename': proto_file.name,
-                'name': item.name,
-                'name_lower': item.name.lower(),
+                "package": proto_file.package or '',
+                "filename": proto_file.name,
+                "name": item.name,
+                "name_lower": item.name.lower(),
             }
 
             if isinstance(item, DescriptorProto):
-                data.update({
-                    'type': 'Message',
-                    'properties': [{'name': f.name, 'type': int(f.type), 'type_name': f.type_name, 'repeated': (f.label == FieldDescriptorProto.LABEL_REPEATED), 'required': (f.label == FieldDescriptorProto.LABEL_REQUIRED)}
-                                   for f in item.field]
-                })
-                output.get("messages").append(data)
+                properties = []
+                data.update({ "properties": properties })
+                messages.append(data)
+                for f in item.field:
+                    property_type = int(f.type)
+                    property =  {
+                        "name": f.name,
+                        "type": property_type,
+                        "repeated": (f.label == FieldDescriptorProto.LABEL_REPEATED),
+                        "required": (f.label == FieldDescriptorProto.LABEL_REQUIRED)
+                    }
+
+                    # https://developers.google.com/protocol-buffers/docs/proto#scalar
+                    if property_type == Field.TYPE_DOUBLE:
+                        property["type_lua"] = "number"
+                        property["type_cpp"] = "double"
+                    elif property_type == Field.TYPE_FLOAT:
+                        property["type_lua"] = "number"
+                        property["type_cpp"] = "float"
+                    elif property_type == Field.TYPE_INT64 or property_type == Field.TYPE_SFIXED64 or property_type == Field.TYPE_SINT64:
+                        property["type_lua"] = "number"
+                        property["type_cpp"] = "int64_t"
+                    elif property_type == Field.TYPE_INT32 or property_type == Field.TYPE_SFIXED32 or property_type == Field.TYPE_SINT32:
+                        property["type_lua"] = "number"
+                        property["type_cpp"] = "int32_t"
+                    elif property_type == Field.TYPE_FIXED64 or property_type == Field.TYPE_UINT64:
+                        property["type_lua"] = "number"
+                        property["type_cpp"] = "uint64_t"
+                    elif property_type == Field.TYPE_FIXED32 or property_type == Field.TYPE_UINT32:
+                        property["type_lua"] = "number"
+                        property["type_cpp"] = "uint32_t"
+                    elif property_type == Field.TYPE_BOOL:
+                        property["type_lua"] = "boolean"
+                        property["type_cpp"] = "bool"
+                    elif property_type == Field.TYPE_ENUM:
+                        property["type_lua"] = "number"
+                        property["type_cpp"] = "int"
+                    elif property_type == Field.TYPE_STRING:
+                        property["type_lua"] = "string"
+                        property["type_cpp"] = "char*"
+                    elif property_type == Field.TYPE_BYTES:
+                        property["type_lua"] = "string"
+                        property["type_cpp"] = "uint8_t*"
+                    elif property_type == Field.TYPE_MESSAGE:
+                        property["type_lua"] = f.type_name.replace(".", "").lower()
+                        property["type_cpp"] = f.type_name.replace(".", "") + "*"
+                    elif property_type == Field.TYPE_GROUP:
+                        print("Unsupported type 'group'")
+                    else:
+                        print("Unknown property type!")
+                    properties.append(property)
 
             elif isinstance(item, EnumDescriptorProto):
-                data.update({
-                    'type': 'Enum',
-                    'values': [{'name': v.name, 'value': v.number}
-                               for v in item.value]
-                })
-                output.get("enums").append(data)
+                values = []
+                data.update({ "values": values })
+                enums.append(data)
+                for v in item.value:
+                    value = {
+                        "name": v.name,
+                        "value": v.number
+                    }
+                    values.append(value)
+
 
     f = response.file.add()
-    f.name = 'proto.json'
+    f.name = "proto.json"
     f.content = json.dumps(output, indent=4)
 
 

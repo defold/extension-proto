@@ -22,29 +22,28 @@ static void lua_pushteam(lua_State* L, Team *msg);
 static void lua_pushperson(lua_State* L, Person *msg)
 {
     lua_newtable(L);
-    // required
+
+    // id
     lua_pushstring(L, "id");
     lua_pushnumber(L, msg->id);
     lua_settable(L, -3);
+
+    // name
     lua_pushstring(L, "name");
     lua_pushstring(L, msg->name);
     lua_settable(L, -3);
-    
-    // optional
+
+    // email
     lua_pushstring(L, "email");
     lua_pushstring(L, msg->email);
     lua_settable(L, -3);
-    
-    // repeated
+
 }
 static void lua_pushteam(lua_State* L, Team *msg)
 {
     lua_newtable(L);
-    // required
-    
-    // optional
-    
-    // repeated
+
+    // members
     lua_pushstring(L, "members");
     lua_newtable(L);
     int members_size = msg->n_members;
@@ -55,6 +54,8 @@ static void lua_pushteam(lua_State* L, Team *msg)
         lua_settable(L, -3);
     }
     lua_settable(L, -3);
+
+    // numbers
     lua_pushstring(L, "numbers");
     lua_newtable(L);
     int numbers_size = msg->n_numbers;
@@ -65,6 +66,7 @@ static void lua_pushteam(lua_State* L, Team *msg)
         lua_settable(L, -3);
     }
     lua_settable(L, -3);
+
 }
 
 
@@ -85,23 +87,24 @@ static Person* luaL_checkperson(lua_State* L, int narg)
     Person *msg = (Person*)malloc(sizeof(Person));
     person__init(msg);
 
-    // required
+    // id
     lua_pushstring(L, "id");
     lua_gettable(L, narg);
     msg->id = (int32_t)luaL_checknumber(L, lua_gettop(L));
     lua_pop(L, 1);
+
+    // name
     lua_pushstring(L, "name");
     lua_gettable(L, narg);
     msg->name = (char*)luaL_checkstring(L, lua_gettop(L));
     lua_pop(L, 1);
-    
-    // optional
+
+    // email
     lua_pushstring(L, "email");
     lua_gettable(L, narg);
     msg->email = (char*)luaL_checkstring(L, lua_gettop(L));
     lua_pop(L, 1);
-    
-    // repeated
+
     return msg;
 }
 static Team* luaL_checkteam(lua_State* L, int narg)
@@ -114,11 +117,7 @@ static Team* luaL_checkteam(lua_State* L, int narg)
     Team *msg = (Team*)malloc(sizeof(Team));
     team__init(msg);
 
-    // required
-    
-    // optional
-    
-    // repeated
+    // members
     lua_pushstring(L, "members");
     lua_gettable(L, narg);
     int members_size = lua_objlen(L, lua_gettop(L));
@@ -132,6 +131,8 @@ static Team* luaL_checkteam(lua_State* L, int narg)
         lua_pop(L, 1);
     }
     lua_pop(L, 1);
+
+    // numbers
     lua_pushstring(L, "numbers");
     lua_gettable(L, narg);
     int numbers_size = lua_objlen(L, lua_gettop(L));
@@ -145,6 +146,7 @@ static Team* luaL_checkteam(lua_State* L, int narg)
         lua_pop(L, 1);
     }
     lua_pop(L, 1);
+
     return msg;
 }
 
@@ -163,24 +165,13 @@ static void free_bool(bool) {};
 
 static void free_person(Person* msg)
 {
-    // required
     free_number(msg->id);
     free_string(msg->name);
-    
-    // optional
     free_string(msg->email);
-    
-    // repeated
-    
     free(msg);
 }
 static void free_team(Team* msg)
 {
-    // required
-    
-    // optional
-    
-    // repeated
     int members_size = msg->n_members;
     for (int i = 0; i < members_size; i++)
     {
@@ -191,7 +182,6 @@ static void free_team(Team* msg)
     {
         free_number(msg->numbers[i]);
     }
-    
     free(msg);
 }
 
@@ -226,7 +216,6 @@ static int EncodePerson(lua_State* L)
     lua_pushlstring(L, buffer, person_packed_size);
     free(buffer);
 
-    // DO IT RECURSIVELY!!!!!!
     free_person(msg);
 
     return 1;
@@ -256,7 +245,6 @@ static int EncodeTeam(lua_State* L)
     lua_pushlstring(L, buffer, team_packed_size);
     free(buffer);
 
-    // DO IT RECURSIVELY!!!!!!
     free_team(msg);
 
     return 1;

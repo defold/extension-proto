@@ -5,28 +5,30 @@
             "filename": "person.proto",
             "name": "Person",
             "name_lower": "person",
-            "type": "Message",
             "properties": [
                 {
                     "name": "id",
                     "type": 5,
-                    "type_name": "",
                     "repeated": false,
-                    "required": true
+                    "required": true,
+                    "type_lua": "number",
+                    "type_cpp": "int32_t"
                 },
                 {
                     "name": "name",
                     "type": 9,
-                    "type_name": "",
                     "repeated": false,
-                    "required": true
+                    "required": true,
+                    "type_lua": "string",
+                    "type_cpp": "char*"
                 },
                 {
                     "name": "email",
                     "type": 9,
-                    "type_name": "",
                     "repeated": false,
-                    "required": false
+                    "required": false,
+                    "type_lua": "string",
+                    "type_cpp": "char*"
                 }
             ]
         },
@@ -35,21 +37,22 @@
             "filename": "team.proto",
             "name": "Team",
             "name_lower": "team",
-            "type": "Message",
             "properties": [
                 {
                     "name": "members",
                     "type": 11,
-                    "type_name": ".Person",
                     "repeated": true,
-                    "required": false
+                    "required": false,
+                    "type_lua": "person",
+                    "type_cpp": "Person*"
                 },
                 {
                     "name": "numbers",
                     "type": 5,
-                    "type_name": "",
                     "repeated": true,
-                    "required": false
+                    "required": false,
+                    "type_lua": "number",
+                    "type_cpp": "int32_t"
                 }
             ]
         }
@@ -57,10 +60,12 @@
     "enums": [],
     "files": [
         {
-            "filename": "person.proto"
+            "filename": "person.proto",
+            "filename_h": "person.pb-c.h"
         },
         {
-            "filename": "team.proto"
+            "filename": "team.proto",
+            "filename_h": "team.pb-c.h"
         }
     ]
 }

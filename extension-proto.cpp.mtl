@@ -25,22 +25,10 @@ static void lua_push{{name_lower}}(lua_State* L, {{name}} *msg);
 static void lua_push{{name_lower}}(lua_State* L, {{name}} *msg)
 {
     lua_newtable(L);
-    // required
-    {{#required_properties}}
-    lua_pushstring(L, "{{name}}");
-    lua_push{{type_lua}}(L, msg->{{name}});
-    lua_settable(L, -3);
-    {{/required_properties}}
-    
-    // optional
-    {{#optional_properties}}
-    lua_pushstring(L, "{{name}}");
-    lua_push{{type_lua}}(L, msg->{{name}});
-    lua_settable(L, -3);
-    {{/optional_properties}}
-    
-    // repeated
-    {{#repeated_properties}}
+
+    {{#properties}}
+    {{#repeated}}
+    // {{name}}
     lua_pushstring(L, "{{name}}");
     lua_newtable(L);
     int {{name}}_size = msg->n_{{name}};
@@ -51,7 +39,16 @@ static void lua_push{{name_lower}}(lua_State* L, {{name}} *msg)
         lua_settable(L, -3);
     }
     lua_settable(L, -3);
-    {{/repeated_properties}}
+
+    {{/repeated}}
+    {{^repeated}}
+    // {{name}}
+    lua_pushstring(L, "{{name}}");
+    lua_push{{type_lua}}(L, msg->{{name}});
+    lua_settable(L, -3);
+
+    {{/repeated}}
+    {{/properties}}
 }
 {{/messages}}
 
@@ -75,24 +72,9 @@ static {{name}}* luaL_check{{name_lower}}(lua_State* L, int narg)
     {{name}} *msg = ({{name}}*)malloc(sizeof({{name}}));
     {{name_lower}}__init(msg);
 
-    // required
-    {{#required_properties}}
-    lua_pushstring(L, "{{name}}");
-    lua_gettable(L, narg);
-    msg->{{name}} = ({{type_cpp}})luaL_check{{type_lua}}(L, lua_gettop(L));
-    lua_pop(L, 1);
-    {{/required_properties}}
-    
-    // optional
-    {{#optional_properties}}
-    lua_pushstring(L, "{{name}}");
-    lua_gettable(L, narg);
-    msg->{{name}} = ({{type_cpp}})luaL_check{{type_lua}}(L, lua_gettop(L));
-    lua_pop(L, 1);
-    {{/optional_properties}}
-    
-    // repeated
-    {{#repeated_properties}}
+    {{#properties}}
+    {{#repeated}}
+    // {{name}}
     lua_pushstring(L, "{{name}}");
     lua_gettable(L, narg);
     int {{name}}_size = lua_objlen(L, lua_gettop(L));
@@ -106,7 +88,17 @@ static {{name}}* luaL_check{{name_lower}}(lua_State* L, int narg)
         lua_pop(L, 1);
     }
     lua_pop(L, 1);
-    {{/repeated_properties}}
+
+    {{/repeated}}
+    {{^repeated}}
+    // {{name}}
+    lua_pushstring(L, "{{name}}");
+    lua_gettable(L, narg);
+    msg->{{name}} = ({{type_cpp}})luaL_check{{type_lua}}(L, lua_gettop(L));
+    lua_pop(L, 1);
+
+    {{/repeated}}
+    {{/properties}}
     return msg;
 }
 {{/messages}}
@@ -128,25 +120,18 @@ static void free_bool(bool) {};
 {{#messages}}
 static void free_{{name_lower}}({{name}}* msg)
 {
-    // required
-    {{#required_properties}}
-    free_{{type_lua}}(msg->{{name}});
-    {{/required_properties}}
-    
-    // optional
-    {{#optional_properties}}
-    free_{{type_lua}}(msg->{{name}});
-    {{/optional_properties}}
-    
-    // repeated
-    {{#repeated_properties}}
+    {{#properties}}
+    {{#repeated}}
     int {{name}}_size = msg->n_{{name}};
     for (int i = 0; i < {{name}}_size; i++)
     {
         free_{{type_lua}}(msg->{{name}}[i]);
     }
-    {{/repeated_properties}}
-    
+    {{/repeated}}
+    {{^repeated}}
+    free_{{type_lua}}(msg->{{name}});
+    {{/repeated}}
+    {{/properties}}
     free(msg);
 }
 {{/messages}}
@@ -183,7 +168,6 @@ static int Encode{{name}}(lua_State* L)
     lua_pushlstring(L, buffer, {{name_lower}}_packed_size);
     free(buffer);
 
-    // DO IT RECURSIVELY!!!!!!
     free_{{name_lower}}(msg);
 
     return 1;

@@ -7,7 +7,7 @@ import html
 
 
 def generate():
-    j = json.load(open("proto.json"))
+    j = json.load(open("extension-proto/json/proto.json"))
     # print(json.dumps(j, indent=4))
 
     with open("extension-proto.script_api.mtl", 'r') as f:
