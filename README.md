@@ -24,6 +24,12 @@ This extension requires a bit more setup than most other Defold extensions befor
    * Generate Defold extension source code with Lua bindings to encode and decode all protobuf messages
    * Generate Defold script API definitions for the Lua bindings to enable auto-complete in the editor
 
+The `generate.sh` script uses the `protoc` compiler and the `protobuf-c` C-code generator:
+
+* `protoc` from https://github.com/protocolbuffers/protobuf/releases/tag/v21.6
+* `protobuf-c` from https://github.com/defold/protobuf-c
+
+
 ## Usage
 The extension provides Lua bindings to encode and decode the protobuf messages defined in the `proto/` folder. Example:
 
