@@ -18,13 +18,13 @@ This extension requires a bit more setup than most other Defold extensions befor
 
 2. Add the protobuf message definitions (files with `.proto` extension) that the extension should handle to the `proto/` folder located in the root of the project.
 
-3. Run the `generate.sh` script to generate Lua bindings and other required files. The script does the following:
+3. Run `generate.py` to generate Lua bindings and other required files. The script does the following:
    * Process all .proto files into a single intermediate data file in JSON format containing information about the protobuf messages
    * Generate C representations of the protobuf messages for use at runtime
    * Generate Defold extension source code with Lua bindings to encode and decode all protobuf messages
    * Generate Defold script API definitions for the Lua bindings to enable auto-complete in the editor
 
-The `generate.sh` script uses the `protoc` compiler and the `protobuf-c` C-code generator:
+The `generate.py` script uses the `protoc` compiler and the `protobuf-c` C-code generator:
 
 * `protoc` from https://github.com/protocolbuffers/protobuf/releases/tag/v21.6
 * `protobuf-c` from https://github.com/defold/protobuf-c
