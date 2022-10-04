@@ -21,7 +21,7 @@ EXTENSION_PROTO_JSON = EXTENSION_DIR_ROOT + "/json/proto.json"
 EXTENSION_PROTO_CPP = EXTENSION_DIR_SRC + "/proto.cpp"
 EXTENSION_PROTO_API = EXTENSION_DIR_ROOT + "/api/extension-proto.script_api"
 
-BIN_DIR = BASE_DIR + "/bin"
+PLUGINS_DIR = BASE_DIR + "/plugins"
 PROTO_DIR = "./proto"
 
 
@@ -47,10 +47,13 @@ def get_platform():
 		raise Exception("Unknown platform")
 
 def get_protoc():
-	return BIN_DIR + "/protoc-" + get_platform()
+	return PLUGINS_DIR + "/protoc-" + get_platform()
 
 def get_protoc_gen_c():
-	return BIN_DIR + "/protoc-gen-c-old"
+	return PLUGINS_DIR + "/protoc-gen-c-" + get_platform()
+
+def get_protoc_gen_json():
+	return PLUGINS_DIR + "/protoc-gen-json.py"
 
 def generate_extension():
 	j = json.load(open("extension-proto/json/proto.json"))
@@ -66,7 +69,7 @@ def generate_json():
 	mkdir(EXTENSION_DIR_JSON)
 	args = [
 		get_protoc(),
-		"--plugin=protoc-gen-json=./bin/protoc-gen-json.py",
+		"--plugin=protoc-gen-json=" + get_protoc_gen_json(),
 		"--json_out=" + EXTENSION_DIR_JSON,
 		"--proto_path=" + PROTO_DIR,
 		PROTO_DIR + "/*.proto" ]
