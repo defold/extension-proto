@@ -2,9 +2,10 @@
     "messages": [
         {
             "package": "",
-            "filename": "person.proto",
-            "name": "Person",
-            "name_lower": "person",
+            "filename": "item.proto",
+            "name": "Item",
+            "name_lower": "item",
+            "name_upper": "ITEM",
             "properties": [
                 {
                     "name": "id",
@@ -23,49 +24,84 @@
                     "type_cpp": "char*"
                 },
                 {
-                    "name": "email",
-                    "type": 9,
+                    "name": "weight",
+                    "type": 2,
                     "repeated": false,
-                    "required": false,
-                    "type_lua": "string",
-                    "type_cpp": "char*"
+                    "required": true,
+                    "type_lua": "number",
+                    "type_cpp": "float"
+                },
+                {
+                    "name": "type",
+                    "type": 14,
+                    "repeated": false,
+                    "required": true,
+                    "type_lua": "number",
+                    "type_cpp": "ItemType"
                 }
             ]
         },
         {
             "package": "",
-            "filename": "team.proto",
-            "name": "Team",
-            "name_lower": "team",
+            "filename": "inventory.proto",
+            "name": "Inventory",
+            "name_lower": "inventory",
+            "name_upper": "INVENTORY",
             "properties": [
                 {
-                    "name": "members",
+                    "name": "capacity",
+                    "type": 5,
+                    "repeated": false,
+                    "required": true,
+                    "type_lua": "number",
+                    "type_cpp": "int32_t"
+                },
+                {
+                    "name": "items",
                     "type": 11,
                     "repeated": true,
                     "required": false,
-                    "type_lua": "person",
-                    "type_cpp": "Person*"
-                },
-                {
-                    "name": "numbers",
-                    "type": 5,
-                    "repeated": true,
-                    "required": false,
-                    "type_lua": "number",
-                    "type_cpp": "int32_t"
+                    "type_lua": "item",
+                    "type_cpp": "Item*"
                 }
             ]
         }
     ],
-    "enums": [],
+    "enums": [
+        {
+            "package": "",
+            "filename": "item.proto",
+            "name": "ItemType",
+            "name_lower": "itemtype",
+            "name_upper": "ITEMTYPE",
+            "values": [
+                {
+                    "name": "WEAPON",
+                    "value": 0
+                },
+                {
+                    "name": "ARMOUR",
+                    "value": 1
+                },
+                {
+                    "name": "RING",
+                    "value": 2
+                },
+                {
+                    "name": "BOOK",
+                    "value": 3
+                }
+            ]
+        }
+    ],
     "files": [
         {
-            "filename": "person.proto",
-            "filename_h": "person.pb-c.h"
+            "filename": "item.proto",
+            "filename_h": "item.pb-c.h"
         },
         {
-            "filename": "team.proto",
-            "filename_h": "team.pb-c.h"
+            "filename": "inventory.proto",
+            "filename_h": "inventory.pb-c.h"
         }
     ]
 }

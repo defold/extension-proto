@@ -39,18 +39,20 @@ def generate_code(request, response):
         "files": files,
     }
     for proto_file in request.proto_file:
+        file = {
+            "filename": proto_file.name,
+            "filename_h": proto_file.name.replace(".proto", ".pb-c.h")
+        }
+        files.append(file)
+
         for item, package in traverse(proto_file):
-            file = {
-                "filename": proto_file.name,
-                "filename_h": proto_file.name.replace(".proto", ".pb-c.h")
-            }
-            files.append(file)
 
             data = {
                 "package": proto_file.package or '',
                 "filename": proto_file.name,
                 "name": item.name,
                 "name_lower": item.name.lower(),
+                "name_upper": item.name.upper(),
             }
 
             if isinstance(item, DescriptorProto):
@@ -90,7 +92,7 @@ def generate_code(request, response):
                         property["type_cpp"] = "bool"
                     elif property_type == Field.TYPE_ENUM:
                         property["type_lua"] = "number"
-                        property["type_cpp"] = "int"
+                        property["type_cpp"] = f.type_name.replace(".", "")
                     elif property_type == Field.TYPE_STRING:
                         property["type_lua"] = "string"
                         property["type_cpp"] = "char*"

@@ -6,7 +6,7 @@
 
 #*****************************************************************************************************
 
-    - name: encode_person
+    - name: encode_item
       type: function
       parameters:
       - name: msg
@@ -15,7 +15,7 @@
       - name: msg
         type: string
 
-    - name: decode_person
+    - name: decode_item
       type: function
       parameters:
       - name: msg
@@ -26,7 +26,7 @@
 
 #*****************************************************************************************************
 
-    - name: encode_team
+    - name: encode_inventory
       type: function
       parameters:
       - name: msg
@@ -35,7 +35,7 @@
       - name: msg
         type: string
 
-    - name: decode_team
+    - name: decode_inventory
       type: function
       parameters:
       - name: msg
@@ -43,3 +43,16 @@
       returns:
       - name: msg
         type: table
+
+
+
+#*****************************************************************************************************
+
+    - name: ITEMTYPE_WEAPON
+      type: number
+    - name: ITEMTYPE_ARMOUR
+      type: number
+    - name: ITEMTYPE_RING
+      type: number
+    - name: ITEMTYPE_BOOK
+      type: number

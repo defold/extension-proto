@@ -1,0 +1,8 @@
+syntax = "proto2";
+
+import "item.proto";
+
+message Inventory {
+  required int32  capacity = 1;
+  repeated Item   items = 2;
+}

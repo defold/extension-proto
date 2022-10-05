@@ -25,3 +25,14 @@
       - name: msg
         type: table
 {{/messages}}
+
+
+{{#enums}}
+
+#*****************************************************************************************************
+
+{{#values}}
+    - name: {{name_upper}}_{{name}}
+      type: number
+{{/values}}
+{{/enums}}

@@ -80,6 +80,7 @@ static {{name}}* luaL_check{{name_lower}}(lua_State* L, int narg)
     int {{name}}_size = lua_objlen(L, lua_gettop(L));
     int {{name}}_index = lua_gettop(L);
     msg->n_{{name}} = {{name}}_size;
+    msg->{{name}} = ({{type_cpp}}*)malloc(sizeof({{type_cpp}}) * {{name}}_size);
     for (int i = 0; i < {{name}}_size; i++)
     {
         lua_pushnumber(L, i + 1);
@@ -127,6 +128,7 @@ static void free_{{name_lower}}({{name}}* msg)
     {
         free_{{type_lua}}(msg->{{name}}[i]);
     }
+    free(msg->{{name}});
     {{/repeated}}
     {{^repeated}}
     free_{{type_lua}}(msg->{{name}});
@@ -188,6 +190,19 @@ static void LuaInit(lua_State* L)
     DM_LUA_STACK_CHECK(L, 0);
     int top = lua_gettop(L);
     luaL_register(L, MODULE_NAME, Module_methods);
+
+    #define SETCONSTANT(name, val) \
+    lua_pushnumber(L, (lua_Number) val); \
+    lua_setfield(L, -2, #name);
+
+    {{#enums}}
+    // {{name}}
+    {{#values}}
+    SETCONSTANT({{name_upper}}_{{name}}, {{value}});
+    {{/values}}
+    {{/enums}}
+    #undef SETCONSTANT
+
     lua_pop(L, 1);
 }
 

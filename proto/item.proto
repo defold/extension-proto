@@ -1,0 +1,15 @@
+syntax = "proto2";
+
+enum ItemType {
+  WEAPON = 0;
+  ARMOUR = 1;
+  RING   = 2;
+  BOOK   = 3;
+}
+
+message Item {
+  required int32    id      = 1;
+  required string   name    = 2;
+  required float    weight  = 3;
+  required ItemType type    = 4;
+}
