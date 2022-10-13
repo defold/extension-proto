@@ -65,6 +65,15 @@ def generate_extension():
 		with codecs.open(EXTENSION_PROTO_CPP, "wb", encoding="utf-8") as f:
 			f.write(html.unescape(result))
 
+def find_all_proto_files():
+	files = []
+	# r=root, d=directories, f = files
+	for r, d, f in os.walk(PROTO_DIR):
+		for file in f:
+			if file.endswith(".proto"):
+				files.append(os.path.join(r, file))
+	return files
+
 def generate_json():
 	print("Generating json")
 	mkdir(EXTENSION_DIR_JSON)
@@ -73,7 +82,7 @@ def generate_json():
 		"--plugin=protoc-gen-json=" + get_protoc_gen_json(),
 		"--json_out=" + EXTENSION_DIR_JSON,
 		"--proto_path={} --proto_path={}".format(PROTO_DIR, PROTO_INCLUDES_DIR),
-		PROTO_DIR + "/*.proto" ]
+	] + find_all_proto_files()
 	call(" ".join(args))
 
 def generate_c():
@@ -84,7 +93,7 @@ def generate_c():
 		"--plugin=protoc-gen-c=" + get_protoc_gen_c(),
 		"--c_out=" + EXTENSION_DIR_SRC,
 		"--proto_path={} --proto_path={}".format(PROTO_DIR, PROTO_INCLUDES_DIR),
-		PROTO_DIR + "/*.proto" ]
+	] + find_all_proto_files()
 	call(" ".join(args))
 
 
