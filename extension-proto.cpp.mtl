@@ -18,11 +18,11 @@
  ******************************************************************************/
 
 {{#messages}}
-static void lua_push{{name_lower}}(lua_State* L, {{name}} *msg);
+static void lua_push{{type_cpp_lower}}(lua_State* L, {{type_cpp}} *msg);
 {{/messages}}
 
 {{#messages}}
-static void lua_push{{name_lower}}(lua_State* L, {{name}} *msg)
+static void lua_push{{type_cpp_lower}}(lua_State* L, {{type_cpp}} *msg)
 {
     lua_newtable(L);
 
@@ -35,7 +35,7 @@ static void lua_push{{name_lower}}(lua_State* L, {{name}} *msg)
     for (int i = 0; i < {{name}}_size; i++)
     {
         lua_pushnumber(L, i + 1);
-        lua_push{{type_lua}}(L, msg->{{name}}[i]);
+        lua_push{{type_lua}}(L, ({{type_cpp}})msg->{{name}}[i]);
         lua_settable(L, -3);
     }
     lua_settable(L, -3);
@@ -44,7 +44,7 @@ static void lua_push{{name_lower}}(lua_State* L, {{name}} *msg)
     {{^repeated}}
     // {{name}}
     lua_pushstring(L, "{{name}}");
-    lua_push{{type_lua}}(L, msg->{{name}});
+    lua_push{{type_lua}}(L, ({{type_cpp}})msg->{{name}});
     lua_settable(L, -3);
 
     {{/repeated}}
@@ -57,20 +57,22 @@ static void lua_push{{name_lower}}(lua_State* L, {{name}} *msg)
  * CHECK 
  ******************************************************************************/
 
+static int luaL_checkboolean(lua_State* L, int narg) { return lua_toboolean(L, narg); }
+
 {{#messages}}
-static {{name}}* luaL_check{{name_lower}}(lua_State* L, int narg);
+static {{type_cpp}}* luaL_check{{type_cpp_lower}}(lua_State* L, int narg);
 {{/messages}}
 
 {{#messages}}
-static {{name}}* luaL_check{{name_lower}}(lua_State* L, int narg)
+static {{type_cpp}}* luaL_check{{type_cpp_lower}}(lua_State* L, int narg)
 {
     if (!lua_istable(L, narg)) {
         luaL_error(L, "Expected value at index %d to be a table", narg);
         return 0;
     }
 
-    {{name}} *msg = ({{name}}*)malloc(sizeof({{name}}));
-    {{name_lower}}__init(msg);
+    {{type_cpp}} *msg = ({{type_cpp}}*)malloc(sizeof({{type_cpp}}));
+    {{type_cpp_lower}}__init(msg);
 
     {{#properties}}
     {{#repeated}}
@@ -111,15 +113,16 @@ static {{name}}* luaL_check{{name_lower}}(lua_State* L, int narg)
  ******************************************************************************/
 
 {{#messages}}
-static void free_{{name_lower}}({{name}}* msg);
+static void free_{{type_cpp_lower}}({{type_cpp}}* msg);
 {{/messages}}
 
 static void free_number(int32_t) {};
 static void free_string(char*) {};
 static void free_bool(bool) {};
+static void free_boolean(bool) {};
 
 {{#messages}}
-static void free_{{name_lower}}({{name}}* msg)
+static void free_{{type_cpp_lower}}({{type_cpp}}* msg)
 {
     {{#properties}}
     {{#repeated}}
@@ -141,10 +144,11 @@ static void free_{{name_lower}}({{name}}* msg)
 
 
 /******************************************************************************
- * DECODE
+ * ENCODE AND DECODE
  ******************************************************************************/
 
 {{#messages}}
+{{^google}}
 static int Decode{{name}}(lua_State* L)
 {
     DM_LUA_STACK_CHECK(L, 1);
@@ -174,13 +178,16 @@ static int Encode{{name}}(lua_State* L)
 
     return 1;
 }
+{{/google}}
 {{/messages}}
 
 static const luaL_reg Module_methods[] =
 {
     {{#messages}}
+    {{^google}}
     {"encode_{{name_lower}}", Encode{{name}} },
     {"decode_{{name_lower}}", Decode{{name}} },
+    {{/google}}
     {{/messages}}
     {0,0}
 };
