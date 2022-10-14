@@ -6,6 +6,9 @@
             "name": "Item",
             "name_lower": "item",
             "name_upper": "ITEM",
+            "type_cpp": "Item",
+            "type_cpp_lower": "item",
+            "google": false,
             "properties": [
                 {
                     "name": "id",
@@ -47,6 +50,9 @@
             "name": "Inventory",
             "name_lower": "inventory",
             "name_upper": "INVENTORY",
+            "type_cpp": "Inventory",
+            "type_cpp_lower": "inventory",
+            "google": false,
             "properties": [
                 {
                     "name": "capacity",
@@ -74,6 +80,9 @@
             "name": "ItemType",
             "name_lower": "itemtype",
             "name_upper": "ITEMTYPE",
+            "type_cpp": "ItemType",
+            "type_cpp_lower": "item_type",
+            "google": false,
             "values": [
                 {
                     "name": "WEAPON",

@@ -25,22 +25,22 @@ static void lua_pushitem(lua_State* L, Item *msg)
 
     // id
     lua_pushstring(L, "id");
-    lua_pushnumber(L, msg->id);
+    lua_pushnumber(L, (int32_t)msg->id);
     lua_settable(L, -3);
 
     // name
     lua_pushstring(L, "name");
-    lua_pushstring(L, msg->name);
+    lua_pushstring(L, (char*)msg->name);
     lua_settable(L, -3);
 
     // weight
     lua_pushstring(L, "weight");
-    lua_pushnumber(L, msg->weight);
+    lua_pushnumber(L, (float)msg->weight);
     lua_settable(L, -3);
 
     // type
     lua_pushstring(L, "type");
-    lua_pushnumber(L, msg->type);
+    lua_pushnumber(L, (ItemType)msg->type);
     lua_settable(L, -3);
 
 }
@@ -50,7 +50,7 @@ static void lua_pushinventory(lua_State* L, Inventory *msg)
 
     // capacity
     lua_pushstring(L, "capacity");
-    lua_pushnumber(L, msg->capacity);
+    lua_pushnumber(L, (int32_t)msg->capacity);
     lua_settable(L, -3);
 
     // items
@@ -60,7 +60,7 @@ static void lua_pushinventory(lua_State* L, Inventory *msg)
     for (int i = 0; i < items_size; i++)
     {
         lua_pushnumber(L, i + 1);
-        lua_pushitem(L, msg->items[i]);
+        lua_pushitem(L, (Item*)msg->items[i]);
         lua_settable(L, -3);
     }
     lua_settable(L, -3);
@@ -71,6 +71,8 @@ static void lua_pushinventory(lua_State* L, Inventory *msg)
 /******************************************************************************
  * CHECK 
  ******************************************************************************/
+
+static int luaL_checkboolean(lua_State* L, int narg) { return lua_toboolean(L, narg); }
 
 static Item* luaL_checkitem(lua_State* L, int narg);
 static Inventory* luaL_checkinventory(lua_State* L, int narg);
@@ -158,6 +160,7 @@ static void free_inventory(Inventory* msg);
 static void free_number(int32_t) {};
 static void free_string(char*) {};
 static void free_bool(bool) {};
+static void free_boolean(bool) {};
 
 static void free_item(Item* msg)
 {
@@ -182,7 +185,7 @@ static void free_inventory(Inventory* msg)
 
 
 /******************************************************************************
- * DECODE
+ * ENCODE AND DECODE
  ******************************************************************************/
 
 static int DecodeItem(lua_State* L)

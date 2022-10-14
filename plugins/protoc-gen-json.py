@@ -3,10 +3,16 @@
 import sys
 import itertools
 import json
+import re
 
 from google.protobuf.compiler import plugin_pb2 as plugin
 from google.protobuf.descriptor_pb2 import DescriptorProto, EnumDescriptorProto, FieldDescriptorProto
 from google.protobuf.type_pb2 import Field
+
+
+def log(*args):
+    print(*args, file=sys.stderr)
+
 
 def traverse(proto_file):
 
@@ -18,16 +24,42 @@ def traverse(proto_file):
                 for enum in item.enum_type:
                     yield enum, package
 
-                for nested in item.nested_type:
-                    nested_package = package + item.name
-
-                    for nested_item in _traverse(nested, nested_package):
+                if item.nested_type:
+                    nested_package = package + "." + item.name
+                    for nested_item in item.nested_type:
                         yield nested_item, nested_package
 
     return itertools.chain(
         _traverse(proto_file.package, proto_file.enum_type),
         _traverse(proto_file.package, proto_file.message_type),
     )
+
+def camel_to_snake(s):
+    return re.sub(r'(?<!^)(?=[A-Z])', '_', s).lower()
+
+def type_name_to_lua(type_name):
+    if type_name.startswith("."):
+        type_name = type_name[1:]
+
+    type_name_parts = []
+    for name in type_name.split("."):
+        name = camel_to_snake(name)
+        type_name_parts.append(name)
+    return "__".join(type_name_parts)
+
+def type_name_to_cpp(type_name, lower=False):
+    if type_name.startswith("."):
+        type_name = type_name[1:]
+
+    type_name_parts = []
+    for name in type_name.split("."):
+        if lower:
+            name = camel_to_snake(name)
+        else:
+            name = name.capitalize() if name.lower() == name else name
+        type_name_parts.append(name)
+    return "__".join(type_name_parts)
+
 
 def generate_code(request, response):
     messages = []
@@ -39,6 +71,7 @@ def generate_code(request, response):
         "files": files,
     }
     for proto_file in request.proto_file:
+        # log(proto_file.name)
         file = {
             "filename": proto_file.name,
             "filename_h": proto_file.name.replace(".proto", ".pb-c.h")
@@ -46,13 +79,16 @@ def generate_code(request, response):
         files.append(file)
 
         for item, package in traverse(proto_file):
-
+            item_name = item.name if hasattr(item, "name") else "?"
             data = {
-                "package": proto_file.package or '',
+                "package": package or '',
                 "filename": proto_file.name,
-                "name": item.name,
-                "name_lower": item.name.lower(),
-                "name_upper": item.name.upper(),
+                "name": item_name,
+                "name_lower": item_name.lower(),
+                "name_upper": item_name.upper(),
+                "type_cpp":  type_name_to_cpp(package + "." + item_name),
+                "type_cpp_lower": type_name_to_cpp(package + "." + item_name, lower=True),
+                "google": proto_file.name.startswith("google")
             }
 
             if isinstance(item, DescriptorProto):
@@ -92,16 +128,17 @@ def generate_code(request, response):
                         property["type_cpp"] = "bool"
                     elif property_type == Field.TYPE_ENUM:
                         property["type_lua"] = "number"
-                        property["type_cpp"] = f.type_name.replace(".", "")
+                        property["type_cpp"] = type_name_to_cpp(f.type_name)
                     elif property_type == Field.TYPE_STRING:
                         property["type_lua"] = "string"
                         property["type_cpp"] = "char*"
                     elif property_type == Field.TYPE_BYTES:
                         property["type_lua"] = "string"
-                        property["type_cpp"] = "uint8_t*"
+                        property["type_cpp"] = "char*"
+                        # property["type_cpp"] = "uint8_t*"
                     elif property_type == Field.TYPE_MESSAGE:
-                        property["type_lua"] = f.type_name.replace(".", "").lower()
-                        property["type_cpp"] = f.type_name.replace(".", "") + "*"
+                        property["type_lua"] = type_name_to_lua(f.type_name)
+                        property["type_cpp"] = type_name_to_cpp(f.type_name) + "*"
                     elif property_type == Field.TYPE_GROUP:
                         print("Unsupported type 'group'")
                     else:
