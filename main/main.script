@@ -20,12 +20,12 @@ local ring_of_wisdom = {
 function init(self)
 	local item = broadsword
 	-- serialize the Lua table to an Item message
-	local item_msg = proto.
+	local item_msg = proto.encode_game_item(item)
 	assert(item_msg)
 	assert(#item_msg == 21)
 
 	-- decode the binary message back to a Lua table
-	local decoded_item = proto.decode_item(item_msg)
+	local decoded_item = proto.decode_game_item(item_msg)
 	assert(decoded_item.id == item.id)
 	assert(decoded_item.name == item.name)
 	assert(decoded_item.type == item.type)
@@ -40,10 +40,10 @@ function init(self)
 			ring_of_wisdom
 		}
 	}
-	local inv_msg = proto.encode_inventory(inventory)
+	local inv_msg = proto.encode_game_inventory(inventory)
 	assert(inv_msg)
 	
-	local decoded_inv = proto.decode_inventory(inv_msg)
+	local decoded_inv = proto.decode_game_inventory(inv_msg)
 	pprint(decoded_inv)
 	assert(decoded_inv.capacity == inventory.capacity)
 	assert(#decoded_inv.items == #inventory.items)
