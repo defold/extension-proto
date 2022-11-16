@@ -14,7 +14,7 @@ pip install pystache
 ## Setup
 This extension requires a bit more setup than most other Defold extensions before it can be used in a project:
 
-1. To use this extension in your Defold project, either [download a copy](https://github.com/defold/extension-proto/archive/refs/heads/master.zip) of the project or [create a fork](https://github.com/defold/extension-proto/fork).
+1. To use this extension in your Defold project, either [download a copy](https://github.com/defold/extension-proto/archive/refs/heads/master.zip) of the project, [create a fork](https://github.com/defold/extension-proto/fork) or [create a new repo from this template project](https://github.com/defold/extension-proto/generate).
 
 2. Add the protobuf message definitions (files with `.proto` extension) that the extension should handle to the `proto/` folder located in the root of the project.
 
