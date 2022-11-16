@@ -16,7 +16,7 @@ PROTOBUF_C__BEGIN_DECLS
 
 #include "item.pb-c.h"
 
-typedef struct Inventory Inventory;
+typedef struct Game__Inventory Game__Inventory;
 
 
 /* --- enums --- */
@@ -24,41 +24,41 @@ typedef struct Inventory Inventory;
 
 /* --- messages --- */
 
-struct  Inventory
+struct  Game__Inventory
 {
   ProtobufCMessage base;
   int32_t capacity;
   size_t n_items;
-  Item **items;
+  Game__Item **items;
 };
-#define INVENTORY__INIT \
- { PROTOBUF_C_MESSAGE_INIT (&inventory__descriptor) \
+#define GAME__INVENTORY__INIT \
+ { PROTOBUF_C_MESSAGE_INIT (&game__inventory__descriptor) \
     , 0, 0,NULL }
 
 
-/* Inventory methods */
-void   inventory__init
-                     (Inventory         *message);
-size_t inventory__get_packed_size
-                     (const Inventory   *message);
-size_t inventory__pack
-                     (const Inventory   *message,
+/* Game__Inventory methods */
+void   game__inventory__init
+                     (Game__Inventory         *message);
+size_t game__inventory__get_packed_size
+                     (const Game__Inventory   *message);
+size_t game__inventory__pack
+                     (const Game__Inventory   *message,
                       uint8_t             *out);
-size_t inventory__pack_to_buffer
-                     (const Inventory   *message,
+size_t game__inventory__pack_to_buffer
+                     (const Game__Inventory   *message,
                       ProtobufCBuffer     *buffer);
-Inventory *
-       inventory__unpack
+Game__Inventory *
+       game__inventory__unpack
                      (ProtobufCAllocator  *allocator,
                       size_t               len,
                       const uint8_t       *data);
-void   inventory__free_unpacked
-                     (Inventory *message,
+void   game__inventory__free_unpacked
+                     (Game__Inventory *message,
                       ProtobufCAllocator *allocator);
 /* --- per-message closures --- */
 
-typedef void (*Inventory_Closure)
-                 (const Inventory *message,
+typedef void (*Game__Inventory_Closure)
+                 (const Game__Inventory *message,
                   void *closure_data);
 
 /* --- services --- */
@@ -66,7 +66,7 @@ typedef void (*Inventory_Closure)
 
 /* --- descriptors --- */
 
-extern const ProtobufCMessageDescriptor inventory__descriptor;
+extern const ProtobufCMessageDescriptor game__inventory__descriptor;
 
 PROTOBUF_C__END_DECLS
 

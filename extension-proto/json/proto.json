@@ -1,13 +1,17 @@
 {
     "messages": [
         {
-            "package": "",
+            "package": "Game",
             "filename": "item.proto",
             "name": "Item",
             "name_lower": "item",
             "name_upper": "ITEM",
-            "type_cpp": "Item",
-            "type_cpp_lower": "item",
+            "type_cpp": "Game__Item",
+            "type_cpp_lower": "game__item",
+            "type_cpp_upper": "GAME__ITEM",
+            "parent": null,
+            "parent_lower": null,
+            "parent_upper": null,
             "google": false,
             "properties": [
                 {
@@ -40,18 +44,22 @@
                     "repeated": false,
                     "required": true,
                     "type_lua": "number",
-                    "type_cpp": "ItemType"
+                    "type_cpp": "Game__Item__ItemType"
                 }
             ]
         },
         {
-            "package": "",
+            "package": "Game",
             "filename": "inventory.proto",
             "name": "Inventory",
             "name_lower": "inventory",
             "name_upper": "INVENTORY",
-            "type_cpp": "Inventory",
-            "type_cpp_lower": "inventory",
+            "type_cpp": "Game__Inventory",
+            "type_cpp_lower": "game__inventory",
+            "type_cpp_upper": "GAME__INVENTORY",
+            "parent": null,
+            "parent_lower": null,
+            "parent_upper": null,
             "google": false,
             "properties": [
                 {
@@ -67,21 +75,25 @@
                     "type": 11,
                     "repeated": true,
                     "required": false,
-                    "type_lua": "item",
-                    "type_cpp": "Item*"
+                    "type_lua": "game__item",
+                    "type_cpp": "Game__Item*"
                 }
             ]
         }
     ],
     "enums": [
         {
-            "package": "",
+            "package": "Game",
             "filename": "item.proto",
             "name": "ItemType",
             "name_lower": "itemtype",
             "name_upper": "ITEMTYPE",
-            "type_cpp": "ItemType",
-            "type_cpp_lower": "item_type",
+            "type_cpp": "Game__Item__ItemType",
+            "type_cpp_lower": "game__item__item_type",
+            "type_cpp_upper": "GAME__ITEM__ITEM_TYPE",
+            "parent": "Item",
+            "parent_lower": "item",
+            "parent_upper": "ITEM",
             "google": false,
             "values": [
                 {

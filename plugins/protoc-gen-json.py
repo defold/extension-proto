@@ -18,16 +18,16 @@ def traverse(proto_file):
 
     def _traverse(package, items):
         for item in items:
-            yield item, package
+            yield item, package, None
 
             if isinstance(item, DescriptorProto):
                 for enum in item.enum_type:
-                    yield enum, package
+                    yield enum, package, item
 
                 if item.nested_type:
                     nested_package = package + "." + item.name
                     for nested_item in item.nested_type:
-                        yield nested_item, nested_package
+                        yield nested_item, nested_package, item
 
     return itertools.chain(
         _traverse(proto_file.package, proto_file.enum_type),
@@ -47,7 +47,7 @@ def type_name_to_lua(type_name):
         type_name_parts.append(name)
     return "__".join(type_name_parts)
 
-def type_name_to_cpp(type_name, lower=False):
+def type_name_to_cpp(type_name, lower=False, upper=False):
     if type_name.startswith("."):
         type_name = type_name[1:]
 
@@ -55,6 +55,8 @@ def type_name_to_cpp(type_name, lower=False):
     for name in type_name.split("."):
         if lower:
             name = camel_to_snake(name)
+        elif upper:
+            name = camel_to_snake(name).upper()
         else:
             name = name.capitalize() if name.lower() == name else name
         type_name_parts.append(name)
@@ -78,16 +80,23 @@ def generate_code(request, response):
         }
         files.append(file)
 
-        for item, package in traverse(proto_file):
+        for item, package, parent in traverse(proto_file):
             item_name = item.name if hasattr(item, "name") else "?"
+            parent_name = parent.name if parent else None
+            item_type_name = package + "." + (parent_name + "." if parent_name else "") + item_name
+
             data = {
                 "package": package or '',
                 "filename": proto_file.name,
                 "name": item_name,
                 "name_lower": item_name.lower(),
                 "name_upper": item_name.upper(),
-                "type_cpp":  type_name_to_cpp(package + "." + item_name),
-                "type_cpp_lower": type_name_to_cpp(package + "." + item_name, lower=True),
+                "type_cpp":  type_name_to_cpp(item_type_name),
+                "type_cpp_lower": type_name_to_cpp(item_type_name, lower=True),
+                "type_cpp_upper":  type_name_to_cpp(item_type_name, upper=True),
+                "parent": parent_name,
+                "parent_lower": parent_name.lower() if parent_name else None,
+                "parent_upper": parent_name.upper() if parent_name else None,
                 "google": proto_file.name.startswith("google")
             }
 

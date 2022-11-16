@@ -1,18 +1,18 @@
 local broadsword = {
 	id = 1,
-	type = proto.ITEMTYPE_WEAPON,
+	type = proto.GAME__ITEM__ITEM_TYPE_WEAPON,
 	name = "Broadsword",
 	weight = 2
 }
 local chainmail = {
 	id = 2,
-	type = proto.ITEMTYPE_ARMOUR,
+	type = proto.GAME__ITEM__ITEM_TYPE_ARMOUR,
 	name = "Chainmail",
 	weight = 25
 }
 local ring_of_wisdom = {
 	id = 3,
-	type = proto.ITEMTYPE_RING,
+	type = proto.GAME__ITEM__ITEM_TYPE_RING,
 	name = "Ring of Wisdom",
 	weight = 0
 }

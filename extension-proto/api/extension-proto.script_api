@@ -48,11 +48,11 @@
 
 #*****************************************************************************************************
 
-    - name: ITEMTYPE_WEAPON
+    - name: GAME__ITEM__ITEM_TYPE_WEAPON
       type: number
-    - name: ITEMTYPE_ARMOUR
+    - name: GAME__ITEM__ITEM_TYPE_ARMOUR
       type: number
-    - name: ITEMTYPE_RING
+    - name: GAME__ITEM__ITEM_TYPE_RING
       type: number
-    - name: ITEMTYPE_BOOK
+    - name: GAME__ITEM__ITEM_TYPE_BOOK
       type: number

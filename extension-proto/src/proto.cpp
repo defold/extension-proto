@@ -16,10 +16,10 @@
  * PUSH
  ******************************************************************************/
 
-static void lua_pushitem(lua_State* L, Item *msg);
-static void lua_pushinventory(lua_State* L, Inventory *msg);
+static void lua_pushgame__item(lua_State* L, Game__Item *msg);
+static void lua_pushgame__inventory(lua_State* L, Game__Inventory *msg);
 
-static void lua_pushitem(lua_State* L, Item *msg)
+static void lua_pushgame__item(lua_State* L, Game__Item *msg)
 {
     lua_newtable(L);
 
@@ -40,11 +40,11 @@ static void lua_pushitem(lua_State* L, Item *msg)
 
     // type
     lua_pushstring(L, "type");
-    lua_pushnumber(L, (ItemType)msg->type);
+    lua_pushnumber(L, (Game__Item__ItemType)msg->type);
     lua_settable(L, -3);
 
 }
-static void lua_pushinventory(lua_State* L, Inventory *msg)
+static void lua_pushgame__inventory(lua_State* L, Game__Inventory *msg)
 {
     lua_newtable(L);
 
@@ -60,7 +60,7 @@ static void lua_pushinventory(lua_State* L, Inventory *msg)
     for (int i = 0; i < items_size; i++)
     {
         lua_pushnumber(L, i + 1);
-        lua_pushitem(L, (Item*)msg->items[i]);
+        lua_pushgame__item(L, (Game__Item*)msg->items[i]);
         lua_settable(L, -3);
     }
     lua_settable(L, -3);
@@ -74,18 +74,18 @@ static void lua_pushinventory(lua_State* L, Inventory *msg)
 
 static int luaL_checkboolean(lua_State* L, int narg) { return lua_toboolean(L, narg); }
 
-static Item* luaL_checkitem(lua_State* L, int narg);
-static Inventory* luaL_checkinventory(lua_State* L, int narg);
+static Game__Item* luaL_checkgame__item(lua_State* L, int narg);
+static Game__Inventory* luaL_checkgame__inventory(lua_State* L, int narg);
 
-static Item* luaL_checkitem(lua_State* L, int narg)
+static Game__Item* luaL_checkgame__item(lua_State* L, int narg)
 {
     if (!lua_istable(L, narg)) {
         luaL_error(L, "Expected value at index %d to be a table", narg);
         return 0;
     }
 
-    Item *msg = (Item*)malloc(sizeof(Item));
-    item__init(msg);
+    Game__Item *msg = (Game__Item*)malloc(sizeof(Game__Item));
+    game__item__init(msg);
 
     // id
     lua_pushstring(L, "id");
@@ -108,20 +108,20 @@ static Item* luaL_checkitem(lua_State* L, int narg)
     // type
     lua_pushstring(L, "type");
     lua_gettable(L, narg);
-    msg->type = (ItemType)luaL_checknumber(L, lua_gettop(L));
+    msg->type = (Game__Item__ItemType)luaL_checknumber(L, lua_gettop(L));
     lua_pop(L, 1);
 
     return msg;
 }
-static Inventory* luaL_checkinventory(lua_State* L, int narg)
+static Game__Inventory* luaL_checkgame__inventory(lua_State* L, int narg)
 {
     if (!lua_istable(L, narg)) {
         luaL_error(L, "Expected value at index %d to be a table", narg);
         return 0;
     }
 
-    Inventory *msg = (Inventory*)malloc(sizeof(Inventory));
-    inventory__init(msg);
+    Game__Inventory *msg = (Game__Inventory*)malloc(sizeof(Game__Inventory));
+    game__inventory__init(msg);
 
     // capacity
     lua_pushstring(L, "capacity");
@@ -135,12 +135,12 @@ static Inventory* luaL_checkinventory(lua_State* L, int narg)
     int items_size = lua_objlen(L, lua_gettop(L));
     int items_index = lua_gettop(L);
     msg->n_items = items_size;
-    msg->items = (Item**)malloc(sizeof(Item*) * items_size);
+    msg->items = (Game__Item**)malloc(sizeof(Game__Item*) * items_size);
     for (int i = 0; i < items_size; i++)
     {
         lua_pushnumber(L, i + 1);
         lua_gettable(L, items_index);
-        msg->items[i] = (Item*)luaL_checkitem(L, lua_gettop(L));
+        msg->items[i] = (Game__Item*)luaL_checkgame__item(L, lua_gettop(L));
         lua_pop(L, 1);
     }
     lua_pop(L, 1);
@@ -154,15 +154,15 @@ static Inventory* luaL_checkinventory(lua_State* L, int narg)
  * FREE 
  ******************************************************************************/
 
-static void free_item(Item* msg);
-static void free_inventory(Inventory* msg);
+static void free_game__item(Game__Item* msg);
+static void free_game__inventory(Game__Inventory* msg);
 
 static void free_number(int32_t) {};
 static void free_string(char*) {};
 static void free_bool(bool) {};
 static void free_boolean(bool) {};
 
-static void free_item(Item* msg)
+static void free_game__item(Game__Item* msg)
 {
     free_number(msg->id);
     free_string(msg->name);
@@ -170,13 +170,13 @@ static void free_item(Item* msg)
     free_number(msg->type);
     free(msg);
 }
-static void free_inventory(Inventory* msg)
+static void free_game__inventory(Game__Inventory* msg)
 {
     free_number(msg->capacity);
     int items_size = msg->n_items;
     for (int i = 0; i < items_size; i++)
     {
-        free_item(msg->items[i]);
+        free_game__item(msg->items[i]);
     }
     free(msg->items);
     free(msg);
@@ -194,9 +194,9 @@ static int DecodeItem(lua_State* L)
     size_t data_length;
     const char* data = luaL_checklstring(L, 1, &data_length);
 
-    Item *msg = item__unpack(0, data_length, (uint8_t*)data);
-    lua_pushitem(L, msg);
-    item__free_unpacked(msg, 0);
+    Game__Item *msg = game__item__unpack(0, data_length, (uint8_t*)data);
+    lua_pushgame__item(L, msg);
+    game__item__free_unpacked(msg, 0);
 
     return 1;
 }
@@ -204,16 +204,16 @@ static int DecodeItem(lua_State* L)
 static int EncodeItem(lua_State* L)
 {
     DM_LUA_STACK_CHECK(L, 1);
-    Item *msg = luaL_checkitem(L, 1);
+    Game__Item *msg = luaL_checkgame__item(L, 1);
 
-    size_t item_packed_size = item__get_packed_size(msg);
+    size_t item_packed_size = game__item__get_packed_size(msg);
     char* buffer = (char*)malloc(item_packed_size);
-    item__pack(msg, (uint8_t*)buffer);
+    game__item__pack(msg, (uint8_t*)buffer);
 
     lua_pushlstring(L, buffer, item_packed_size);
     free(buffer);
 
-    free_item(msg);
+    free_game__item(msg);
 
     return 1;
 }
@@ -223,9 +223,9 @@ static int DecodeInventory(lua_State* L)
     size_t data_length;
     const char* data = luaL_checklstring(L, 1, &data_length);
 
-    Inventory *msg = inventory__unpack(0, data_length, (uint8_t*)data);
-    lua_pushinventory(L, msg);
-    inventory__free_unpacked(msg, 0);
+    Game__Inventory *msg = game__inventory__unpack(0, data_length, (uint8_t*)data);
+    lua_pushgame__inventory(L, msg);
+    game__inventory__free_unpacked(msg, 0);
 
     return 1;
 }
@@ -233,16 +233,16 @@ static int DecodeInventory(lua_State* L)
 static int EncodeInventory(lua_State* L)
 {
     DM_LUA_STACK_CHECK(L, 1);
-    Inventory *msg = luaL_checkinventory(L, 1);
+    Game__Inventory *msg = luaL_checkgame__inventory(L, 1);
 
-    size_t inventory_packed_size = inventory__get_packed_size(msg);
+    size_t inventory_packed_size = game__inventory__get_packed_size(msg);
     char* buffer = (char*)malloc(inventory_packed_size);
-    inventory__pack(msg, (uint8_t*)buffer);
+    game__inventory__pack(msg, (uint8_t*)buffer);
 
     lua_pushlstring(L, buffer, inventory_packed_size);
     free(buffer);
 
-    free_inventory(msg);
+    free_game__inventory(msg);
 
     return 1;
 }
@@ -267,10 +267,10 @@ static void LuaInit(lua_State* L)
     lua_setfield(L, -2, #name);
 
     // ItemType
-    SETCONSTANT(ITEMTYPE_WEAPON, 0);
-    SETCONSTANT(ITEMTYPE_ARMOUR, 1);
-    SETCONSTANT(ITEMTYPE_RING, 2);
-    SETCONSTANT(ITEMTYPE_BOOK, 3);
+    SETCONSTANT(GAME__ITEM__ITEM_TYPE_WEAPON, GAME__ITEM__ITEM_TYPE__WEAPON);
+    SETCONSTANT(GAME__ITEM__ITEM_TYPE_ARMOUR, GAME__ITEM__ITEM_TYPE__ARMOUR);
+    SETCONSTANT(GAME__ITEM__ITEM_TYPE_RING, GAME__ITEM__ITEM_TYPE__RING);
+    SETCONSTANT(GAME__ITEM__ITEM_TYPE_BOOK, GAME__ITEM__ITEM_TYPE__BOOK);
     #undef SETCONSTANT
 
     lua_pop(L, 1);

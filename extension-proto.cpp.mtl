@@ -155,9 +155,9 @@ static int Decode{{name}}(lua_State* L)
     size_t data_length;
     const char* data = luaL_checklstring(L, 1, &data_length);
 
-    {{name}} *msg = {{name_lower}}__unpack(0, data_length, (uint8_t*)data);
-    lua_push{{name_lower}}(L, msg);
-    {{name_lower}}__free_unpacked(msg, 0);
+    {{type_cpp}} *msg = {{type_cpp_lower}}__unpack(0, data_length, (uint8_t*)data);
+    lua_push{{type_cpp_lower}}(L, msg);
+    {{type_cpp_lower}}__free_unpacked(msg, 0);
 
     return 1;
 }
@@ -165,16 +165,16 @@ static int Decode{{name}}(lua_State* L)
 static int Encode{{name}}(lua_State* L)
 {
     DM_LUA_STACK_CHECK(L, 1);
-    {{name}} *msg = luaL_check{{name_lower}}(L, 1);
+    {{type_cpp}} *msg = luaL_check{{type_cpp_lower}}(L, 1);
 
-    size_t {{name_lower}}_packed_size = {{name_lower}}__get_packed_size(msg);
+    size_t {{name_lower}}_packed_size = {{type_cpp_lower}}__get_packed_size(msg);
     char* buffer = (char*)malloc({{name_lower}}_packed_size);
-    {{name_lower}}__pack(msg, (uint8_t*)buffer);
+    {{type_cpp_lower}}__pack(msg, (uint8_t*)buffer);
 
     lua_pushlstring(L, buffer, {{name_lower}}_packed_size);
     free(buffer);
 
-    free_{{name_lower}}(msg);
+    free_{{type_cpp_lower}}(msg);
 
     return 1;
 }
@@ -205,7 +205,7 @@ static void LuaInit(lua_State* L)
     {{#enums}}
     // {{name}}
     {{#values}}
-    SETCONSTANT({{name_upper}}_{{name}}, {{value}});
+    SETCONSTANT({{type_cpp_upper}}_{{name}}, {{type_cpp_upper}}__{{name}});
     {{/values}}
     {{/enums}}
     #undef SETCONSTANT

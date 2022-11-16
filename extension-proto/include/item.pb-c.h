@@ -15,57 +15,57 @@ PROTOBUF_C__BEGIN_DECLS
 #endif
 
 
-typedef struct Item Item;
+typedef struct Game__Item Game__Item;
 
 
 /* --- enums --- */
 
-typedef enum _ItemType {
-  ITEM_TYPE__WEAPON = 0,
-  ITEM_TYPE__ARMOUR = 1,
-  ITEM_TYPE__RING = 2,
-  ITEM_TYPE__BOOK = 3
-    PROTOBUF_C__FORCE_ENUM_TO_BE_INT_SIZE(ITEM_TYPE)
-} ItemType;
+typedef enum _Game__Item__ItemType {
+  GAME__ITEM__ITEM_TYPE__WEAPON = 0,
+  GAME__ITEM__ITEM_TYPE__ARMOUR = 1,
+  GAME__ITEM__ITEM_TYPE__RING = 2,
+  GAME__ITEM__ITEM_TYPE__BOOK = 3
+    PROTOBUF_C__FORCE_ENUM_TO_BE_INT_SIZE(GAME__ITEM__ITEM_TYPE)
+} Game__Item__ItemType;
 
 /* --- messages --- */
 
-struct  Item
+struct  Game__Item
 {
   ProtobufCMessage base;
   int32_t id;
   char *name;
   float weight;
-  ItemType type;
+  Game__Item__ItemType type;
 };
-#define ITEM__INIT \
- { PROTOBUF_C_MESSAGE_INIT (&item__descriptor) \
-    , 0, NULL, 0, ITEM_TYPE__WEAPON }
+#define GAME__ITEM__INIT \
+ { PROTOBUF_C_MESSAGE_INIT (&game__item__descriptor) \
+    , 0, NULL, 0, GAME__ITEM__ITEM_TYPE__WEAPON }
 
 
-/* Item methods */
-void   item__init
-                     (Item         *message);
-size_t item__get_packed_size
-                     (const Item   *message);
-size_t item__pack
-                     (const Item   *message,
+/* Game__Item methods */
+void   game__item__init
+                     (Game__Item         *message);
+size_t game__item__get_packed_size
+                     (const Game__Item   *message);
+size_t game__item__pack
+                     (const Game__Item   *message,
                       uint8_t             *out);
-size_t item__pack_to_buffer
-                     (const Item   *message,
+size_t game__item__pack_to_buffer
+                     (const Game__Item   *message,
                       ProtobufCBuffer     *buffer);
-Item *
-       item__unpack
+Game__Item *
+       game__item__unpack
                      (ProtobufCAllocator  *allocator,
                       size_t               len,
                       const uint8_t       *data);
-void   item__free_unpacked
-                     (Item *message,
+void   game__item__free_unpacked
+                     (Game__Item *message,
                       ProtobufCAllocator *allocator);
 /* --- per-message closures --- */
 
-typedef void (*Item_Closure)
-                 (const Item *message,
+typedef void (*Game__Item_Closure)
+                 (const Game__Item *message,
                   void *closure_data);
 
 /* --- services --- */
@@ -73,8 +73,8 @@ typedef void (*Item_Closure)
 
 /* --- descriptors --- */
 
-extern const ProtobufCEnumDescriptor    item_type__descriptor;
-extern const ProtobufCMessageDescriptor item__descriptor;
+extern const ProtobufCMessageDescriptor game__item__descriptor;
+extern const ProtobufCEnumDescriptor    game__item__item_type__descriptor;
 
 PROTOBUF_C__END_DECLS
 

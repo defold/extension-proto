@@ -7,52 +7,84 @@
 #endif
 
 #include "item.pb-c.h"
-void   item__init
-                     (Item         *message)
+void   game__item__init
+                     (Game__Item         *message)
 {
-  static const Item init_value = ITEM__INIT;
+  static const Game__Item init_value = GAME__ITEM__INIT;
   *message = init_value;
 }
-size_t item__get_packed_size
-                     (const Item *message)
+size_t game__item__get_packed_size
+                     (const Game__Item *message)
 {
-  assert(message->base.descriptor == &item__descriptor);
+  assert(message->base.descriptor == &game__item__descriptor);
   return protobuf_c_message_get_packed_size ((const ProtobufCMessage*)(message));
 }
-size_t item__pack
-                     (const Item *message,
+size_t game__item__pack
+                     (const Game__Item *message,
                       uint8_t       *out)
 {
-  assert(message->base.descriptor == &item__descriptor);
+  assert(message->base.descriptor == &game__item__descriptor);
   return protobuf_c_message_pack ((const ProtobufCMessage*)message, out);
 }
-size_t item__pack_to_buffer
-                     (const Item *message,
+size_t game__item__pack_to_buffer
+                     (const Game__Item *message,
                       ProtobufCBuffer *buffer)
 {
-  assert(message->base.descriptor == &item__descriptor);
+  assert(message->base.descriptor == &game__item__descriptor);
   return protobuf_c_message_pack_to_buffer ((const ProtobufCMessage*)message, buffer);
 }
-Item *
-       item__unpack
+Game__Item *
+       game__item__unpack
                      (ProtobufCAllocator  *allocator,
                       size_t               len,
                       const uint8_t       *data)
 {
-  return (Item *)
-     protobuf_c_message_unpack (&item__descriptor,
+  return (Game__Item *)
+     protobuf_c_message_unpack (&game__item__descriptor,
                                 allocator, len, data);
 }
-void   item__free_unpacked
-                     (Item *message,
+void   game__item__free_unpacked
+                     (Game__Item *message,
                       ProtobufCAllocator *allocator)
 {
   if(!message)
     return;
-  assert(message->base.descriptor == &item__descriptor);
+  assert(message->base.descriptor == &game__item__descriptor);
   protobuf_c_message_free_unpacked ((ProtobufCMessage*)message, allocator);
 }
-static const ProtobufCFieldDescriptor item__field_descriptors[4] =
+static const ProtobufCEnumValue game__item__item_type__enum_values_by_number[4] =
+{
+  { "WEAPON", "GAME__ITEM__ITEM_TYPE__WEAPON", 0 },
+  { "ARMOUR", "GAME__ITEM__ITEM_TYPE__ARMOUR", 1 },
+  { "RING", "GAME__ITEM__ITEM_TYPE__RING", 2 },
+  { "BOOK", "GAME__ITEM__ITEM_TYPE__BOOK", 3 },
+};
+static const ProtobufCIntRange game__item__item_type__value_ranges[] = {
+{0, 0},{0, 4}
+};
+static const ProtobufCEnumValueIndex game__item__item_type__enum_values_by_name[4] =
+{
+  { "ARMOUR", 1 },
+  { "BOOK", 3 },
+  { "RING", 2 },
+  { "WEAPON", 0 },
+};
+const ProtobufCEnumDescriptor game__item__item_type__descriptor =
+{
+  PROTOBUF_C__ENUM_DESCRIPTOR_MAGIC,
+  "Game.Item.ItemType",
+  "ItemType",
+  "Game__Item__ItemType",
+  "Game",
+  4,
+  game__item__item_type__enum_values_by_number,
+  4,
+  game__item__item_type__enum_values_by_name,
+  1,
+  game__item__item_type__value_ranges,
+  NULL,NULL,NULL,NULL   /* reserved[1234] */
+};
+static const ProtobufCFieldDescriptor game__item__field_descriptors[4] =
 {
   {
     "id",
@@ -60,7 +92,7 @@ static const ProtobufCFieldDescriptor item__field_descriptors[4] =
     PROTOBUF_C_LABEL_REQUIRED,
     PROTOBUF_C_TYPE_INT32,
     0,   /* quantifier_offset */
-    offsetof(Item, id),
+    offsetof(Game__Item, id),
     NULL,
     NULL,
     0,             /* flags */
@@ -72,7 +104,7 @@ static const ProtobufCFieldDescriptor item__field_descriptors[4] =
     PROTOBUF_C_LABEL_REQUIRED,
     PROTOBUF_C_TYPE_STRING,
     0,   /* quantifier_offset */
-    offsetof(Item, name),
+    offsetof(Game__Item, name),
     NULL,
     NULL,
     0,             /* flags */
@@ -84,7 +116,7 @@ static const ProtobufCFieldDescriptor item__field_descriptors[4] =
     PROTOBUF_C_LABEL_REQUIRED,
     PROTOBUF_C_TYPE_FLOAT,
     0,   /* quantifier_offset */
-    offsetof(Item, weight),
+    offsetof(Game__Item, weight),
     NULL,
     NULL,
     0,             /* flags */
@@ -96,68 +128,36 @@ static const ProtobufCFieldDescriptor item__field_descriptors[4] =
     PROTOBUF_C_LABEL_REQUIRED,
     PROTOBUF_C_TYPE_ENUM,
     0,   /* quantifier_offset */
-    offsetof(Item, type),
-    &item_type__descriptor,
+    offsetof(Game__Item, type),
+    &game__item__item_type__descriptor,
     NULL,
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
   },
 };
-static const unsigned item__field_indices_by_name[] = {
+static const unsigned game__item__field_indices_by_name[] = {
   0,   /* field[0] = id */
   1,   /* field[1] = name */
   3,   /* field[3] = type */
   2,   /* field[2] = weight */
 };
-static const ProtobufCIntRange item__number_ranges[1 + 1] =
+static const ProtobufCIntRange game__item__number_ranges[1 + 1] =
 {
   { 1, 0 },
   { 0, 4 }
 };
-const ProtobufCMessageDescriptor item__descriptor =
+const ProtobufCMessageDescriptor game__item__descriptor =
 {
   PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
+  "Game.Item",
   "Item",
-  "Item",
-  "Item",
-  "",
-  sizeof(Item),
+  "Game__Item",
+  "Game",
+  sizeof(Game__Item),
   4,
-  item__field_descriptors,
-  item__field_indices_by_name,
-  1,  item__number_ranges,
-  (ProtobufCMessageInit) item__init,
+  game__item__field_descriptors,
+  game__item__field_indices_by_name,
+  1,  game__item__number_ranges,
+  (ProtobufCMessageInit) game__item__init,
   NULL,NULL,NULL    /* reserved[123] */
-};
-static const ProtobufCEnumValue item_type__enum_values_by_number[4] =
-{
-  { "WEAPON", "ITEM_TYPE__WEAPON", 0 },
-  { "ARMOUR", "ITEM_TYPE__ARMOUR", 1 },
-  { "RING", "ITEM_TYPE__RING", 2 },
-  { "BOOK", "ITEM_TYPE__BOOK", 3 },
-};
-static const ProtobufCIntRange item_type__value_ranges[] = {
-{0, 0},{0, 4}
-};
-static const ProtobufCEnumValueIndex item_type__enum_values_by_name[4] =
-{
-  { "ARMOUR", 1 },
-  { "BOOK", 3 },
-  { "RING", 2 },
-  { "WEAPON", 0 },
-};
-const ProtobufCEnumDescriptor item_type__descriptor =
-{
-  PROTOBUF_C__ENUM_DESCRIPTOR_MAGIC,
-  "ItemType",
-  "ItemType",
-  "ItemType",
-  "",
-  4,
-  item_type__enum_values_by_number,
-  4,
-  item_type__enum_values_by_name,
-  1,
-  item_type__value_ranges,
-  NULL,NULL,NULL,NULL   /* reserved[1234] */
 };
