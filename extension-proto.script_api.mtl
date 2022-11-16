@@ -7,7 +7,7 @@
 
 #*****************************************************************************************************
 
-    - name: encode_{{name_lower}}
+    - name: encode_{{package_lower}}_{{name_lower}}
       type: function
       parameters:
       - name: msg
@@ -16,7 +16,7 @@
       - name: msg
         type: string
 
-    - name: decode_{{name_lower}}
+    - name: decode_{{package_lower}}_{{name_lower}}
       type: function
       parameters:
       - name: msg

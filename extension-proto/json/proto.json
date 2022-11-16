@@ -2,8 +2,12 @@
     "messages": [
         {
             "package": "Game",
+            "package_lower": "game",
+            "nested": false,
             "filename": "item.proto",
             "name": "Item",
+            "name_cpp": "Item",
+            "name_cpp_lower": "item",
             "name_lower": "item",
             "name_upper": "ITEM",
             "type_cpp": "Game__Item",
@@ -16,42 +20,64 @@
             "properties": [
                 {
                     "name": "id",
+                    "name_cpp": "id",
+                    "name_cpp_lower": "id",
                     "type": 5,
                     "repeated": false,
                     "required": true,
+                    "optional": false,
                     "type_lua": "number",
-                    "type_cpp": "int32_t"
+                    "type_cpp": "int32_t",
+                    "type_is_primitive": true
                 },
                 {
                     "name": "name",
+                    "name_cpp": "name",
+                    "name_cpp_lower": "name",
                     "type": 9,
                     "repeated": false,
                     "required": true,
+                    "optional": false,
                     "type_lua": "string",
-                    "type_cpp": "char*"
+                    "type_cpp": "char*",
+                    "type_is_string": true,
+                    "type_is_primitive": false
                 },
                 {
                     "name": "weight",
+                    "name_cpp": "weight",
+                    "name_cpp_lower": "weight",
                     "type": 2,
                     "repeated": false,
                     "required": true,
+                    "optional": false,
                     "type_lua": "number",
-                    "type_cpp": "float"
+                    "type_cpp": "float",
+                    "type_is_primitive": true
                 },
                 {
                     "name": "type",
+                    "name_cpp": "type",
+                    "name_cpp_lower": "type",
                     "type": 14,
                     "repeated": false,
                     "required": true,
+                    "optional": false,
                     "type_lua": "number",
-                    "type_cpp": "Game__Item__ItemType"
+                    "type_cpp": "Game__Item__ItemType",
+                    "type_is_enum": true,
+                    "type_is_primitive": true
                 }
             ]
         },
         {
             "package": "Game",
+            "package_lower": "game",
+            "nested": false,
             "filename": "inventory.proto",
             "name": "Inventory",
+            "name_cpp": "Inventory",
+            "name_cpp_lower": "inventory",
             "name_lower": "inventory",
             "name_upper": "INVENTORY",
             "type_cpp": "Game__Inventory",
@@ -64,19 +90,28 @@
             "properties": [
                 {
                     "name": "capacity",
+                    "name_cpp": "capacity",
+                    "name_cpp_lower": "capacity",
                     "type": 5,
                     "repeated": false,
                     "required": true,
+                    "optional": false,
                     "type_lua": "number",
-                    "type_cpp": "int32_t"
+                    "type_cpp": "int32_t",
+                    "type_is_primitive": true
                 },
                 {
                     "name": "items",
+                    "name_cpp": "items",
+                    "name_cpp_lower": "items",
                     "type": 11,
                     "repeated": true,
                     "required": false,
+                    "optional": false,
                     "type_lua": "game__item",
-                    "type_cpp": "Game__Item*"
+                    "type_cpp": "Game__Item*",
+                    "type_is_message": true,
+                    "type_is_primitive": false
                 }
             ]
         }
@@ -84,8 +119,12 @@
     "enums": [
         {
             "package": "Game",
+            "package_lower": "game",
+            "nested": false,
             "filename": "item.proto",
             "name": "ItemType",
+            "name_cpp": "ItemType",
+            "name_cpp_lower": "itemtype",
             "name_lower": "itemtype",
             "name_upper": "ITEMTYPE",
             "type_cpp": "Game__Item__ItemType",

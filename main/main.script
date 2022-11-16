@@ -20,7 +20,7 @@ local ring_of_wisdom = {
 function init(self)
 	local item = broadsword
 	-- serialize the Lua table to an Item message
-	local item_msg = proto.encode_item(item)
+	local item_msg = proto.
 	assert(item_msg)
 	assert(#item_msg == 21)
 

@@ -24,7 +24,6 @@ EXTENSION_PROTO_API = EXTENSION_DIR_ROOT + "/api/extension-proto.script_api"
 
 PLUGINS_DIR = BASE_DIR + "/plugins"
 PROTO_DIR = "./proto"
-PROTO_INCLUDES_DIR = "./proto_includes"
 
 
 def call(args):
@@ -101,7 +100,7 @@ def generate_json():
 		get_protoc(),
 		"--plugin=protoc-gen-json=" + get_protoc_gen_json(),
 		"--json_out=" + EXTENSION_DIR_JSON,
-		"--proto_path={} --proto_path={}".format(PROTO_DIR, PROTO_INCLUDES_DIR),
+		"--proto_path={}".format(PROTO_DIR),
 	]
 	call(" ".join(args + find_all_proto_files(PROTO_DIR)))
 
@@ -113,7 +112,7 @@ def generate_c():
 		get_protoc(),
 		"--plugin=protoc-gen-c=" + get_protoc_gen_c(),
 		"--c_out=" + EXTENSION_DIR_SRC,
-		"--proto_path={} --proto_path={}".format(PROTO_DIR, PROTO_INCLUDES_DIR),
+		"--proto_path={}".format(PROTO_DIR),
 	]
 	call(" ".join(args + find_all_proto_files(PROTO_DIR)))
 	move_extension_includes()

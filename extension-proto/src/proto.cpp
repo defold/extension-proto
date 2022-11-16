@@ -19,28 +19,33 @@
 static void lua_pushgame__item(lua_State* L, Game__Item *msg);
 static void lua_pushgame__inventory(lua_State* L, Game__Inventory *msg);
 
+static void lua_pushProtobufCBinaryData(lua_State* L, ProtobufCBinaryData binarydata)
+{
+    lua_pushlstring(L, (const char*)binarydata.data, binarydata.len);
+}
+
 static void lua_pushgame__item(lua_State* L, Game__Item *msg)
 {
     lua_newtable(L);
 
     // id
     lua_pushstring(L, "id");
-    lua_pushnumber(L, (int32_t)msg->id);
+    lua_pushnumber(L, (int32_t)(msg->id));
     lua_settable(L, -3);
 
     // name
     lua_pushstring(L, "name");
-    lua_pushstring(L, (char*)msg->name);
+    lua_pushstring(L, (char*)(msg->name));
     lua_settable(L, -3);
 
     // weight
     lua_pushstring(L, "weight");
-    lua_pushnumber(L, (float)msg->weight);
+    lua_pushnumber(L, (float)(msg->weight));
     lua_settable(L, -3);
 
     // type
     lua_pushstring(L, "type");
-    lua_pushnumber(L, (Game__Item__ItemType)msg->type);
+    lua_pushnumber(L, (Game__Item__ItemType)(msg->type));
     lua_settable(L, -3);
 
 }
@@ -50,7 +55,7 @@ static void lua_pushgame__inventory(lua_State* L, Game__Inventory *msg)
 
     // capacity
     lua_pushstring(L, "capacity");
-    lua_pushnumber(L, (int32_t)msg->capacity);
+    lua_pushnumber(L, (int32_t)(msg->capacity));
     lua_settable(L, -3);
 
     // items
@@ -60,7 +65,7 @@ static void lua_pushgame__inventory(lua_State* L, Game__Inventory *msg)
     for (int i = 0; i < items_size; i++)
     {
         lua_pushnumber(L, i + 1);
-        lua_pushgame__item(L, (Game__Item*)msg->items[i]);
+        lua_pushgame__item(L, (Game__Item*)(msg->items[i]));
         lua_settable(L, -3);
     }
     lua_settable(L, -3);
@@ -76,6 +81,17 @@ static int luaL_checkboolean(lua_State* L, int narg) { return lua_toboolean(L, n
 
 static Game__Item* luaL_checkgame__item(lua_State* L, int narg);
 static Game__Inventory* luaL_checkgame__inventory(lua_State* L, int narg);
+
+static ProtobufCBinaryData luaL_checkProtobufCBinaryData(lua_State* L, int narg)
+{
+    size_t len;
+    const char* data = luaL_checklstring(L, narg, &len);
+
+    ProtobufCBinaryData binarydata;
+    binarydata.data = (uint8_t*)data;
+    binarydata.len = len;
+    return binarydata;
+}
 
 static Game__Item* luaL_checkgame__item(lua_State* L, int narg)
 {
@@ -157,6 +173,7 @@ static Game__Inventory* luaL_checkgame__inventory(lua_State* L, int narg)
 static void free_game__item(Game__Item* msg);
 static void free_game__inventory(Game__Inventory* msg);
 
+static void free_ProtobufCBinaryData(ProtobufCBinaryData) {};
 static void free_number(int32_t) {};
 static void free_string(char*) {};
 static void free_bool(bool) {};
@@ -188,7 +205,8 @@ static void free_game__inventory(Game__Inventory* msg)
  * ENCODE AND DECODE
  ******************************************************************************/
 
-static int DecodeItem(lua_State* L)
+// item.proto
+static int DecodeGame__Item(lua_State* L)
 {
     DM_LUA_STACK_CHECK(L, 1);
     size_t data_length;
@@ -200,8 +218,7 @@ static int DecodeItem(lua_State* L)
 
     return 1;
 }
-
-static int EncodeItem(lua_State* L)
+static int EncodeGame__Item(lua_State* L)
 {
     DM_LUA_STACK_CHECK(L, 1);
     Game__Item *msg = luaL_checkgame__item(L, 1);
@@ -217,7 +234,9 @@ static int EncodeItem(lua_State* L)
 
     return 1;
 }
-static int DecodeInventory(lua_State* L)
+
+// inventory.proto
+static int DecodeGame__Inventory(lua_State* L)
 {
     DM_LUA_STACK_CHECK(L, 1);
     size_t data_length;
@@ -229,8 +248,7 @@ static int DecodeInventory(lua_State* L)
 
     return 1;
 }
-
-static int EncodeInventory(lua_State* L)
+static int EncodeGame__Inventory(lua_State* L)
 {
     DM_LUA_STACK_CHECK(L, 1);
     Game__Inventory *msg = luaL_checkgame__inventory(L, 1);
@@ -247,12 +265,13 @@ static int EncodeInventory(lua_State* L)
     return 1;
 }
 
+
 static const luaL_reg Module_methods[] =
 {
-    {"encode_item", EncodeItem },
-    {"decode_item", DecodeItem },
-    {"encode_inventory", EncodeInventory },
-    {"decode_inventory", DecodeInventory },
+    {"encode_game_item", EncodeGame__Item },
+    {"decode_game_item", DecodeGame__Item },
+    {"encode_game_inventory", EncodeGame__Inventory },
+    {"decode_game_inventory", DecodeGame__Inventory },
     {0,0}
 };
 

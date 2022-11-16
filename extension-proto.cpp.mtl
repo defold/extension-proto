@@ -21,6 +21,11 @@
 static void lua_push{{type_cpp_lower}}(lua_State* L, {{type_cpp}} *msg);
 {{/messages}}
 
+static void lua_pushProtobufCBinaryData(lua_State* L, ProtobufCBinaryData binarydata)
+{
+    lua_pushlstring(L, (const char*)binarydata.data, binarydata.len);
+}
+
 {{#messages}}
 static void lua_push{{type_cpp_lower}}(lua_State* L, {{type_cpp}} *msg)
 {
@@ -35,19 +40,29 @@ static void lua_push{{type_cpp_lower}}(lua_State* L, {{type_cpp}} *msg)
     for (int i = 0; i < {{name}}_size; i++)
     {
         lua_pushnumber(L, i + 1);
-        lua_push{{type_lua}}(L, ({{type_cpp}})msg->{{name}}[i]);
+        lua_push{{type_lua}}(L, ({{type_cpp}})(msg->{{name_cpp_lower}}[i]));
         lua_settable(L, -3);
     }
     lua_settable(L, -3);
 
     {{/repeated}}
-    {{^repeated}}
+    {{#required}}
     // {{name}}
     lua_pushstring(L, "{{name}}");
-    lua_push{{type_lua}}(L, ({{type_cpp}})msg->{{name}});
+    lua_push{{type_lua}}(L, ({{type_cpp}})(msg->{{name_cpp_lower}}));
     lua_settable(L, -3);
 
-    {{/repeated}}
+    {{/required}}
+    {{#optional}}
+    // {{name}}
+    if ({{#type_is_primitive}}msg->has_{{name_cpp_lower}}{{/type_is_primitive}}{{#type_is_string}}msg->{{name_cpp_lower}} != 0{{/type_is_string}}{{#type_is_bytes}}msg->{{name_cpp_lower}}.data != 0{{/type_is_bytes}}{{#type_is_message}}msg->{{name_cpp_lower}} != 0{{/type_is_message}})
+    {
+        lua_pushstring(L, "{{name}}");
+        lua_push{{type_lua}}(L, ({{type_cpp}})(msg->{{name_cpp_lower}}));
+        lua_settable(L, -3);
+    }
+
+    {{/optional}}
     {{/properties}}
 }
 {{/messages}}
@@ -62,6 +77,17 @@ static int luaL_checkboolean(lua_State* L, int narg) { return lua_toboolean(L, n
 {{#messages}}
 static {{type_cpp}}* luaL_check{{type_cpp_lower}}(lua_State* L, int narg);
 {{/messages}}
+
+static ProtobufCBinaryData luaL_checkProtobufCBinaryData(lua_State* L, int narg)
+{
+    size_t len;
+    const char* data = luaL_checklstring(L, narg, &len);
+
+    ProtobufCBinaryData binarydata;
+    binarydata.data = (uint8_t*)data;
+    binarydata.len = len;
+    return binarydata;
+}
 
 {{#messages}}
 static {{type_cpp}}* luaL_check{{type_cpp_lower}}(lua_State* L, int narg)
@@ -82,25 +108,39 @@ static {{type_cpp}}* luaL_check{{type_cpp_lower}}(lua_State* L, int narg)
     int {{name}}_size = lua_objlen(L, lua_gettop(L));
     int {{name}}_index = lua_gettop(L);
     msg->n_{{name}} = {{name}}_size;
-    msg->{{name}} = ({{type_cpp}}*)malloc(sizeof({{type_cpp}}) * {{name}}_size);
+    msg->{{name_cpp_lower}} = ({{type_cpp}}*)malloc(sizeof({{type_cpp}}) * {{name}}_size);
     for (int i = 0; i < {{name}}_size; i++)
     {
         lua_pushnumber(L, i + 1);
         lua_gettable(L, {{name}}_index);
-        msg->{{name}}[i] = ({{type_cpp}})luaL_check{{type_lua}}(L, lua_gettop(L));
+        msg->{{name_cpp_lower}}[i] = ({{type_cpp}})luaL_check{{type_lua}}(L, lua_gettop(L));
         lua_pop(L, 1);
     }
     lua_pop(L, 1);
 
     {{/repeated}}
-    {{^repeated}}
+    {{#required}}
     // {{name}}
     lua_pushstring(L, "{{name}}");
     lua_gettable(L, narg);
-    msg->{{name}} = ({{type_cpp}})luaL_check{{type_lua}}(L, lua_gettop(L));
+    msg->{{name_cpp_lower}} = ({{type_cpp}})luaL_check{{type_lua}}(L, lua_gettop(L));
     lua_pop(L, 1);
 
-    {{/repeated}}
+    {{/required}}
+    {{#optional}}
+    // {{name}}
+    lua_pushstring(L, "{{name}}");
+    lua_gettable(L, narg);
+    if (!lua_isnil(L, lua_gettop(L)))
+    {
+        {{#type_is_primitive}}
+        msg->has_{{name_cpp_lower}} = 1;
+        {{/type_is_primitive}}
+        msg->{{name_cpp_lower}} = ({{type_cpp}})luaL_check{{type_lua}}(L, lua_gettop(L));
+    }
+    lua_pop(L, 1);
+
+    {{/optional}}
     {{/properties}}
     return msg;
 }
@@ -116,6 +156,7 @@ static {{type_cpp}}* luaL_check{{type_cpp_lower}}(lua_State* L, int narg)
 static void free_{{type_cpp_lower}}({{type_cpp}}* msg);
 {{/messages}}
 
+static void free_ProtobufCBinaryData(ProtobufCBinaryData) {};
 static void free_number(int32_t) {};
 static void free_string(char*) {};
 static void free_bool(bool) {};
@@ -129,12 +170,12 @@ static void free_{{type_cpp_lower}}({{type_cpp}}* msg)
     int {{name}}_size = msg->n_{{name}};
     for (int i = 0; i < {{name}}_size; i++)
     {
-        free_{{type_lua}}(msg->{{name}}[i]);
+        free_{{type_lua}}(msg->{{name_cpp_lower}}[i]);
     }
-    free(msg->{{name}});
+    free(msg->{{name_cpp_lower}});
     {{/repeated}}
     {{^repeated}}
-    free_{{type_lua}}(msg->{{name}});
+    free_{{type_lua}}(msg->{{name_cpp_lower}});
     {{/repeated}}
     {{/properties}}
     free(msg);
@@ -148,8 +189,9 @@ static void free_{{type_cpp_lower}}({{type_cpp}}* msg)
  ******************************************************************************/
 
 {{#messages}}
-{{^google}}
-static int Decode{{name}}(lua_State* L)
+{{^nested}}
+// {{filename}}
+static int Decode{{type_cpp}}(lua_State* L)
 {
     DM_LUA_STACK_CHECK(L, 1);
     size_t data_length;
@@ -161,8 +203,7 @@ static int Decode{{name}}(lua_State* L)
 
     return 1;
 }
-
-static int Encode{{name}}(lua_State* L)
+static int Encode{{type_cpp}}(lua_State* L)
 {
     DM_LUA_STACK_CHECK(L, 1);
     {{type_cpp}} *msg = luaL_check{{type_cpp_lower}}(L, 1);
@@ -178,16 +219,17 @@ static int Encode{{name}}(lua_State* L)
 
     return 1;
 }
-{{/google}}
+
+{{/nested}}
 {{/messages}}
 
 static const luaL_reg Module_methods[] =
 {
     {{#messages}}
-    {{^google}}
-    {"encode_{{name_lower}}", Encode{{name}} },
-    {"decode_{{name_lower}}", Decode{{name}} },
-    {{/google}}
+    {{^nested}}
+    {"encode_{{package_lower}}_{{name_lower}}", Encode{{type_cpp}} },
+    {"decode_{{package_lower}}_{{name_lower}}", Decode{{type_cpp}} },
+    {{/nested}}
     {{/messages}}
     {0,0}
 };

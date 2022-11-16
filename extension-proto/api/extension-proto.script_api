@@ -6,7 +6,7 @@
 
 #*****************************************************************************************************
 
-    - name: encode_item
+    - name: encode_game_item
       type: function
       parameters:
       - name: msg
@@ -15,7 +15,7 @@
       - name: msg
         type: string
 
-    - name: decode_item
+    - name: decode_game_item
       type: function
       parameters:
       - name: msg
@@ -26,7 +26,7 @@
 
 #*****************************************************************************************************
 
-    - name: encode_inventory
+    - name: encode_game_inventory
       type: function
       parameters:
       - name: msg
@@ -35,7 +35,7 @@
       - name: msg
         type: string
 
-    - name: decode_inventory
+    - name: decode_game_inventory
       type: function
       parameters:
       - name: msg
