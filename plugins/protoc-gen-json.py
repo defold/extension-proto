@@ -36,6 +36,9 @@ def traverse(proto_file):
         _traverse(proto_file.package, proto_file.message_type),
     )
 
+def capitalize_first_letter_only(input):
+  return re.sub('([a-zA-Z])', lambda x: x.groups()[0].upper(), input, 1)
+
 def camel_to_snake(s):
     words = re.findall(r'[A-Z]*[a-z\d]*', s)
     while('' in words):
@@ -68,7 +71,7 @@ def type_name_to_cpp(type_name, lower=False, upper=False):
         else:
             # dmInputDDF GamepadModifier_t -> DmInputDDF__GamepadModifierT
             name_words = name.split('_')
-            name = name_words[0] + ''.join(n.title() for n in name_words[1:])
+            name = name_words[0] + ''.join(capitalize_first_letter_only(n) for n in name_words[1:])
             name = name[0].upper() + name[1:]
         type_name_parts.append(name)
     return "__".join(type_name_parts)
@@ -99,6 +102,7 @@ def generate_code(request, response):
             parent_name = parent.name if parent else None
             item_type_name = package + "." + (parent_name + "." if parent_name else "") + item_name
             data = {
+                "is_proto2_syntax": proto_file.syntax == "proto2",
                 "package": package,
                 "package_lower": package.lower(),
                 "nested": '.' in package,
