@@ -97,7 +97,7 @@ assert(person.email == decoded.email)
 |
 +--- proto
 |    |
-|    +-- *.proto                           Protobuf message defintions
+|    +-- *.proto                           Protobuf message definitions
 ```
 
 
