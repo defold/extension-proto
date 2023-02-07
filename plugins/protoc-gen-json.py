@@ -39,6 +39,9 @@ def parse_proto_file(proto_file):
 def capitalize_first_letter_only(input):
   return re.sub('([a-zA-Z])', lambda x: x.groups()[0].upper(), input, 1)
 
+def capitalize_first_letter_only(input):
+  return re.sub('([a-zA-Z])', lambda x: x.groups()[0].upper(), input, 1)
+
 def camel_to_snake(s):
     words = re.findall(r'[A-Z]*[a-z\d]*', s)
     while('' in words):
