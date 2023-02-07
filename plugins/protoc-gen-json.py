@@ -16,25 +16,28 @@ def log(*args):
     print(*args, file=sys.stderr)
 
 
-def traverse(proto_file):
+def parse_proto_file(proto_file):
+    out_items = []
 
-    def _traverse(package, items):
+    def _parse(package, items):
         for item in items:
-            yield item, package, None
-
+            out_items.append({ "item": item, "package": package, "parent": None })
+            
             if isinstance(item, DescriptorProto):
                 for enum in item.enum_type:
-                    yield enum, package, item
-
+                    out_items.append({ "item": enum, "package": package, "parent": item })
+                
                 if item.nested_type:
                     nested_package = package + "." + item.name
-                    for nested_item in item.nested_type:
-                        yield nested_item, nested_package, None
+                    _parse(nested_package, item.nested_type)
 
-    return itertools.chain(
-        _traverse(proto_file.package, proto_file.enum_type),
-        _traverse(proto_file.package, proto_file.message_type),
-    )
+    _parse(proto_file.package, proto_file.enum_type)
+    _parse(proto_file.package, proto_file.message_type)
+    return out_items
+
+
+def capitalize_first_letter_only(input):
+  return re.sub('([a-zA-Z])', lambda x: x.groups()[0].upper(), input, 1)
 
 def camel_to_snake(s):
     words = re.findall(r'[A-Z]*[a-z\d]*', s)
@@ -68,7 +71,7 @@ def type_name_to_cpp(type_name, lower=False, upper=False):
         else:
             # dmInputDDF GamepadModifier_t -> DmInputDDF__GamepadModifierT
             name_words = name.split('_')
-            name = name_words[0] + ''.join(n.title() for n in name_words[1:])
+            name = name_words[0] + ''.join(capitalize_first_letter_only(n) for n in name_words[1:])
             name = name[0].upper() + name[1:]
         type_name_parts.append(name)
     return "__".join(type_name_parts)
@@ -91,14 +94,17 @@ def generate_code(request, response):
         }
         files.append(file)
 
-        for item, package, parent in traverse(proto_file):
-            package = package or ''
+        for o in parse_proto_file(proto_file):
+            item = o.get("item")
+            package = o.get("package") or ''
+            parent = o.get("parent")
             if package.startswith("google.protobuf"): continue
 
             item_name = item.name if hasattr(item, "name") else "?"
             parent_name = parent.name if parent else None
             item_type_name = package + "." + (parent_name + "." if parent_name else "") + item_name
             data = {
+                "is_proto2_syntax": proto_file.syntax == "proto2",
                 "package": package,
                 "package_lower": package.lower(),
                 "nested": '.' in package,

@@ -34,10 +34,10 @@ static void lua_push{{type_cpp_lower}}(lua_State* L, {{type_cpp}} *msg)
     {{#properties}}
     {{#repeated}}
     // {{name}}
-    lua_pushstring(L, "{{name}}");
+    lua_pushstring(L, "{{name_cpp_lower}}");
     lua_newtable(L);
-    int {{name}}_size = msg->n_{{name}};
-    for (int i = 0; i < {{name}}_size; i++)
+    int {{name_cpp_lower}}_size = msg->n_{{name_cpp_lower}};
+    for (int i = 0; i < {{name_cpp_lower}}_size; i++)
     {
         lua_pushnumber(L, i + 1);
         lua_push{{type_lua}}(L, ({{type_cpp}})(msg->{{name_cpp_lower}}[i]));
@@ -53,6 +53,7 @@ static void lua_push{{type_cpp_lower}}(lua_State* L, {{type_cpp}} *msg)
     lua_settable(L, -3);
 
     {{/required}}
+    {{#is_proto2_syntax}}
     {{#optional}}
     // {{name}}
     if ({{#type_is_primitive}}msg->has_{{name_cpp_lower}}{{/type_is_primitive}}{{#type_is_string}}msg->{{name_cpp_lower}} != 0{{/type_is_string}}{{#type_is_bytes}}msg->{{name_cpp_lower}}.data != 0{{/type_is_bytes}}{{#type_is_message}}msg->{{name_cpp_lower}} != 0{{/type_is_message}})
@@ -63,6 +64,7 @@ static void lua_push{{type_cpp_lower}}(lua_State* L, {{type_cpp}} *msg)
     }
 
     {{/optional}}
+    {{/is_proto2_syntax}}
     {{/properties}}
 }
 {{/messages}}
@@ -107,7 +109,7 @@ static {{type_cpp}}* luaL_check{{type_cpp_lower}}(lua_State* L, int narg)
     lua_gettable(L, narg);
     int {{name}}_size = lua_objlen(L, lua_gettop(L));
     int {{name}}_index = lua_gettop(L);
-    msg->n_{{name}} = {{name}}_size;
+    msg->n_{{name_cpp_lower}} = {{name}}_size;
     msg->{{name_cpp_lower}} = ({{type_cpp}}*)malloc(sizeof({{type_cpp}}) * {{name}}_size);
     for (int i = 0; i < {{name}}_size; i++)
     {
@@ -133,9 +135,11 @@ static {{type_cpp}}* luaL_check{{type_cpp_lower}}(lua_State* L, int narg)
     lua_gettable(L, narg);
     if (!lua_isnil(L, lua_gettop(L)))
     {
+        {{#is_proto2_syntax}}
         {{#type_is_primitive}}
         msg->has_{{name_cpp_lower}} = 1;
         {{/type_is_primitive}}
+        {{/is_proto2_syntax}}
         msg->{{name_cpp_lower}} = ({{type_cpp}})luaL_check{{type_lua}}(L, lua_gettop(L));
     }
     lua_pop(L, 1);
@@ -167,7 +171,7 @@ static void free_{{type_cpp_lower}}({{type_cpp}}* msg)
 {
     {{#properties}}
     {{#repeated}}
-    int {{name}}_size = msg->n_{{name}};
+    int {{name}}_size = msg->n_{{name_cpp_lower}};
     for (int i = 0; i < {{name}}_size; i++)
     {
         free_{{type_lua}}(msg->{{name_cpp_lower}}[i]);
