@@ -96,8 +96,7 @@ static ProtobufCBinaryData luaL_checkProtobufCBinaryData(lua_State* L, int narg)
 static Game__Item* luaL_checkgame__item(lua_State* L, int narg)
 {
     if (!lua_istable(L, narg)) {
-        luaL_error(L, "Expected value at index %d to be a table", narg);
-        return 0;
+        return DM_LUA_ERROR("Expected value at index %d to be a table", narg);
     }
 
     Game__Item *msg = (Game__Item*)malloc(sizeof(Game__Item));
@@ -132,8 +131,7 @@ static Game__Item* luaL_checkgame__item(lua_State* L, int narg)
 static Game__Inventory* luaL_checkgame__inventory(lua_State* L, int narg)
 {
     if (!lua_istable(L, narg)) {
-        luaL_error(L, "Expected value at index %d to be a table", narg);
-        return 0;
+        return DM_LUA_ERROR("Expected value at index %d to be a table", narg);
     }
 
     Game__Inventory *msg = (Game__Inventory*)malloc(sizeof(Game__Inventory));
