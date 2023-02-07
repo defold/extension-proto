@@ -16,25 +16,28 @@ def log(*args):
     print(*args, file=sys.stderr)
 
 
-def traverse(proto_file):
+def parse_proto_file(proto_file):
+    out_items = []
 
-    def _traverse(package, items):
+    def _parse(package, items):
         for item in items:
-            yield item, package, None
-
+            out_items.append({ "item": item, "package": package, "parent": None })
+            
             if isinstance(item, DescriptorProto):
                 for enum in item.enum_type:
-                    yield enum, package, item
-
+                    out_items.append({ "item": enum, "package": package, "parent": item })
+                
                 if item.nested_type:
                     nested_package = package + "." + item.name
-                    for nested_item in item.nested_type:
-                        yield nested_item, nested_package, None
+                    _parse(nested_package, item.nested_type)
 
-    return itertools.chain(
-        _traverse(proto_file.package, proto_file.enum_type),
-        _traverse(proto_file.package, proto_file.message_type),
-    )
+    _parse(proto_file.package, proto_file.enum_type)
+    _parse(proto_file.package, proto_file.message_type)
+    return out_items
+
+
+def capitalize_first_letter_only(input):
+  return re.sub('([a-zA-Z])', lambda x: x.groups()[0].upper(), input, 1)
 
 def capitalize_first_letter_only(input):
   return re.sub('([a-zA-Z])', lambda x: x.groups()[0].upper(), input, 1)
@@ -94,8 +97,10 @@ def generate_code(request, response):
         }
         files.append(file)
 
-        for item, package, parent in traverse(proto_file):
-            package = package or ''
+        for o in parse_proto_file(proto_file):
+            item = o.get("item")
+            package = o.get("package") or ''
+            parent = o.get("parent")
             if package.startswith("google.protobuf"): continue
 
             item_name = item.name if hasattr(item, "name") else "?"

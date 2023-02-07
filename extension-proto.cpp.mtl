@@ -109,7 +109,7 @@ static {{type_cpp}}* luaL_check{{type_cpp_lower}}(lua_State* L, int narg)
     lua_gettable(L, narg);
     int {{name}}_size = lua_objlen(L, lua_gettop(L));
     int {{name}}_index = lua_gettop(L);
-    msg->n_{{name}} = {{name}}_size;
+    msg->n_{{name_cpp_lower}} = {{name}}_size;
     msg->{{name_cpp_lower}} = ({{type_cpp}}*)malloc(sizeof({{type_cpp}}) * {{name}}_size);
     for (int i = 0; i < {{name}}_size; i++)
     {
@@ -171,7 +171,7 @@ static void free_{{type_cpp_lower}}({{type_cpp}}* msg)
 {
     {{#properties}}
     {{#repeated}}
-    int {{name}}_size = msg->n_{{name}};
+    int {{name}}_size = msg->n_{{name_cpp_lower}};
     for (int i = 0; i < {{name}}_size; i++)
     {
         free_{{type_lua}}(msg->{{name_cpp_lower}}[i]);
