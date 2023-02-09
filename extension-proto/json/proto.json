@@ -1,6 +1,7 @@
 {
     "messages": [
         {
+            "is_proto2_syntax": false,
             "package": "Game",
             "package_lower": "game",
             "nested": false,
@@ -71,6 +72,7 @@
             ]
         },
         {
+            "is_proto2_syntax": false,
             "package": "Game",
             "package_lower": "game",
             "nested": false,
@@ -118,6 +120,7 @@
     ],
     "enums": [
         {
+            "is_proto2_syntax": false,
             "package": "Game",
             "package_lower": "game",
             "nested": false,
