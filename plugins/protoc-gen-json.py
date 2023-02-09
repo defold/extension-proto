@@ -90,7 +90,6 @@ def generate_code(request, response):
         "files": files,
     }
     for proto_file in request.proto_file:
-        # log(proto_file.name)
         file = {
             "filename": proto_file.name,
             "filename_h": proto_file.name.replace(".proto", ".pb-c.h")
@@ -107,7 +106,7 @@ def generate_code(request, response):
             parent_name = parent.name if parent else None
             item_type_name = package + "." + (parent_name + "." if parent_name else "") + item_name
             data = {
-                "is_proto2_syntax": proto_file.syntax == "proto2",
+                "is_proto2_syntax": proto_file.syntax != "proto3", # syntax will not be set if proto2
                 "package": package,
                 "package_lower": package.lower(),
                 "nested": '.' in package,

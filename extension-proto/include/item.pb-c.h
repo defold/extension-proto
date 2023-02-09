@@ -37,10 +37,12 @@ struct  Game__Item
   char *name;
   float weight;
   Game__Item__ItemType type;
+  protobuf_c_boolean has_magic;
+  protobuf_c_boolean magic;
 };
 #define GAME__ITEM__INIT \
  { PROTOBUF_C_MESSAGE_INIT (&game__item__descriptor) \
-    , 0, NULL, 0, GAME__ITEM__ITEM_TYPE__WEAPON }
+    , 0, NULL, 0, GAME__ITEM__ITEM_TYPE__WEAPON, 0, 0 }
 
 
 /* Game__Item methods */

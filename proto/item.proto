@@ -13,4 +13,5 @@ message Item {
   required string   name    = 2;
   required float    weight  = 3;
   required ItemType type    = 4;
+  optional bool     magic   = 5;
 }

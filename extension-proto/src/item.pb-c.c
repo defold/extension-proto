@@ -84,7 +84,7 @@ const ProtobufCEnumDescriptor game__item__item_type__descriptor =
   game__item__item_type__value_ranges,
   NULL,NULL,NULL,NULL   /* reserved[1234] */
 };
-static const ProtobufCFieldDescriptor game__item__field_descriptors[4] =
+static const ProtobufCFieldDescriptor game__item__field_descriptors[5] =
 {
   {
     "id",
@@ -134,9 +134,22 @@ static const ProtobufCFieldDescriptor game__item__field_descriptors[4] =
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
   },
+  {
+    "magic",
+    5,
+    PROTOBUF_C_LABEL_OPTIONAL,
+    PROTOBUF_C_TYPE_BOOL,
+    offsetof(Game__Item, has_magic),
+    offsetof(Game__Item, magic),
+    NULL,
+    NULL,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
 };
 static const unsigned game__item__field_indices_by_name[] = {
   0,   /* field[0] = id */
+  4,   /* field[4] = magic */
   1,   /* field[1] = name */
   3,   /* field[3] = type */
   2,   /* field[2] = weight */
@@ -144,7 +157,7 @@ static const unsigned game__item__field_indices_by_name[] = {
 static const ProtobufCIntRange game__item__number_ranges[1 + 1] =
 {
   { 1, 0 },
-  { 0, 4 }
+  { 0, 5 }
 };
 const ProtobufCMessageDescriptor game__item__descriptor =
 {
@@ -154,7 +167,7 @@ const ProtobufCMessageDescriptor game__item__descriptor =
   "Game__Item",
   "Game",
   sizeof(Game__Item),
-  4,
+  5,
   game__item__field_descriptors,
   game__item__field_indices_by_name,
   1,  game__item__number_ranges,

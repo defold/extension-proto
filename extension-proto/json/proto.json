@@ -1,7 +1,7 @@
 {
     "messages": [
         {
-            "is_proto2_syntax": false,
+            "is_proto2_syntax": true,
             "package": "Game",
             "package_lower": "game",
             "nested": false,
@@ -68,11 +68,23 @@
                     "type_cpp": "Game__Item__ItemType",
                     "type_is_enum": true,
                     "type_is_primitive": true
+                },
+                {
+                    "name": "magic",
+                    "name_cpp": "magic",
+                    "name_cpp_lower": "magic",
+                    "type": 8,
+                    "repeated": false,
+                    "required": false,
+                    "optional": true,
+                    "type_lua": "boolean",
+                    "type_cpp": "protobuf_c_boolean",
+                    "type_is_primitive": true
                 }
             ]
         },
         {
-            "is_proto2_syntax": false,
+            "is_proto2_syntax": true,
             "package": "Game",
             "package_lower": "game",
             "nested": false,
@@ -120,7 +132,7 @@
     ],
     "enums": [
         {
-            "is_proto2_syntax": false,
+            "is_proto2_syntax": true,
             "package": "Game",
             "package_lower": "game",
             "nested": false,

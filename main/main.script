@@ -8,13 +8,15 @@ local chainmail = {
 	id = 2,
 	type = proto.GAME__ITEM__ITEM_TYPE_ARMOUR,
 	name = "Chainmail",
-	weight = 25
+	weight = 25,
+	magic = false
 }
 local ring_of_wisdom = {
 	id = 3,
 	type = proto.GAME__ITEM__ITEM_TYPE_RING,
 	name = "Ring of Wisdom",
-	weight = 0
+	weight = 0,
+	magic = true
 }
 
 function init(self)
@@ -30,6 +32,7 @@ function init(self)
 	assert(decoded_item.name == item.name)
 	assert(decoded_item.type == item.type)
 	assert(decoded_item.weight == item.weight)
+	assert(decoded_item.magic == item.magic)
 
 
 	local inventory = {

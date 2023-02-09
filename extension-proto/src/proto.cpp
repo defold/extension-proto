@@ -48,6 +48,14 @@ static void lua_pushgame__item(lua_State* L, Game__Item *msg)
     lua_pushnumber(L, (Game__Item__ItemType)(msg->type));
     lua_settable(L, -3);
 
+    // magic
+    if (msg->has_magic)
+    {
+        lua_pushstring(L, "magic");
+        lua_pushboolean(L, (protobuf_c_boolean)(msg->magic));
+        lua_settable(L, -3);
+    }
+
 }
 static void lua_pushgame__inventory(lua_State* L, Game__Inventory *msg)
 {
@@ -96,7 +104,8 @@ static ProtobufCBinaryData luaL_checkProtobufCBinaryData(lua_State* L, int narg)
 static Game__Item* luaL_checkgame__item(lua_State* L, int narg)
 {
     if (!lua_istable(L, narg)) {
-        return DM_LUA_ERROR("Expected value at index %d to be a table", narg);
+        luaL_error(L, "Expected value at index %d to be a table", narg);
+        return 0;
     }
 
     Game__Item *msg = (Game__Item*)malloc(sizeof(Game__Item));
@@ -126,12 +135,23 @@ static Game__Item* luaL_checkgame__item(lua_State* L, int narg)
     msg->type = (Game__Item__ItemType)luaL_checknumber(L, lua_gettop(L));
     lua_pop(L, 1);
 
+    // magic
+    lua_pushstring(L, "magic");
+    lua_gettable(L, narg);
+    if (!lua_isnil(L, lua_gettop(L)))
+    {
+        msg->has_magic = 1;
+        msg->magic = (protobuf_c_boolean)luaL_checkboolean(L, lua_gettop(L));
+    }
+    lua_pop(L, 1);
+
     return msg;
 }
 static Game__Inventory* luaL_checkgame__inventory(lua_State* L, int narg)
 {
     if (!lua_istable(L, narg)) {
-        return DM_LUA_ERROR("Expected value at index %d to be a table", narg);
+        luaL_error(L, "Expected value at index %d to be a table", narg);
+        return 0;
     }
 
     Game__Inventory *msg = (Game__Inventory*)malloc(sizeof(Game__Inventory));
@@ -183,6 +203,7 @@ static void free_game__item(Game__Item* msg)
     free_string(msg->name);
     free_number(msg->weight);
     free_number(msg->type);
+    free_boolean(msg->magic);
     free(msg);
 }
 static void free_game__inventory(Game__Inventory* msg)
