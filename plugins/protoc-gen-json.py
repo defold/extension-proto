@@ -169,7 +169,7 @@ def generate_code(request, response):
                         property["type_is_primitive"] = True
                     elif property_type == Field.TYPE_BOOL:
                         property["type_lua"] = "boolean"
-                        property["type_cpp"] = "bool"
+                        property["type_cpp"] = "protobuf_c_boolean"
                         property["type_is_primitive"] = True
                     elif property_type == Field.TYPE_ENUM:
                         property["type_lua"] = "number"
