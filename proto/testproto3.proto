@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+package testp3;
+
+/* 
+ * Multi-line comment
+ */
+message Scalars {
+	// all proto3 scalar values
+	int32    i32    = 1;
+	int64    i64    = 2;
+	uint32   ui32   = 3;
+	uint64   ui64   = 4;
+	sint32   si32   = 5;
+	sint64   si64   = 6;
+	fixed32  fix32  = 7;
+	fixed64  fix64  = 8;
+	sfixed32 sfix32 = 9;
+	sfixed64 sfix64 = 10;
+	bool     b      = 11;
+	string   s      = 12; // comment
+	bytes    bytes  = 13;
+	double   d      = 14;
+	float    f      = 15;
+}
+
+message Outer {
+	message Middle {
+		message Inner {
+			string text = 1;
+		}
+		string text = 1;
+		Inner inner = 2;
+	}
+
+	string text = 1;
+	Middle middle = 2;
+}
+
+enum Language {
+	LANGUAGE_LUA  = 0;
+	LANGUAGE_CPP  = 1;
+	LANGUAGE_JAVA = 2;
+}
+
+message Basic {
+	string    s = 1;
+	int32     i = 2;
+	Language lang = 3;
+}
+
+message Container {
+	map<string, Basic>  basic_map = 1;
+	map<string, string> string_map = 2;
+	repeated string     repeated_string = 3;
+	repeated Basic      repeated_basic = 4;
+}

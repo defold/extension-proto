@@ -20,6 +20,9 @@
 {{#messages}}
 static void lua_push{{type_cpp_lower}}(lua_State* L, {{type_cpp}} *msg);
 {{/messages}}
+{{#messages}}
+static void lua_push{{type_cpp_lower}}_repeated(lua_State* L, {{type_cpp}} *msg, int count);
+{{/messages}}
 
 static void lua_pushProtobufCBinaryData(lua_State* L, ProtobufCBinaryData binarydata)
 {
@@ -27,11 +30,29 @@ static void lua_pushProtobufCBinaryData(lua_State* L, ProtobufCBinaryData binary
 }
 
 {{#messages}}
+static void lua_push{{type_cpp_lower}}_repeated(lua_State* L, {{type_cpp}} *msg, int index)
+{
+    {{#is_map_entry}}
+    {{key.type_cpp}} key = ({{key.type_cpp}})(msg->key);
+    {{value.type_cpp}} value = ({{value.type_cpp}})(msg->value);
+    lua_push{{key.type_lua}}(L, key);
+    lua_push{{value.type_lua}}(L, value);
+    lua_settable(L, -3);
+    {{/is_map_entry}}
+    {{^is_map_entry}}
+    lua_pushnumber(L, index);
+    lua_push{{type_lua}}(L, msg);
+    lua_settable(L, -3);
+    {{/is_map_entry}}
+}
+{{/messages}}
+
+{{#messages}}
 static void lua_push{{type_cpp_lower}}(lua_State* L, {{type_cpp}} *msg)
 {
     lua_newtable(L);
 
-    {{#properties}}
+    {{#fields}}
     {{#repeated}}
     // {{name}}
     lua_pushstring(L, "{{name_cpp_lower}}");
@@ -39,9 +60,15 @@ static void lua_push{{type_cpp_lower}}(lua_State* L, {{type_cpp}} *msg)
     int {{name_cpp_lower}}_size = msg->n_{{name_cpp_lower}};
     for (int i = 0; i < {{name_cpp_lower}}_size; i++)
     {
+        {{#type_is_message}}
+        {{type_cpp}} {{name}}_msg = ({{type_cpp}})(msg->{{name_cpp_lower}}[i]);
+        lua_push{{type_cpp_lower}}_repeated(L, {{name}}_msg, i + 1);
+        {{/type_is_message}}
+        {{^type_is_message}}
         lua_pushnumber(L, i + 1);
         lua_push{{type_lua}}(L, ({{type_cpp}})(msg->{{name_cpp_lower}}[i]));
         lua_settable(L, -3);
+        {{/type_is_message}}
     }
     lua_settable(L, -3);
 
@@ -65,7 +92,7 @@ static void lua_push{{type_cpp_lower}}(lua_State* L, {{type_cpp}} *msg)
     }
 
     {{/optional}}
-    {{/properties}}
+    {{/fields}}
 }
 {{/messages}}
 
@@ -74,11 +101,18 @@ static void lua_push{{type_cpp_lower}}(lua_State* L, {{type_cpp}} *msg)
  * CHECK 
  ******************************************************************************/
 
-static int luaL_checkboolean(lua_State* L, int narg) { return lua_toboolean(L, narg); }
-
-{{#messages}}
-static {{type_cpp}}* luaL_check{{type_cpp_lower}}(lua_State* L, int narg);
-{{/messages}}
+// get size of table by counting number of keys
+static int lua_tablelen(lua_State* L, int index)
+{
+    int count = 0;
+    lua_pushnil(L);  // first key
+    while (lua_next(L, index) != 0) // pops key, pushes key-value pair
+    {
+        lua_pop(L, 1); // remove value, keep key for next iteration
+        count++;
+    }
+    return count;
+}
 
 static ProtobufCBinaryData luaL_checkProtobufCBinaryData(lua_State* L, int narg)
 {
@@ -91,7 +125,30 @@ static ProtobufCBinaryData luaL_checkProtobufCBinaryData(lua_State* L, int narg)
     return binarydata;
 }
 
+static int luaL_checkboolean(lua_State* L, int narg) { return lua_toboolean(L, narg); }
+
 {{#messages}}
+{{#is_map_entry}}
+static {{type_cpp}}* luaL_check{{type_cpp_lower}}(lua_State* L, int key, int value);
+{{/is_map_entry}}
+{{^is_map_entry}}
+static {{type_cpp}}* luaL_check{{type_cpp_lower}}(lua_State* L, int narg);
+{{/is_map_entry}}
+{{/messages}}
+
+{{#messages}}
+{{#is_map_entry}}
+static {{type_cpp}}* luaL_check{{type_cpp_lower}}(lua_State* L, int key, int value)
+{
+    {{type_cpp}} *msg = ({{type_cpp}}*)malloc(sizeof({{type_cpp}}));
+    {{type_cpp_lower}}__init(msg);
+    msg->key = ({{key.type_cpp}})luaL_check{{key.type_lua}}(L, key);
+    msg->value = ({{value.type_cpp}})luaL_check{{value.type_lua}}(L, value);
+    return msg;
+}
+
+{{/is_map_entry}}
+{{^is_map_entry}}
 static {{type_cpp}}* luaL_check{{type_cpp_lower}}(lua_State* L, int narg)
 {
     if (!lua_istable(L, narg)) {
@@ -102,23 +159,41 @@ static {{type_cpp}}* luaL_check{{type_cpp_lower}}(lua_State* L, int narg)
     {{type_cpp}} *msg = ({{type_cpp}}*)malloc(sizeof({{type_cpp}}));
     {{type_cpp_lower}}__init(msg);
 
-    {{#properties}}
+    {{#fields}}
     {{#repeated}}
-    // {{name}}
+    // {{name}} {{#type_is_map}}[map]{{/type_is_map}}{{^type_is_map}}[repeated]{{/type_is_map}}
     lua_pushstring(L, "{{name}}");
     lua_gettable(L, narg);
-    int {{name}}_size = lua_objlen(L, lua_gettop(L));
     int {{name}}_index = lua_gettop(L);
+    if (!lua_istable(L, {{name}}_index))
+    {
+        luaL_error(L, "Expected value for key '{{name}}' to be a table");
+        return 0;
+    }
+    int {{name}}_size = lua_tablelen(L, {{name}}_index);
     msg->n_{{name_cpp_lower}} = {{name}}_size;
     msg->{{name_cpp_lower}} = ({{type_cpp}}*)malloc(sizeof({{type_cpp}}) * {{name}}_size);
+    {{#type_is_map}}
+    {
+        int i = 0;
+        lua_pushnil(L);  // first key
+        while (lua_next(L, {{name}}_index) != 0) // pops key, pushes key-value pair
+        {
+            msg->{{name_cpp_lower}}[i++] = ({{type_cpp}})luaL_check{{type_lua}}(L, lua_gettop(L) - 1, lua_gettop(L));
+            lua_pop(L, 1); // pop value
+        }
+    }
+    {{/type_is_map}}
+    {{^type_is_map}}
     for (int i = 0; i < {{name}}_size; i++)
     {
-        lua_pushnumber(L, i + 1);
-        lua_gettable(L, {{name}}_index);
+        lua_pushnumber(L, i + 1); // key
+        lua_gettable(L, {{name}}_index); // pops key, pushes value
         msg->{{name_cpp_lower}}[i] = ({{type_cpp}})luaL_check{{type_lua}}(L, lua_gettop(L));
-        lua_pop(L, 1);
+        lua_pop(L, 1); // pop value
     }
-    lua_pop(L, 1);
+    {{/type_is_map}}
+    lua_pop(L, 1); // pop table "{{name}}"
 
     {{/repeated}}
     {{#required}}
@@ -141,9 +216,11 @@ static {{type_cpp}}* luaL_check{{type_cpp_lower}}(lua_State* L, int narg)
     lua_pop(L, 1);
 
     {{/optional}}
-    {{/properties}}
+    {{/fields}}
     return msg;
 }
+
+{{/is_map_entry}}
 {{/messages}}
 
 
@@ -165,7 +242,7 @@ static void free_boolean(bool) {};
 {{#messages}}
 static void free_{{type_cpp_lower}}({{type_cpp}}* msg)
 {
-    {{#properties}}
+    {{#fields}}
     {{#repeated}}
     int {{name}}_size = msg->n_{{name_cpp_lower}};
     for (int i = 0; i < {{name}}_size; i++)
@@ -177,7 +254,7 @@ static void free_{{type_cpp_lower}}({{type_cpp}}* msg)
     {{^repeated}}
     free_{{type_lua}}(msg->{{name_cpp_lower}});
     {{/repeated}}
-    {{/properties}}
+    {{/fields}}
     free(msg);
 }
 {{/messages}}

@@ -1,53 +1,130 @@
-local broadsword = {
-	id = 1,
-	type = proto.GAME__ITEM__ITEM_TYPE_WEAPON,
-	name = "Broadsword",
-	weight = 2
-}
-local chainmail = {
-	id = 2,
-	type = proto.GAME__ITEM__ITEM_TYPE_ARMOUR,
-	name = "Chainmail",
-	weight = 25,
-	magic = false
-}
-local ring_of_wisdom = {
-	id = 3,
-	type = proto.GAME__ITEM__ITEM_TYPE_RING,
-	name = "Ring of Wisdom",
-	weight = 0,
-	magic = true
-}
-
-function init(self)
-	local item = broadsword
+local function test_proto2()
+	local broadsword = {
+		id = 1,
+		type = proto.GAME__ITEM__ITEM_TYPE_WEAPON,
+		name = "Broadsword",
+		weight = 2
+	}
+	local chainmail = {
+		id = 2,
+		type = proto.GAME__ITEM__ITEM_TYPE_ARMOUR,
+		name = "Chainmail",
+		weight = 25,
+		magic = false
+	}
+	local ring_of_wisdom = {
+		id = 3,
+		type = proto.GAME__ITEM__ITEM_TYPE_RING,
+		name = "Ring of Wisdom",
+		weight = 0,
+		magic = true
+	}
+	
+	local item = ring_of_wisdom
 	-- serialize the Lua table to an Item message
+	print("Encoding item")
+	pprint(item)
 	local item_msg = proto.encode_game_item(item)
 	assert(item_msg)
-	assert(#item_msg == 21)
+	assert(#item_msg == 27)
 
 	-- decode the binary message back to a Lua table
+	print("Decoding item")
 	local decoded_item = proto.decode_game_item(item_msg)
+	pprint(decoded_item)
 	assert(decoded_item.id == item.id)
 	assert(decoded_item.name == item.name)
 	assert(decoded_item.type == item.type)
 	assert(decoded_item.weight == item.weight)
 	assert(decoded_item.magic == item.magic)
+end
 
-
-	local inventory = {
-		capacity = 5,
-		items = {
-			broadsword,
-			chainmail,
-			ring_of_wisdom
-		}
+local function test_proto3()
+	local scalars = {
+		i32    = (2^31)-1,
+		i64    = (2^62)-1,
+		ui32   = (2^32)-1,
+		ui64   = (2^63)-1,
+		si32   = -2^31,
+		si64   = -2^63,
+		fix32  = (2^31)-1,
+		fix64  = (2^63)-1,
+		sfix32 = -2^31,
+		sfix64 = -2^63,
+		b      = true,
+		s      = "foobar",
+		bytes  = "\0x0\0x1\0x2\0x3",
+		d      = 1000.0001,
+		f      = 1000.0001,
 	}
-	local inv_msg = proto.encode_game_inventory(inventory)
-	assert(inv_msg)
-	
-	local decoded_inv = proto.decode_game_inventory(inv_msg)
-	pprint(decoded_inv)
-	assert(decoded_inv.capacity == inventory.capacity)
-	assert(#decoded_inv.items == #inventory.items)
+	print("Encoding scalars")
+	pprint(scalars)
+	local encoded_scalars = proto.encode_testp3_scalars(scalars)
+	assert(encoded_scalars)
+	assert(#encoded_scalars > 0)
+
+	print("Decoding scalars")
+	local decoded_scalars = proto.decode_testp3_scalars(encoded_scalars)
+	pprint(decoded_scalars)
+	assert(scalars.i32 == decoded_scalars.i32)
+	assert(scalars.i64 == decoded_scalars.i64)
+	assert(scalars.ui32 == decoded_scalars.ui32)
+	assert(scalars.ui64 == decoded_scalars.ui64)
+	assert(scalars.si32 == decoded_scalars.si32)
+	assert(scalars.si64 == decoded_scalars.si64)
+	assert(scalars.fix32 == decoded_scalars.fix32)
+	assert(scalars.fix64 == decoded_scalars.fix64)
+	assert(scalars.sfix32 == decoded_scalars.sfix32)
+	assert(scalars.sfix64 == decoded_scalars.sfix64)
+	assert(scalars.b == decoded_scalars.b)
+	assert(scalars.s == decoded_scalars.s)
+	assert(scalars.bytes == decoded_scalars.bytes)
+	assert(math.abs(scalars.d - decoded_scalars.d) < 0.001)
+	assert(math.abs(scalars.f - decoded_scalars.f) < 0.001)
+
+	print("Basic message and enums")
+	local basic1 = { s = "cpp", i = 123, lang = proto.TESTP3__LANGUAGE_LANGUAGE_CPP }
+	local basic2 = { s = "lua", i = 345, lang = proto.TESTP3__LANGUAGES_LANGUAGE_LUA }
+	local encoded_b1 = proto.encode_testp3_basic(basic1)
+	local encoded_b2 = proto.encode_testp3_basic(basic2)
+	local decoded_b1 = proto.decode_testp3_basic(encoded_b1)
+	local decoded_b2 = proto.decode_testp3_basic(encoded_b2)
+	assert(basic1.s == decoded_b1.s)
+	assert(basic1.i == decoded_b1.i)
+	assert(basic1.lang == decoded_b1.lang)
+
+	print("Nested messages")
+	local inner = { text = "inner" }
+	local middle = { text = "middle", inner = inner }
+	local outer = { text = "outer", middle = middle }
+	local encoded_outer = proto.encode_testp3_outer(outer)
+	local decoded_outer = proto.decode_testp3_outer(encoded_outer)
+	pprint(decoded_outer)
+
+	print("Repeated messages and maps")
+	local container = {
+		basic_map = {
+			b1 = basic1,
+			b2 = basic2,
+		},
+		string_map = {
+			luke = "skywalker",
+			han = "solo",
+		},
+		repeated_string = { "a", "b", "c" },
+		repeated_basic = { basic1, basic2 }
+	}
+	local encoded_container = proto.encode_testp3_container(container)
+	local decoded_container = proto.decode_testp3_container(encoded_container)
+	pprint(decoded_container)
+	assert(decoded_container.basic_map)
+	assert(decoded_container.basic_map.b1.s == container.basic_map.b1.s)
+	assert(decoded_container.string_map.luke == container.string_map.luke)
+	assert(decoded_container.repeated_string[1] == container.repeated_string[1])
+	assert(decoded_container.repeated_basic[1].s == container.repeated_basic[1].s)
+end
+
+function init(self)
+	test_proto2()
+	test_proto3()
 end

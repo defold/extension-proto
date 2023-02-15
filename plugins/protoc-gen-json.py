@@ -79,6 +79,75 @@ def type_name_to_cpp(type_name, lower=False, upper=False):
         type_name_parts.append(name)
     return "__".join(type_name_parts)
 
+def parse_field(f):
+    field_type = int(f.type)
+    field =  {
+        "name": f.name,
+        "name_cpp": name_to_cpp(f.name),
+        "name_cpp_lower": name_to_cpp(f.name).lower(),
+        "type": field_type,
+        "repeated": (f.label == FieldDescriptorProto.LABEL_REPEATED),
+        "required": (f.label == FieldDescriptorProto.LABEL_REQUIRED),
+        "optional": (f.label == FieldDescriptorProto.LABEL_OPTIONAL),
+    }
+
+    # https://developers.google.com/protocol-buffers/docs/proto#scalar
+    if field_type == Field.TYPE_DOUBLE:
+        field["type_lua"] = "number"
+        field["type_cpp"] = "double"
+        field["type_is_primitive"] = True
+    elif field_type == Field.TYPE_FLOAT:
+        field["type_lua"] = "number"
+        field["type_cpp"] = "float"
+        field["type_is_primitive"] = True
+    elif field_type == Field.TYPE_INT64 or field_type == Field.TYPE_SFIXED64 or field_type == Field.TYPE_SINT64:
+        field["type_lua"] = "number"
+        field["type_cpp"] = "int64_t"
+        field["type_is_primitive"] = True
+    elif field_type == Field.TYPE_INT32 or field_type == Field.TYPE_SFIXED32 or field_type == Field.TYPE_SINT32:
+        field["type_lua"] = "number"
+        field["type_cpp"] = "int32_t"
+        field["type_is_primitive"] = True
+    elif field_type == Field.TYPE_FIXED64 or field_type == Field.TYPE_UINT64:
+        field["type_lua"] = "number"
+        field["type_cpp"] = "uint64_t"
+        field["type_is_primitive"] = True
+    elif field_type == Field.TYPE_FIXED32 or field_type == Field.TYPE_UINT32:
+        field["type_lua"] = "number"
+        field["type_cpp"] = "uint32_t"
+        field["type_is_primitive"] = True
+    elif field_type == Field.TYPE_BOOL:
+        field["type_lua"] = "boolean"
+        field["type_cpp"] = "protobuf_c_boolean"
+        field["type_is_primitive"] = True
+    elif field_type == Field.TYPE_ENUM:
+        field["type_lua"] = "number"
+        field["type_cpp"] = type_name_to_cpp(f.type_name)
+        field["type_is_enum"] = True
+        field["type_is_primitive"] = True
+    elif field_type == Field.TYPE_STRING:
+        field["type_lua"] = "string"
+        field["type_cpp"] = "char*"
+        field["type_is_string"] = True
+        field["type_is_primitive"] = False
+    elif field_type == Field.TYPE_BYTES:
+        field["type_lua"] = "ProtobufCBinaryData"
+        field["type_cpp"] = "ProtobufCBinaryData"
+        field["type_is_bytes"] = True
+        field["type_is_primitive"] = False
+    elif field_type == Field.TYPE_MESSAGE:
+        field["type_lua"] = type_name_to_lua(f.type_name)
+        field["type_cpp"] = type_name_to_cpp(f.type_name) + "*"
+        field["type_cpp_lower"] = type_name_to_cpp(f.type_name, lower=True)
+        field["type_is_message"] = True
+        field["type_is_primitive"] = False
+    elif field_type == Field.TYPE_GROUP:
+        print("Unsupported type 'group'")
+    else:
+        print("Unknown field type!")
+
+    return field
+
 
 def generate_code(request, response):
     messages = []
@@ -105,8 +174,12 @@ def generate_code(request, response):
             item_name = item.name if hasattr(item, "name") else "?"
             parent_name = parent.name if parent else None
             item_type_name = package + "." + (parent_name + "." if parent_name else "") + item_name
+
+            # proto_file.syntax will not be set if proto2
+            is_proto2_syntax = proto_file.syntax != "proto3"
+            
             data = {
-                "is_proto2_syntax": proto_file.syntax != "proto3", # syntax will not be set if proto2
+                "is_proto2_syntax": is_proto2_syntax,
                 "package": package,
                 "package_lower": package.lower(),
                 "nested": '.' in package,
@@ -116,6 +189,7 @@ def generate_code(request, response):
                 "name_cpp_lower": name_to_cpp(item_name).lower(),
                 "name_lower": item_name.lower(),
                 "name_upper": item_name.upper(),
+                "type_lua":  type_name_to_lua(item_type_name),
                 "type_cpp":  type_name_to_cpp(item_type_name),
                 "type_cpp_lower": type_name_to_cpp(item_type_name, lower=True),
                 "type_cpp_upper":  type_name_to_cpp(item_type_name, upper=True),
@@ -126,75 +200,21 @@ def generate_code(request, response):
             }
 
             if isinstance(item, DescriptorProto):
-                properties = []
-                data.update({ "properties": properties })
+                is_map_entry = item.options.map_entry
+                fields = []
+                data.update({ "fields": fields })
+                data["is_map_entry"] = is_map_entry
                 messages.append(data)
-                for f in item.field:
-                    property_type = int(f.type)
-                    property =  {
-                        "name": f.name,
-                        "name_cpp": name_to_cpp(f.name),
-                        "name_cpp_lower": name_to_cpp(f.name).lower(),
-                        "type": property_type,
-                        "repeated": (f.label == FieldDescriptorProto.LABEL_REPEATED),
-                        "required": (f.label == FieldDescriptorProto.LABEL_REQUIRED),
-                        "optional": (f.label == FieldDescriptorProto.LABEL_OPTIONAL),
-                    }
 
-                    # https://developers.google.com/protocol-buffers/docs/proto#scalar
-                    if property_type == Field.TYPE_DOUBLE:
-                        property["type_lua"] = "number"
-                        property["type_cpp"] = "double"
-                        property["type_is_primitive"] = True
-                    elif property_type == Field.TYPE_FLOAT:
-                        property["type_lua"] = "number"
-                        property["type_cpp"] = "float"
-                        property["type_is_primitive"] = True
-                    elif property_type == Field.TYPE_INT64 or property_type == Field.TYPE_SFIXED64 or property_type == Field.TYPE_SINT64:
-                        property["type_lua"] = "number"
-                        property["type_cpp"] = "int64_t"
-                        property["type_is_primitive"] = True
-                    elif property_type == Field.TYPE_INT32 or property_type == Field.TYPE_SFIXED32 or property_type == Field.TYPE_SINT32:
-                        property["type_lua"] = "number"
-                        property["type_cpp"] = "int32_t"
-                        property["type_is_primitive"] = True
-                    elif property_type == Field.TYPE_FIXED64 or property_type == Field.TYPE_UINT64:
-                        property["type_lua"] = "number"
-                        property["type_cpp"] = "uint64_t"
-                        property["type_is_primitive"] = True
-                    elif property_type == Field.TYPE_FIXED32 or property_type == Field.TYPE_UINT32:
-                        property["type_lua"] = "number"
-                        property["type_cpp"] = "uint32_t"
-                        property["type_is_primitive"] = True
-                    elif property_type == Field.TYPE_BOOL:
-                        property["type_lua"] = "boolean"
-                        property["type_cpp"] = "protobuf_c_boolean"
-                        property["type_is_primitive"] = True
-                    elif property_type == Field.TYPE_ENUM:
-                        property["type_lua"] = "number"
-                        property["type_cpp"] = type_name_to_cpp(f.type_name)
-                        property["type_is_enum"] = True
-                        property["type_is_primitive"] = True
-                    elif property_type == Field.TYPE_STRING:
-                        property["type_lua"] = "string"
-                        property["type_cpp"] = "char*"
-                        property["type_is_string"] = True
-                        property["type_is_primitive"] = False
-                    elif property_type == Field.TYPE_BYTES:
-                        property["type_lua"] = "ProtobufCBinaryData"
-                        property["type_cpp"] = "ProtobufCBinaryData"
-                        property["type_is_bytes"] = True
-                        property["type_is_primitive"] = False
-                    elif property_type == Field.TYPE_MESSAGE:
-                        property["type_lua"] = type_name_to_lua(f.type_name)
-                        property["type_cpp"] = type_name_to_cpp(f.type_name) + "*"
-                        property["type_is_message"] = True
-                        property["type_is_primitive"] = False
-                    elif property_type == Field.TYPE_GROUP:
-                        print("Unsupported type 'group'")
-                    else:
-                        print("Unknown property type!")
-                    properties.append(property)
+                if is_map_entry:
+                    for f in item.field:
+                        if f.name == "key":
+                            data["key"] = parse_field(f)
+                        elif f.name == "value":
+                            data["value"] = parse_field(f)
+                else:
+                    for f in item.field:
+                        fields.append(parse_field(f))
 
             elif isinstance(item, EnumDescriptorProto):
                 values = []
@@ -206,6 +226,18 @@ def generate_code(request, response):
                         "value": v.number
                     }
                     values.append(value)
+
+    # find message fields of type map
+    # we do this by first searching for any map entry messages and
+    # then by searching for fields which use the map entry as field type
+    for message in messages:
+        if not message.get("is_map_entry"):
+            continue
+        for m in messages:
+            for f in m.get("fields"):
+                if f.get("type_cpp").replace("*", "") == message.get("type_cpp"):
+                    log("found message using this map entry", m.get("name"))
+                    f["type_is_map"] = True
 
 
     f = response.file.add()

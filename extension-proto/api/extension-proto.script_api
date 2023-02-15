@@ -44,6 +44,86 @@
       - name: msg
         type: table
 
+#*****************************************************************************************************
+
+    - name: encode_testp3_scalars
+      type: function
+      parameters:
+      - name: msg
+        type: table
+      returns:
+      - name: msg
+        type: string
+
+    - name: decode_testp3_scalars
+      type: function
+      parameters:
+      - name: msg
+        type: string
+      returns:
+      - name: msg
+        type: table
+
+#*****************************************************************************************************
+
+    - name: encode_testp3_outer
+      type: function
+      parameters:
+      - name: msg
+        type: table
+      returns:
+      - name: msg
+        type: string
+
+    - name: decode_testp3_outer
+      type: function
+      parameters:
+      - name: msg
+        type: string
+      returns:
+      - name: msg
+        type: table
+
+#*****************************************************************************************************
+
+    - name: encode_testp3_basic
+      type: function
+      parameters:
+      - name: msg
+        type: table
+      returns:
+      - name: msg
+        type: string
+
+    - name: decode_testp3_basic
+      type: function
+      parameters:
+      - name: msg
+        type: string
+      returns:
+      - name: msg
+        type: table
+
+#*****************************************************************************************************
+
+    - name: encode_testp3_container
+      type: function
+      parameters:
+      - name: msg
+        type: table
+      returns:
+      - name: msg
+        type: string
+
+    - name: decode_testp3_container
+      type: function
+      parameters:
+      - name: msg
+        type: string
+      returns:
+      - name: msg
+        type: table
+
 
 
 #*****************************************************************************************************
@@ -55,4 +135,13 @@
     - name: GAME__ITEM__ITEM_TYPE_RING
       type: number
     - name: GAME__ITEM__ITEM_TYPE_BOOK
+      type: number
+
+#*****************************************************************************************************
+
+    - name: TESTP3__LANGUAGE_LANGUAGE_LUA
+      type: number
+    - name: TESTP3__LANGUAGE_LANGUAGE_CPP
+      type: number
+    - name: TESTP3__LANGUAGE_LANGUAGE_JAVA
       type: number
