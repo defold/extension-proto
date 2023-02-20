@@ -143,14 +143,18 @@ struct  Testp3__Container
   Testp3__Container__BasicMapEntry **basic_map;
   size_t n_string_map;
   Testp3__Container__StringMapEntry **string_map;
-  size_t n_repeated_string;
-  char **repeated_string;
-  size_t n_repeated_basic;
-  Testp3__Basic **repeated_basic;
+  size_t n_repeated_string1;
+  char **repeated_string1;
+  size_t n_repeated_string2;
+  char **repeated_string2;
+  size_t n_repeated_basic1;
+  Testp3__Basic **repeated_basic1;
+  size_t n_repeated_basic2;
+  Testp3__Basic **repeated_basic2;
 };
 #define TESTP3__CONTAINER__INIT \
  { PROTOBUF_C_MESSAGE_INIT (&testp3__container__descriptor) \
-    , 0,NULL, 0,NULL, 0,NULL, 0,NULL }
+    , 0,NULL, 0,NULL, 0,NULL, 0,NULL, 0,NULL, 0,NULL }
 
 
 /* Testp3__Scalars methods */

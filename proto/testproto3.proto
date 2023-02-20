@@ -52,6 +52,8 @@ message Basic {
 message Container {
 	map<string, Basic>  basic_map = 1;
 	map<string, string> string_map = 2;
-	repeated string     repeated_string = 3;
-	repeated Basic      repeated_basic = 4;
+	repeated string     repeated_string1 = 3;
+	repeated string     repeated_string2 = 4;
+	repeated Basic      repeated_basic1 = 5;
+	repeated Basic      repeated_basic2 = 6;
 }

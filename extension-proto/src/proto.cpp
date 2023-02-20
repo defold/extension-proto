@@ -7,9 +7,8 @@
 #include <stdlib.h>
 
 
-#include "item.pb-c.h"
-#include "inventory.pb-c.h"
 #include "testproto3.pb-c.h"
+#include "testproto2.pb-c.h"
 
 
 
@@ -17,8 +16,6 @@
  * PUSH
  ******************************************************************************/
 
-static void lua_pushgame__item(lua_State* L, Game__Item *msg);
-static void lua_pushgame__inventory(lua_State* L, Game__Inventory *msg);
 static void lua_pushtestp3__scalars(lua_State* L, Testp3__Scalars *msg);
 static void lua_pushtestp3__outer(lua_State* L, Testp3__Outer *msg);
 static void lua_pushtestp3__outer__middle(lua_State* L, Testp3__Outer__Middle *msg);
@@ -27,8 +24,14 @@ static void lua_pushtestp3__basic(lua_State* L, Testp3__Basic *msg);
 static void lua_pushtestp3__container(lua_State* L, Testp3__Container *msg);
 static void lua_pushtestp3__container__basic_map_entry(lua_State* L, Testp3__Container__BasicMapEntry *msg);
 static void lua_pushtestp3__container__string_map_entry(lua_State* L, Testp3__Container__StringMapEntry *msg);
-static void lua_pushgame__item_repeated(lua_State* L, Game__Item *msg, int count);
-static void lua_pushgame__inventory_repeated(lua_State* L, Game__Inventory *msg, int count);
+static void lua_pushtestp2__scalars(lua_State* L, Testp2__Scalars *msg);
+static void lua_pushtestp2__outer(lua_State* L, Testp2__Outer *msg);
+static void lua_pushtestp2__outer__middle(lua_State* L, Testp2__Outer__Middle *msg);
+static void lua_pushtestp2__outer__middle__inner(lua_State* L, Testp2__Outer__Middle__Inner *msg);
+static void lua_pushtestp2__basic(lua_State* L, Testp2__Basic *msg);
+static void lua_pushtestp2__container(lua_State* L, Testp2__Container *msg);
+static void lua_pushtestp2__container__basic_map_entry(lua_State* L, Testp2__Container__BasicMapEntry *msg);
+static void lua_pushtestp2__container__string_map_entry(lua_State* L, Testp2__Container__StringMapEntry *msg);
 static void lua_pushtestp3__scalars_repeated(lua_State* L, Testp3__Scalars *msg, int count);
 static void lua_pushtestp3__outer_repeated(lua_State* L, Testp3__Outer *msg, int count);
 static void lua_pushtestp3__outer__middle_repeated(lua_State* L, Testp3__Outer__Middle *msg, int count);
@@ -37,24 +40,20 @@ static void lua_pushtestp3__basic_repeated(lua_State* L, Testp3__Basic *msg, int
 static void lua_pushtestp3__container_repeated(lua_State* L, Testp3__Container *msg, int count);
 static void lua_pushtestp3__container__basic_map_entry_repeated(lua_State* L, Testp3__Container__BasicMapEntry *msg, int count);
 static void lua_pushtestp3__container__string_map_entry_repeated(lua_State* L, Testp3__Container__StringMapEntry *msg, int count);
+static void lua_pushtestp2__scalars_repeated(lua_State* L, Testp2__Scalars *msg, int count);
+static void lua_pushtestp2__outer_repeated(lua_State* L, Testp2__Outer *msg, int count);
+static void lua_pushtestp2__outer__middle_repeated(lua_State* L, Testp2__Outer__Middle *msg, int count);
+static void lua_pushtestp2__outer__middle__inner_repeated(lua_State* L, Testp2__Outer__Middle__Inner *msg, int count);
+static void lua_pushtestp2__basic_repeated(lua_State* L, Testp2__Basic *msg, int count);
+static void lua_pushtestp2__container_repeated(lua_State* L, Testp2__Container *msg, int count);
+static void lua_pushtestp2__container__basic_map_entry_repeated(lua_State* L, Testp2__Container__BasicMapEntry *msg, int count);
+static void lua_pushtestp2__container__string_map_entry_repeated(lua_State* L, Testp2__Container__StringMapEntry *msg, int count);
 
 static void lua_pushProtobufCBinaryData(lua_State* L, ProtobufCBinaryData binarydata)
 {
     lua_pushlstring(L, (const char*)binarydata.data, binarydata.len);
 }
 
-static void lua_pushgame__item_repeated(lua_State* L, Game__Item *msg, int index)
-{
-    lua_pushnumber(L, index);
-    lua_pushgame__item(L, msg);
-    lua_settable(L, -3);
-}
-static void lua_pushgame__inventory_repeated(lua_State* L, Game__Inventory *msg, int index)
-{
-    lua_pushnumber(L, index);
-    lua_pushgame__inventory(L, msg);
-    lua_settable(L, -3);
-}
 static void lua_pushtestp3__scalars_repeated(lua_State* L, Testp3__Scalars *msg, int index)
 {
     lua_pushnumber(L, index);
@@ -107,61 +106,59 @@ static void lua_pushtestp3__container__string_map_entry_repeated(lua_State* L, T
     lua_pushstring(L, value);
     lua_settable(L, -3);
 }
-
-static void lua_pushgame__item(lua_State* L, Game__Item *msg)
+static void lua_pushtestp2__scalars_repeated(lua_State* L, Testp2__Scalars *msg, int index)
 {
-    lua_newtable(L);
-
-    // id
-    lua_pushstring(L, "id");
-    lua_pushnumber(L, (int32_t)(msg->id));
+    lua_pushnumber(L, index);
+    lua_pushtestp2__scalars(L, msg);
     lua_settable(L, -3);
-
-    // name
-    lua_pushstring(L, "name");
-    lua_pushstring(L, (char*)(msg->name));
-    lua_settable(L, -3);
-
-    // weight
-    lua_pushstring(L, "weight");
-    lua_pushnumber(L, (float)(msg->weight));
-    lua_settable(L, -3);
-
-    // type
-    lua_pushstring(L, "type");
-    lua_pushnumber(L, (Game__Item__ItemType)(msg->type));
-    lua_settable(L, -3);
-
-    // magic
-    if (msg->has_magic)
-    {
-        lua_pushstring(L, "magic");
-        lua_pushboolean(L, (protobuf_c_boolean)(msg->magic));
-        lua_settable(L, -3);
-    }
-
 }
-static void lua_pushgame__inventory(lua_State* L, Game__Inventory *msg)
+static void lua_pushtestp2__outer_repeated(lua_State* L, Testp2__Outer *msg, int index)
 {
-    lua_newtable(L);
-
-    // capacity
-    lua_pushstring(L, "capacity");
-    lua_pushnumber(L, (int32_t)(msg->capacity));
+    lua_pushnumber(L, index);
+    lua_pushtestp2__outer(L, msg);
     lua_settable(L, -3);
-
-    // items
-    lua_pushstring(L, "items");
-    lua_newtable(L);
-    int items_size = msg->n_items;
-    for (int i = 0; i < items_size; i++)
-    {
-        Game__Item* items_msg = (Game__Item*)(msg->items[i]);
-        lua_pushgame__item_repeated(L, items_msg, i + 1);
-    }
-    lua_settable(L, -3);
-
 }
+static void lua_pushtestp2__outer__middle_repeated(lua_State* L, Testp2__Outer__Middle *msg, int index)
+{
+    lua_pushnumber(L, index);
+    lua_pushtestp2__outer__middle(L, msg);
+    lua_settable(L, -3);
+}
+static void lua_pushtestp2__outer__middle__inner_repeated(lua_State* L, Testp2__Outer__Middle__Inner *msg, int index)
+{
+    lua_pushnumber(L, index);
+    lua_pushtestp2__outer__middle__inner(L, msg);
+    lua_settable(L, -3);
+}
+static void lua_pushtestp2__basic_repeated(lua_State* L, Testp2__Basic *msg, int index)
+{
+    lua_pushnumber(L, index);
+    lua_pushtestp2__basic(L, msg);
+    lua_settable(L, -3);
+}
+static void lua_pushtestp2__container_repeated(lua_State* L, Testp2__Container *msg, int index)
+{
+    lua_pushnumber(L, index);
+    lua_pushtestp2__container(L, msg);
+    lua_settable(L, -3);
+}
+static void lua_pushtestp2__container__basic_map_entry_repeated(lua_State* L, Testp2__Container__BasicMapEntry *msg, int index)
+{
+    char* key = (char*)(msg->key);
+    Testp2__Basic* value = (Testp2__Basic*)(msg->value);
+    lua_pushstring(L, key);
+    lua_pushtestp2__basic(L, value);
+    lua_settable(L, -3);
+}
+static void lua_pushtestp2__container__string_map_entry_repeated(lua_State* L, Testp2__Container__StringMapEntry *msg, int index)
+{
+    char* key = (char*)(msg->key);
+    char* value = (char*)(msg->value);
+    lua_pushstring(L, key);
+    lua_pushstring(L, value);
+    lua_settable(L, -3);
+}
+
 static void lua_pushtestp3__scalars(lua_State* L, Testp3__Scalars *msg)
 {
     lua_newtable(L);
@@ -374,6 +371,229 @@ static void lua_pushtestp3__container(lua_State* L, Testp3__Container *msg)
     }
     lua_settable(L, -3);
 
+    // repeated_string1
+    lua_pushstring(L, "repeated_string1");
+    lua_newtable(L);
+    int repeated_string1_size = msg->n_repeated_string1;
+    for (int i = 0; i < repeated_string1_size; i++)
+    {
+        lua_pushnumber(L, i + 1);
+        lua_pushstring(L, (char*)(msg->repeated_string1[i]));
+        lua_settable(L, -3);
+    }
+    lua_settable(L, -3);
+
+    // repeated_string2
+    lua_pushstring(L, "repeated_string2");
+    lua_newtable(L);
+    int repeated_string2_size = msg->n_repeated_string2;
+    for (int i = 0; i < repeated_string2_size; i++)
+    {
+        lua_pushnumber(L, i + 1);
+        lua_pushstring(L, (char*)(msg->repeated_string2[i]));
+        lua_settable(L, -3);
+    }
+    lua_settable(L, -3);
+
+    // repeated_basic1
+    lua_pushstring(L, "repeated_basic1");
+    lua_newtable(L);
+    int repeated_basic1_size = msg->n_repeated_basic1;
+    for (int i = 0; i < repeated_basic1_size; i++)
+    {
+        Testp3__Basic* repeated_basic1_msg = (Testp3__Basic*)(msg->repeated_basic1[i]);
+        lua_pushtestp3__basic_repeated(L, repeated_basic1_msg, i + 1);
+    }
+    lua_settable(L, -3);
+
+    // repeated_basic2
+    lua_pushstring(L, "repeated_basic2");
+    lua_newtable(L);
+    int repeated_basic2_size = msg->n_repeated_basic2;
+    for (int i = 0; i < repeated_basic2_size; i++)
+    {
+        Testp3__Basic* repeated_basic2_msg = (Testp3__Basic*)(msg->repeated_basic2[i]);
+        lua_pushtestp3__basic_repeated(L, repeated_basic2_msg, i + 1);
+    }
+    lua_settable(L, -3);
+
+}
+static void lua_pushtestp3__container__basic_map_entry(lua_State* L, Testp3__Container__BasicMapEntry *msg)
+{
+    lua_newtable(L);
+
+}
+static void lua_pushtestp3__container__string_map_entry(lua_State* L, Testp3__Container__StringMapEntry *msg)
+{
+    lua_newtable(L);
+
+}
+static void lua_pushtestp2__scalars(lua_State* L, Testp2__Scalars *msg)
+{
+    lua_newtable(L);
+
+    // i32
+    lua_pushstring(L, "i32");
+    lua_pushnumber(L, (int32_t)(msg->i32));
+    lua_settable(L, -3);
+
+    // i64
+    lua_pushstring(L, "i64");
+    lua_pushnumber(L, (int64_t)(msg->i64));
+    lua_settable(L, -3);
+
+    // ui32
+    lua_pushstring(L, "ui32");
+    lua_pushnumber(L, (uint32_t)(msg->ui32));
+    lua_settable(L, -3);
+
+    // ui64
+    lua_pushstring(L, "ui64");
+    lua_pushnumber(L, (uint64_t)(msg->ui64));
+    lua_settable(L, -3);
+
+    // si32
+    lua_pushstring(L, "si32");
+    lua_pushnumber(L, (int32_t)(msg->si32));
+    lua_settable(L, -3);
+
+    // si64
+    lua_pushstring(L, "si64");
+    lua_pushnumber(L, (int64_t)(msg->si64));
+    lua_settable(L, -3);
+
+    // fix32
+    lua_pushstring(L, "fix32");
+    lua_pushnumber(L, (uint32_t)(msg->fix32));
+    lua_settable(L, -3);
+
+    // fix64
+    lua_pushstring(L, "fix64");
+    lua_pushnumber(L, (uint64_t)(msg->fix64));
+    lua_settable(L, -3);
+
+    // sfix32
+    lua_pushstring(L, "sfix32");
+    lua_pushnumber(L, (int32_t)(msg->sfix32));
+    lua_settable(L, -3);
+
+    // sfix64
+    lua_pushstring(L, "sfix64");
+    lua_pushnumber(L, (int64_t)(msg->sfix64));
+    lua_settable(L, -3);
+
+    // b
+    lua_pushstring(L, "b");
+    lua_pushboolean(L, (protobuf_c_boolean)(msg->b));
+    lua_settable(L, -3);
+
+    // s
+    lua_pushstring(L, "s");
+    lua_pushstring(L, (char*)(msg->s));
+    lua_settable(L, -3);
+
+    // bytes
+    lua_pushstring(L, "bytes");
+    lua_pushProtobufCBinaryData(L, (ProtobufCBinaryData)(msg->bytes));
+    lua_settable(L, -3);
+
+    // d
+    lua_pushstring(L, "d");
+    lua_pushnumber(L, (double)(msg->d));
+    lua_settable(L, -3);
+
+    // f
+    lua_pushstring(L, "f");
+    lua_pushnumber(L, (float)(msg->f));
+    lua_settable(L, -3);
+
+}
+static void lua_pushtestp2__outer(lua_State* L, Testp2__Outer *msg)
+{
+    lua_newtable(L);
+
+    // text
+    lua_pushstring(L, "text");
+    lua_pushstring(L, (char*)(msg->text));
+    lua_settable(L, -3);
+
+    // middle
+    lua_pushstring(L, "middle");
+    lua_pushtestp2__outer__middle(L, (Testp2__Outer__Middle*)(msg->middle));
+    lua_settable(L, -3);
+
+}
+static void lua_pushtestp2__outer__middle(lua_State* L, Testp2__Outer__Middle *msg)
+{
+    lua_newtable(L);
+
+    // text
+    lua_pushstring(L, "text");
+    lua_pushstring(L, (char*)(msg->text));
+    lua_settable(L, -3);
+
+    // inner
+    lua_pushstring(L, "inner");
+    lua_pushtestp2__outer__middle__inner(L, (Testp2__Outer__Middle__Inner*)(msg->inner));
+    lua_settable(L, -3);
+
+}
+static void lua_pushtestp2__outer__middle__inner(lua_State* L, Testp2__Outer__Middle__Inner *msg)
+{
+    lua_newtable(L);
+
+    // text
+    lua_pushstring(L, "text");
+    lua_pushstring(L, (char*)(msg->text));
+    lua_settable(L, -3);
+
+}
+static void lua_pushtestp2__basic(lua_State* L, Testp2__Basic *msg)
+{
+    lua_newtable(L);
+
+    // s
+    lua_pushstring(L, "s");
+    lua_pushstring(L, (char*)(msg->s));
+    lua_settable(L, -3);
+
+    // i
+    lua_pushstring(L, "i");
+    lua_pushnumber(L, (int32_t)(msg->i));
+    lua_settable(L, -3);
+
+    // lang
+    lua_pushstring(L, "lang");
+    lua_pushnumber(L, (Testp2__Language)(msg->lang));
+    lua_settable(L, -3);
+
+}
+static void lua_pushtestp2__container(lua_State* L, Testp2__Container *msg)
+{
+    lua_newtable(L);
+
+    // basic_map
+    lua_pushstring(L, "basic_map");
+    lua_newtable(L);
+    int basic_map_size = msg->n_basic_map;
+    for (int i = 0; i < basic_map_size; i++)
+    {
+        Testp2__Container__BasicMapEntry* basic_map_msg = (Testp2__Container__BasicMapEntry*)(msg->basic_map[i]);
+        lua_pushtestp2__container__basic_map_entry_repeated(L, basic_map_msg, i + 1);
+    }
+    lua_settable(L, -3);
+
+    // string_map
+    lua_pushstring(L, "string_map");
+    lua_newtable(L);
+    int string_map_size = msg->n_string_map;
+    for (int i = 0; i < string_map_size; i++)
+    {
+        Testp2__Container__StringMapEntry* string_map_msg = (Testp2__Container__StringMapEntry*)(msg->string_map[i]);
+        lua_pushtestp2__container__string_map_entry_repeated(L, string_map_msg, i + 1);
+    }
+    lua_settable(L, -3);
+
     // repeated_string
     lua_pushstring(L, "repeated_string");
     lua_newtable(L);
@@ -392,18 +612,50 @@ static void lua_pushtestp3__container(lua_State* L, Testp3__Container *msg)
     int repeated_basic_size = msg->n_repeated_basic;
     for (int i = 0; i < repeated_basic_size; i++)
     {
-        Testp3__Basic* repeated_basic_msg = (Testp3__Basic*)(msg->repeated_basic[i]);
-        lua_pushtestp3__basic_repeated(L, repeated_basic_msg, i + 1);
+        Testp2__Basic* repeated_basic_msg = (Testp2__Basic*)(msg->repeated_basic[i]);
+        lua_pushtestp2__basic_repeated(L, repeated_basic_msg, i + 1);
     }
     lua_settable(L, -3);
 
+    // optional_string1
+    if (msg->optional_string1 != 0)
+    {
+        lua_pushstring(L, "optional_string1");
+        lua_pushstring(L, (char*)(msg->optional_string1));
+        lua_settable(L, -3);
+    }
+
+    // optional_string2
+    if (msg->optional_string2 != 0)
+    {
+        lua_pushstring(L, "optional_string2");
+        lua_pushstring(L, (char*)(msg->optional_string2));
+        lua_settable(L, -3);
+    }
+
+    // optional_basic1
+    if (msg->optional_basic1 != 0)
+    {
+        lua_pushstring(L, "optional_basic1");
+        lua_pushtestp2__basic(L, (Testp2__Basic*)(msg->optional_basic1));
+        lua_settable(L, -3);
+    }
+
+    // optional_basic2
+    if (msg->optional_basic2 != 0)
+    {
+        lua_pushstring(L, "optional_basic2");
+        lua_pushtestp2__basic(L, (Testp2__Basic*)(msg->optional_basic2));
+        lua_settable(L, -3);
+    }
+
 }
-static void lua_pushtestp3__container__basic_map_entry(lua_State* L, Testp3__Container__BasicMapEntry *msg)
+static void lua_pushtestp2__container__basic_map_entry(lua_State* L, Testp2__Container__BasicMapEntry *msg)
 {
     lua_newtable(L);
 
 }
-static void lua_pushtestp3__container__string_map_entry(lua_State* L, Testp3__Container__StringMapEntry *msg)
+static void lua_pushtestp2__container__string_map_entry(lua_State* L, Testp2__Container__StringMapEntry *msg)
 {
     lua_newtable(L);
 
@@ -440,8 +692,6 @@ static ProtobufCBinaryData luaL_checkProtobufCBinaryData(lua_State* L, int narg)
 
 static int luaL_checkboolean(lua_State* L, int narg) { return lua_toboolean(L, narg); }
 
-static Game__Item* luaL_checkgame__item(lua_State* L, int narg);
-static Game__Inventory* luaL_checkgame__inventory(lua_State* L, int narg);
 static Testp3__Scalars* luaL_checktestp3__scalars(lua_State* L, int narg);
 static Testp3__Outer* luaL_checktestp3__outer(lua_State* L, int narg);
 static Testp3__Outer__Middle* luaL_checktestp3__outer__middle(lua_State* L, int narg);
@@ -450,93 +700,14 @@ static Testp3__Basic* luaL_checktestp3__basic(lua_State* L, int narg);
 static Testp3__Container* luaL_checktestp3__container(lua_State* L, int narg);
 static Testp3__Container__BasicMapEntry* luaL_checktestp3__container__basic_map_entry(lua_State* L, int key, int value);
 static Testp3__Container__StringMapEntry* luaL_checktestp3__container__string_map_entry(lua_State* L, int key, int value);
-
-static Game__Item* luaL_checkgame__item(lua_State* L, int narg)
-{
-    if (!lua_istable(L, narg)) {
-        luaL_error(L, "Expected value at index %d to be a table", narg);
-        return 0;
-    }
-
-    Game__Item *msg = (Game__Item*)malloc(sizeof(Game__Item));
-    game__item__init(msg);
-
-    // id
-    lua_pushstring(L, "id");
-    lua_gettable(L, narg);
-    msg->id = (int32_t)luaL_checknumber(L, lua_gettop(L));
-    lua_pop(L, 1);
-
-    // name
-    lua_pushstring(L, "name");
-    lua_gettable(L, narg);
-    msg->name = (char*)luaL_checkstring(L, lua_gettop(L));
-    lua_pop(L, 1);
-
-    // weight
-    lua_pushstring(L, "weight");
-    lua_gettable(L, narg);
-    msg->weight = (float)luaL_checknumber(L, lua_gettop(L));
-    lua_pop(L, 1);
-
-    // type
-    lua_pushstring(L, "type");
-    lua_gettable(L, narg);
-    msg->type = (Game__Item__ItemType)luaL_checknumber(L, lua_gettop(L));
-    lua_pop(L, 1);
-
-    // magic
-    lua_pushstring(L, "magic");
-    lua_gettable(L, narg);
-    if (!lua_isnil(L, lua_gettop(L)))
-    {
-        msg->has_magic = 1;
-        msg->magic = (protobuf_c_boolean)luaL_checkboolean(L, lua_gettop(L));
-    }
-    lua_pop(L, 1);
-
-    return msg;
-}
-
-static Game__Inventory* luaL_checkgame__inventory(lua_State* L, int narg)
-{
-    if (!lua_istable(L, narg)) {
-        luaL_error(L, "Expected value at index %d to be a table", narg);
-        return 0;
-    }
-
-    Game__Inventory *msg = (Game__Inventory*)malloc(sizeof(Game__Inventory));
-    game__inventory__init(msg);
-
-    // capacity
-    lua_pushstring(L, "capacity");
-    lua_gettable(L, narg);
-    msg->capacity = (int32_t)luaL_checknumber(L, lua_gettop(L));
-    lua_pop(L, 1);
-
-    // items [repeated]
-    lua_pushstring(L, "items");
-    lua_gettable(L, narg);
-    int items_index = lua_gettop(L);
-    if (!lua_istable(L, items_index))
-    {
-        luaL_error(L, "Expected value for key 'items' to be a table");
-        return 0;
-    }
-    int items_size = lua_tablelen(L, items_index);
-    msg->n_items = items_size;
-    msg->items = (Game__Item**)malloc(sizeof(Game__Item*) * items_size);
-    for (int i = 0; i < items_size; i++)
-    {
-        lua_pushnumber(L, i + 1); // key
-        lua_gettable(L, items_index); // pops key, pushes value
-        msg->items[i] = (Game__Item*)luaL_checkgame__item(L, lua_gettop(L));
-        lua_pop(L, 1); // pop value
-    }
-    lua_pop(L, 1); // pop table "items"
-
-    return msg;
-}
+static Testp2__Scalars* luaL_checktestp2__scalars(lua_State* L, int narg);
+static Testp2__Outer* luaL_checktestp2__outer(lua_State* L, int narg);
+static Testp2__Outer__Middle* luaL_checktestp2__outer__middle(lua_State* L, int narg);
+static Testp2__Outer__Middle__Inner* luaL_checktestp2__outer__middle__inner(lua_State* L, int narg);
+static Testp2__Basic* luaL_checktestp2__basic(lua_State* L, int narg);
+static Testp2__Container* luaL_checktestp2__container(lua_State* L, int narg);
+static Testp2__Container__BasicMapEntry* luaL_checktestp2__container__basic_map_entry(lua_State* L, int key, int value);
+static Testp2__Container__StringMapEntry* luaL_checktestp2__container__string_map_entry(lua_State* L, int key, int value);
 
 static Testp3__Scalars* luaL_checktestp3__scalars(lua_State* L, int narg)
 {
@@ -824,21 +995,19 @@ static Testp3__Container* luaL_checktestp3__container(lua_State* L, int narg)
     lua_pushstring(L, "basic_map");
     lua_gettable(L, narg);
     int basic_map_index = lua_gettop(L);
-    if (!lua_istable(L, basic_map_index))
+    if (!lua_isnil(L, basic_map_index))
     {
-        luaL_error(L, "Expected value for key 'basic_map' to be a table");
-        return 0;
-    }
-    int basic_map_size = lua_tablelen(L, basic_map_index);
-    msg->n_basic_map = basic_map_size;
-    msg->basic_map = (Testp3__Container__BasicMapEntry**)malloc(sizeof(Testp3__Container__BasicMapEntry*) * basic_map_size);
-    {
-        int i = 0;
-        lua_pushnil(L);  // first key
-        while (lua_next(L, basic_map_index) != 0) // pops key, pushes key-value pair
+        int basic_map_size = lua_tablelen(L, basic_map_index);
+        msg->n_basic_map = basic_map_size;
+        msg->basic_map = (Testp3__Container__BasicMapEntry**)malloc(sizeof(Testp3__Container__BasicMapEntry*) * basic_map_size);
         {
-            msg->basic_map[i++] = (Testp3__Container__BasicMapEntry*)luaL_checktestp3__container__basic_map_entry(L, lua_gettop(L) - 1, lua_gettop(L));
-            lua_pop(L, 1); // pop value
+            int i = 0;
+            lua_pushnil(L);  // first key
+            while (lua_next(L, basic_map_index) != 0) // pops key, pushes key-value pair
+            {
+                msg->basic_map[i++] = (Testp3__Container__BasicMapEntry*)luaL_checktestp3__container__basic_map_entry(L, lua_gettop(L) - 1, lua_gettop(L));
+                lua_pop(L, 1); // pop value
+            }
         }
     }
     lua_pop(L, 1); // pop table "basic_map"
@@ -847,66 +1016,98 @@ static Testp3__Container* luaL_checktestp3__container(lua_State* L, int narg)
     lua_pushstring(L, "string_map");
     lua_gettable(L, narg);
     int string_map_index = lua_gettop(L);
-    if (!lua_istable(L, string_map_index))
+    if (!lua_isnil(L, string_map_index))
     {
-        luaL_error(L, "Expected value for key 'string_map' to be a table");
-        return 0;
-    }
-    int string_map_size = lua_tablelen(L, string_map_index);
-    msg->n_string_map = string_map_size;
-    msg->string_map = (Testp3__Container__StringMapEntry**)malloc(sizeof(Testp3__Container__StringMapEntry*) * string_map_size);
-    {
-        int i = 0;
-        lua_pushnil(L);  // first key
-        while (lua_next(L, string_map_index) != 0) // pops key, pushes key-value pair
+        int string_map_size = lua_tablelen(L, string_map_index);
+        msg->n_string_map = string_map_size;
+        msg->string_map = (Testp3__Container__StringMapEntry**)malloc(sizeof(Testp3__Container__StringMapEntry*) * string_map_size);
         {
-            msg->string_map[i++] = (Testp3__Container__StringMapEntry*)luaL_checktestp3__container__string_map_entry(L, lua_gettop(L) - 1, lua_gettop(L));
-            lua_pop(L, 1); // pop value
+            int i = 0;
+            lua_pushnil(L);  // first key
+            while (lua_next(L, string_map_index) != 0) // pops key, pushes key-value pair
+            {
+                msg->string_map[i++] = (Testp3__Container__StringMapEntry*)luaL_checktestp3__container__string_map_entry(L, lua_gettop(L) - 1, lua_gettop(L));
+                lua_pop(L, 1); // pop value
+            }
         }
     }
     lua_pop(L, 1); // pop table "string_map"
 
-    // repeated_string [repeated]
-    lua_pushstring(L, "repeated_string");
+    // repeated_string1 [repeated]
+    lua_pushstring(L, "repeated_string1");
     lua_gettable(L, narg);
-    int repeated_string_index = lua_gettop(L);
-    if (!lua_istable(L, repeated_string_index))
+    int repeated_string1_index = lua_gettop(L);
+    if (!lua_isnil(L, repeated_string1_index))
     {
-        luaL_error(L, "Expected value for key 'repeated_string' to be a table");
-        return 0;
+        int repeated_string1_size = lua_tablelen(L, repeated_string1_index);
+        msg->n_repeated_string1 = repeated_string1_size;
+        msg->repeated_string1 = (char**)malloc(sizeof(char*) * repeated_string1_size);
+        for (int i = 0; i < repeated_string1_size; i++)
+        {
+            lua_pushnumber(L, i + 1); // key
+            lua_gettable(L, repeated_string1_index); // pops key, pushes value
+            msg->repeated_string1[i] = (char*)luaL_checkstring(L, lua_gettop(L));
+            lua_pop(L, 1); // pop value
+        }
     }
-    int repeated_string_size = lua_tablelen(L, repeated_string_index);
-    msg->n_repeated_string = repeated_string_size;
-    msg->repeated_string = (char**)malloc(sizeof(char*) * repeated_string_size);
-    for (int i = 0; i < repeated_string_size; i++)
-    {
-        lua_pushnumber(L, i + 1); // key
-        lua_gettable(L, repeated_string_index); // pops key, pushes value
-        msg->repeated_string[i] = (char*)luaL_checkstring(L, lua_gettop(L));
-        lua_pop(L, 1); // pop value
-    }
-    lua_pop(L, 1); // pop table "repeated_string"
+    lua_pop(L, 1); // pop table "repeated_string1"
 
-    // repeated_basic [repeated]
-    lua_pushstring(L, "repeated_basic");
+    // repeated_string2 [repeated]
+    lua_pushstring(L, "repeated_string2");
     lua_gettable(L, narg);
-    int repeated_basic_index = lua_gettop(L);
-    if (!lua_istable(L, repeated_basic_index))
+    int repeated_string2_index = lua_gettop(L);
+    if (!lua_isnil(L, repeated_string2_index))
     {
-        luaL_error(L, "Expected value for key 'repeated_basic' to be a table");
-        return 0;
+        int repeated_string2_size = lua_tablelen(L, repeated_string2_index);
+        msg->n_repeated_string2 = repeated_string2_size;
+        msg->repeated_string2 = (char**)malloc(sizeof(char*) * repeated_string2_size);
+        for (int i = 0; i < repeated_string2_size; i++)
+        {
+            lua_pushnumber(L, i + 1); // key
+            lua_gettable(L, repeated_string2_index); // pops key, pushes value
+            msg->repeated_string2[i] = (char*)luaL_checkstring(L, lua_gettop(L));
+            lua_pop(L, 1); // pop value
+        }
     }
-    int repeated_basic_size = lua_tablelen(L, repeated_basic_index);
-    msg->n_repeated_basic = repeated_basic_size;
-    msg->repeated_basic = (Testp3__Basic**)malloc(sizeof(Testp3__Basic*) * repeated_basic_size);
-    for (int i = 0; i < repeated_basic_size; i++)
+    lua_pop(L, 1); // pop table "repeated_string2"
+
+    // repeated_basic1 [repeated]
+    lua_pushstring(L, "repeated_basic1");
+    lua_gettable(L, narg);
+    int repeated_basic1_index = lua_gettop(L);
+    if (!lua_isnil(L, repeated_basic1_index))
     {
-        lua_pushnumber(L, i + 1); // key
-        lua_gettable(L, repeated_basic_index); // pops key, pushes value
-        msg->repeated_basic[i] = (Testp3__Basic*)luaL_checktestp3__basic(L, lua_gettop(L));
-        lua_pop(L, 1); // pop value
+        int repeated_basic1_size = lua_tablelen(L, repeated_basic1_index);
+        msg->n_repeated_basic1 = repeated_basic1_size;
+        msg->repeated_basic1 = (Testp3__Basic**)malloc(sizeof(Testp3__Basic*) * repeated_basic1_size);
+        for (int i = 0; i < repeated_basic1_size; i++)
+        {
+            lua_pushnumber(L, i + 1); // key
+            lua_gettable(L, repeated_basic1_index); // pops key, pushes value
+            msg->repeated_basic1[i] = (Testp3__Basic*)luaL_checktestp3__basic(L, lua_gettop(L));
+            lua_pop(L, 1); // pop value
+        }
     }
-    lua_pop(L, 1); // pop table "repeated_basic"
+    lua_pop(L, 1); // pop table "repeated_basic1"
+
+    // repeated_basic2 [repeated]
+    lua_pushstring(L, "repeated_basic2");
+    lua_gettable(L, narg);
+    int repeated_basic2_index = lua_gettop(L);
+    if (!lua_isnil(L, repeated_basic2_index))
+    {
+        int repeated_basic2_size = lua_tablelen(L, repeated_basic2_index);
+        msg->n_repeated_basic2 = repeated_basic2_size;
+        msg->repeated_basic2 = (Testp3__Basic**)malloc(sizeof(Testp3__Basic*) * repeated_basic2_size);
+        for (int i = 0; i < repeated_basic2_size; i++)
+        {
+            lua_pushnumber(L, i + 1); // key
+            lua_gettable(L, repeated_basic2_index); // pops key, pushes value
+            msg->repeated_basic2[i] = (Testp3__Basic*)luaL_checktestp3__basic(L, lua_gettop(L));
+            lua_pop(L, 1); // pop value
+        }
+    }
+    lua_pop(L, 1); // pop table "repeated_basic2"
 
     return msg;
 }
@@ -929,6 +1130,372 @@ static Testp3__Container__StringMapEntry* luaL_checktestp3__container__string_ma
     return msg;
 }
 
+static Testp2__Scalars* luaL_checktestp2__scalars(lua_State* L, int narg)
+{
+    if (!lua_istable(L, narg)) {
+        luaL_error(L, "Expected value at index %d to be a table", narg);
+        return 0;
+    }
+
+    Testp2__Scalars *msg = (Testp2__Scalars*)malloc(sizeof(Testp2__Scalars));
+    testp2__scalars__init(msg);
+
+    // i32
+    lua_pushstring(L, "i32");
+    lua_gettable(L, narg);
+    msg->i32 = (int32_t)luaL_checknumber(L, lua_gettop(L));
+    lua_pop(L, 1);
+
+    // i64
+    lua_pushstring(L, "i64");
+    lua_gettable(L, narg);
+    msg->i64 = (int64_t)luaL_checknumber(L, lua_gettop(L));
+    lua_pop(L, 1);
+
+    // ui32
+    lua_pushstring(L, "ui32");
+    lua_gettable(L, narg);
+    msg->ui32 = (uint32_t)luaL_checknumber(L, lua_gettop(L));
+    lua_pop(L, 1);
+
+    // ui64
+    lua_pushstring(L, "ui64");
+    lua_gettable(L, narg);
+    msg->ui64 = (uint64_t)luaL_checknumber(L, lua_gettop(L));
+    lua_pop(L, 1);
+
+    // si32
+    lua_pushstring(L, "si32");
+    lua_gettable(L, narg);
+    msg->si32 = (int32_t)luaL_checknumber(L, lua_gettop(L));
+    lua_pop(L, 1);
+
+    // si64
+    lua_pushstring(L, "si64");
+    lua_gettable(L, narg);
+    msg->si64 = (int64_t)luaL_checknumber(L, lua_gettop(L));
+    lua_pop(L, 1);
+
+    // fix32
+    lua_pushstring(L, "fix32");
+    lua_gettable(L, narg);
+    msg->fix32 = (uint32_t)luaL_checknumber(L, lua_gettop(L));
+    lua_pop(L, 1);
+
+    // fix64
+    lua_pushstring(L, "fix64");
+    lua_gettable(L, narg);
+    msg->fix64 = (uint64_t)luaL_checknumber(L, lua_gettop(L));
+    lua_pop(L, 1);
+
+    // sfix32
+    lua_pushstring(L, "sfix32");
+    lua_gettable(L, narg);
+    msg->sfix32 = (int32_t)luaL_checknumber(L, lua_gettop(L));
+    lua_pop(L, 1);
+
+    // sfix64
+    lua_pushstring(L, "sfix64");
+    lua_gettable(L, narg);
+    msg->sfix64 = (int64_t)luaL_checknumber(L, lua_gettop(L));
+    lua_pop(L, 1);
+
+    // b
+    lua_pushstring(L, "b");
+    lua_gettable(L, narg);
+    msg->b = (protobuf_c_boolean)luaL_checkboolean(L, lua_gettop(L));
+    lua_pop(L, 1);
+
+    // s
+    lua_pushstring(L, "s");
+    lua_gettable(L, narg);
+    msg->s = (char*)luaL_checkstring(L, lua_gettop(L));
+    lua_pop(L, 1);
+
+    // bytes
+    lua_pushstring(L, "bytes");
+    lua_gettable(L, narg);
+    msg->bytes = (ProtobufCBinaryData)luaL_checkProtobufCBinaryData(L, lua_gettop(L));
+    lua_pop(L, 1);
+
+    // d
+    lua_pushstring(L, "d");
+    lua_gettable(L, narg);
+    msg->d = (double)luaL_checknumber(L, lua_gettop(L));
+    lua_pop(L, 1);
+
+    // f
+    lua_pushstring(L, "f");
+    lua_gettable(L, narg);
+    msg->f = (float)luaL_checknumber(L, lua_gettop(L));
+    lua_pop(L, 1);
+
+    return msg;
+}
+
+static Testp2__Outer* luaL_checktestp2__outer(lua_State* L, int narg)
+{
+    if (!lua_istable(L, narg)) {
+        luaL_error(L, "Expected value at index %d to be a table", narg);
+        return 0;
+    }
+
+    Testp2__Outer *msg = (Testp2__Outer*)malloc(sizeof(Testp2__Outer));
+    testp2__outer__init(msg);
+
+    // text
+    lua_pushstring(L, "text");
+    lua_gettable(L, narg);
+    msg->text = (char*)luaL_checkstring(L, lua_gettop(L));
+    lua_pop(L, 1);
+
+    // middle
+    lua_pushstring(L, "middle");
+    lua_gettable(L, narg);
+    msg->middle = (Testp2__Outer__Middle*)luaL_checktestp2__outer__middle(L, lua_gettop(L));
+    lua_pop(L, 1);
+
+    return msg;
+}
+
+static Testp2__Outer__Middle* luaL_checktestp2__outer__middle(lua_State* L, int narg)
+{
+    if (!lua_istable(L, narg)) {
+        luaL_error(L, "Expected value at index %d to be a table", narg);
+        return 0;
+    }
+
+    Testp2__Outer__Middle *msg = (Testp2__Outer__Middle*)malloc(sizeof(Testp2__Outer__Middle));
+    testp2__outer__middle__init(msg);
+
+    // text
+    lua_pushstring(L, "text");
+    lua_gettable(L, narg);
+    msg->text = (char*)luaL_checkstring(L, lua_gettop(L));
+    lua_pop(L, 1);
+
+    // inner
+    lua_pushstring(L, "inner");
+    lua_gettable(L, narg);
+    msg->inner = (Testp2__Outer__Middle__Inner*)luaL_checktestp2__outer__middle__inner(L, lua_gettop(L));
+    lua_pop(L, 1);
+
+    return msg;
+}
+
+static Testp2__Outer__Middle__Inner* luaL_checktestp2__outer__middle__inner(lua_State* L, int narg)
+{
+    if (!lua_istable(L, narg)) {
+        luaL_error(L, "Expected value at index %d to be a table", narg);
+        return 0;
+    }
+
+    Testp2__Outer__Middle__Inner *msg = (Testp2__Outer__Middle__Inner*)malloc(sizeof(Testp2__Outer__Middle__Inner));
+    testp2__outer__middle__inner__init(msg);
+
+    // text
+    lua_pushstring(L, "text");
+    lua_gettable(L, narg);
+    msg->text = (char*)luaL_checkstring(L, lua_gettop(L));
+    lua_pop(L, 1);
+
+    return msg;
+}
+
+static Testp2__Basic* luaL_checktestp2__basic(lua_State* L, int narg)
+{
+    if (!lua_istable(L, narg)) {
+        luaL_error(L, "Expected value at index %d to be a table", narg);
+        return 0;
+    }
+
+    Testp2__Basic *msg = (Testp2__Basic*)malloc(sizeof(Testp2__Basic));
+    testp2__basic__init(msg);
+
+    // s
+    lua_pushstring(L, "s");
+    lua_gettable(L, narg);
+    msg->s = (char*)luaL_checkstring(L, lua_gettop(L));
+    lua_pop(L, 1);
+
+    // i
+    lua_pushstring(L, "i");
+    lua_gettable(L, narg);
+    msg->i = (int32_t)luaL_checknumber(L, lua_gettop(L));
+    lua_pop(L, 1);
+
+    // lang
+    lua_pushstring(L, "lang");
+    lua_gettable(L, narg);
+    msg->lang = (Testp2__Language)luaL_checknumber(L, lua_gettop(L));
+    lua_pop(L, 1);
+
+    return msg;
+}
+
+static Testp2__Container* luaL_checktestp2__container(lua_State* L, int narg)
+{
+    if (!lua_istable(L, narg)) {
+        luaL_error(L, "Expected value at index %d to be a table", narg);
+        return 0;
+    }
+
+    Testp2__Container *msg = (Testp2__Container*)malloc(sizeof(Testp2__Container));
+    testp2__container__init(msg);
+
+    // basic_map [map]
+    lua_pushstring(L, "basic_map");
+    lua_gettable(L, narg);
+    int basic_map_index = lua_gettop(L);
+    if (!lua_istable(L, basic_map_index))
+    {
+        luaL_error(L, "Expected value for key 'basic_map' to be a table");
+        return 0;
+    }
+    {
+        int basic_map_size = lua_tablelen(L, basic_map_index);
+        msg->n_basic_map = basic_map_size;
+        msg->basic_map = (Testp2__Container__BasicMapEntry**)malloc(sizeof(Testp2__Container__BasicMapEntry*) * basic_map_size);
+        {
+            int i = 0;
+            lua_pushnil(L);  // first key
+            while (lua_next(L, basic_map_index) != 0) // pops key, pushes key-value pair
+            {
+                msg->basic_map[i++] = (Testp2__Container__BasicMapEntry*)luaL_checktestp2__container__basic_map_entry(L, lua_gettop(L) - 1, lua_gettop(L));
+                lua_pop(L, 1); // pop value
+            }
+        }
+    }
+    lua_pop(L, 1); // pop table "basic_map"
+
+    // string_map [map]
+    lua_pushstring(L, "string_map");
+    lua_gettable(L, narg);
+    int string_map_index = lua_gettop(L);
+    if (!lua_istable(L, string_map_index))
+    {
+        luaL_error(L, "Expected value for key 'string_map' to be a table");
+        return 0;
+    }
+    {
+        int string_map_size = lua_tablelen(L, string_map_index);
+        msg->n_string_map = string_map_size;
+        msg->string_map = (Testp2__Container__StringMapEntry**)malloc(sizeof(Testp2__Container__StringMapEntry*) * string_map_size);
+        {
+            int i = 0;
+            lua_pushnil(L);  // first key
+            while (lua_next(L, string_map_index) != 0) // pops key, pushes key-value pair
+            {
+                msg->string_map[i++] = (Testp2__Container__StringMapEntry*)luaL_checktestp2__container__string_map_entry(L, lua_gettop(L) - 1, lua_gettop(L));
+                lua_pop(L, 1); // pop value
+            }
+        }
+    }
+    lua_pop(L, 1); // pop table "string_map"
+
+    // repeated_string [repeated]
+    lua_pushstring(L, "repeated_string");
+    lua_gettable(L, narg);
+    int repeated_string_index = lua_gettop(L);
+    if (!lua_istable(L, repeated_string_index))
+    {
+        luaL_error(L, "Expected value for key 'repeated_string' to be a table");
+        return 0;
+    }
+    {
+        int repeated_string_size = lua_tablelen(L, repeated_string_index);
+        msg->n_repeated_string = repeated_string_size;
+        msg->repeated_string = (char**)malloc(sizeof(char*) * repeated_string_size);
+        for (int i = 0; i < repeated_string_size; i++)
+        {
+            lua_pushnumber(L, i + 1); // key
+            lua_gettable(L, repeated_string_index); // pops key, pushes value
+            msg->repeated_string[i] = (char*)luaL_checkstring(L, lua_gettop(L));
+            lua_pop(L, 1); // pop value
+        }
+    }
+    lua_pop(L, 1); // pop table "repeated_string"
+
+    // repeated_basic [repeated]
+    lua_pushstring(L, "repeated_basic");
+    lua_gettable(L, narg);
+    int repeated_basic_index = lua_gettop(L);
+    if (!lua_istable(L, repeated_basic_index))
+    {
+        luaL_error(L, "Expected value for key 'repeated_basic' to be a table");
+        return 0;
+    }
+    {
+        int repeated_basic_size = lua_tablelen(L, repeated_basic_index);
+        msg->n_repeated_basic = repeated_basic_size;
+        msg->repeated_basic = (Testp2__Basic**)malloc(sizeof(Testp2__Basic*) * repeated_basic_size);
+        for (int i = 0; i < repeated_basic_size; i++)
+        {
+            lua_pushnumber(L, i + 1); // key
+            lua_gettable(L, repeated_basic_index); // pops key, pushes value
+            msg->repeated_basic[i] = (Testp2__Basic*)luaL_checktestp2__basic(L, lua_gettop(L));
+            lua_pop(L, 1); // pop value
+        }
+    }
+    lua_pop(L, 1); // pop table "repeated_basic"
+
+    // optional_string1
+    lua_pushstring(L, "optional_string1");
+    lua_gettable(L, narg);
+    if (!lua_isnil(L, lua_gettop(L)))
+    {
+        msg->optional_string1 = (char*)luaL_checkstring(L, lua_gettop(L));
+    }
+    lua_pop(L, 1);
+
+    // optional_string2
+    lua_pushstring(L, "optional_string2");
+    lua_gettable(L, narg);
+    if (!lua_isnil(L, lua_gettop(L)))
+    {
+        msg->optional_string2 = (char*)luaL_checkstring(L, lua_gettop(L));
+    }
+    lua_pop(L, 1);
+
+    // optional_basic1
+    lua_pushstring(L, "optional_basic1");
+    lua_gettable(L, narg);
+    if (!lua_isnil(L, lua_gettop(L)))
+    {
+        msg->optional_basic1 = (Testp2__Basic*)luaL_checktestp2__basic(L, lua_gettop(L));
+    }
+    lua_pop(L, 1);
+
+    // optional_basic2
+    lua_pushstring(L, "optional_basic2");
+    lua_gettable(L, narg);
+    if (!lua_isnil(L, lua_gettop(L)))
+    {
+        msg->optional_basic2 = (Testp2__Basic*)luaL_checktestp2__basic(L, lua_gettop(L));
+    }
+    lua_pop(L, 1);
+
+    return msg;
+}
+
+static Testp2__Container__BasicMapEntry* luaL_checktestp2__container__basic_map_entry(lua_State* L, int key, int value)
+{
+    Testp2__Container__BasicMapEntry *msg = (Testp2__Container__BasicMapEntry*)malloc(sizeof(Testp2__Container__BasicMapEntry));
+    testp2__container__basic_map_entry__init(msg);
+    msg->key = (char*)luaL_checkstring(L, key);
+    msg->value = (Testp2__Basic*)luaL_checktestp2__basic(L, value);
+    return msg;
+}
+
+static Testp2__Container__StringMapEntry* luaL_checktestp2__container__string_map_entry(lua_State* L, int key, int value)
+{
+    Testp2__Container__StringMapEntry *msg = (Testp2__Container__StringMapEntry*)malloc(sizeof(Testp2__Container__StringMapEntry));
+    testp2__container__string_map_entry__init(msg);
+    msg->key = (char*)luaL_checkstring(L, key);
+    msg->value = (char*)luaL_checkstring(L, value);
+    return msg;
+}
+
 
 
 
@@ -936,8 +1503,6 @@ static Testp3__Container__StringMapEntry* luaL_checktestp3__container__string_ma
  * FREE 
  ******************************************************************************/
 
-static void free_game__item(Game__Item* msg);
-static void free_game__inventory(Game__Inventory* msg);
 static void free_testp3__scalars(Testp3__Scalars* msg);
 static void free_testp3__outer(Testp3__Outer* msg);
 static void free_testp3__outer__middle(Testp3__Outer__Middle* msg);
@@ -946,6 +1511,14 @@ static void free_testp3__basic(Testp3__Basic* msg);
 static void free_testp3__container(Testp3__Container* msg);
 static void free_testp3__container__basic_map_entry(Testp3__Container__BasicMapEntry* msg);
 static void free_testp3__container__string_map_entry(Testp3__Container__StringMapEntry* msg);
+static void free_testp2__scalars(Testp2__Scalars* msg);
+static void free_testp2__outer(Testp2__Outer* msg);
+static void free_testp2__outer__middle(Testp2__Outer__Middle* msg);
+static void free_testp2__outer__middle__inner(Testp2__Outer__Middle__Inner* msg);
+static void free_testp2__basic(Testp2__Basic* msg);
+static void free_testp2__container(Testp2__Container* msg);
+static void free_testp2__container__basic_map_entry(Testp2__Container__BasicMapEntry* msg);
+static void free_testp2__container__string_map_entry(Testp2__Container__StringMapEntry* msg);
 
 static void free_ProtobufCBinaryData(ProtobufCBinaryData) {};
 static void free_number(int32_t) {};
@@ -953,26 +1526,6 @@ static void free_string(char*) {};
 static void free_bool(bool) {};
 static void free_boolean(bool) {};
 
-static void free_game__item(Game__Item* msg)
-{
-    free_number(msg->id);
-    free_string(msg->name);
-    free_number(msg->weight);
-    free_number(msg->type);
-    free_boolean(msg->magic);
-    free(msg);
-}
-static void free_game__inventory(Game__Inventory* msg)
-{
-    free_number(msg->capacity);
-    int items_size = msg->n_items;
-    for (int i = 0; i < items_size; i++)
-    {
-        free_game__item(msg->items[i]);
-    }
-    free(msg->items);
-    free(msg);
-}
 static void free_testp3__scalars(Testp3__Scalars* msg)
 {
     free_number(msg->i32);
@@ -1030,18 +1583,30 @@ static void free_testp3__container(Testp3__Container* msg)
         free_testp3__container__string_map_entry(msg->string_map[i]);
     }
     free(msg->string_map);
-    int repeated_string_size = msg->n_repeated_string;
-    for (int i = 0; i < repeated_string_size; i++)
+    int repeated_string1_size = msg->n_repeated_string1;
+    for (int i = 0; i < repeated_string1_size; i++)
     {
-        free_string(msg->repeated_string[i]);
+        free_string(msg->repeated_string1[i]);
     }
-    free(msg->repeated_string);
-    int repeated_basic_size = msg->n_repeated_basic;
-    for (int i = 0; i < repeated_basic_size; i++)
+    free(msg->repeated_string1);
+    int repeated_string2_size = msg->n_repeated_string2;
+    for (int i = 0; i < repeated_string2_size; i++)
     {
-        free_testp3__basic(msg->repeated_basic[i]);
+        free_string(msg->repeated_string2[i]);
     }
-    free(msg->repeated_basic);
+    free(msg->repeated_string2);
+    int repeated_basic1_size = msg->n_repeated_basic1;
+    for (int i = 0; i < repeated_basic1_size; i++)
+    {
+        free_testp3__basic(msg->repeated_basic1[i]);
+    }
+    free(msg->repeated_basic1);
+    int repeated_basic2_size = msg->n_repeated_basic2;
+    for (int i = 0; i < repeated_basic2_size; i++)
+    {
+        free_testp3__basic(msg->repeated_basic2[i]);
+    }
+    free(msg->repeated_basic2);
     free(msg);
 }
 static void free_testp3__container__basic_map_entry(Testp3__Container__BasicMapEntry* msg)
@@ -1052,72 +1617,95 @@ static void free_testp3__container__string_map_entry(Testp3__Container__StringMa
 {
     free(msg);
 }
+static void free_testp2__scalars(Testp2__Scalars* msg)
+{
+    free_number(msg->i32);
+    free_number(msg->i64);
+    free_number(msg->ui32);
+    free_number(msg->ui64);
+    free_number(msg->si32);
+    free_number(msg->si64);
+    free_number(msg->fix32);
+    free_number(msg->fix64);
+    free_number(msg->sfix32);
+    free_number(msg->sfix64);
+    free_boolean(msg->b);
+    free_string(msg->s);
+    free_ProtobufCBinaryData(msg->bytes);
+    free_number(msg->d);
+    free_number(msg->f);
+    free(msg);
+}
+static void free_testp2__outer(Testp2__Outer* msg)
+{
+    free_string(msg->text);
+    free_testp2__outer__middle(msg->middle);
+    free(msg);
+}
+static void free_testp2__outer__middle(Testp2__Outer__Middle* msg)
+{
+    free_string(msg->text);
+    free_testp2__outer__middle__inner(msg->inner);
+    free(msg);
+}
+static void free_testp2__outer__middle__inner(Testp2__Outer__Middle__Inner* msg)
+{
+    free_string(msg->text);
+    free(msg);
+}
+static void free_testp2__basic(Testp2__Basic* msg)
+{
+    free_string(msg->s);
+    free_number(msg->i);
+    free_number(msg->lang);
+    free(msg);
+}
+static void free_testp2__container(Testp2__Container* msg)
+{
+    int basic_map_size = msg->n_basic_map;
+    for (int i = 0; i < basic_map_size; i++)
+    {
+        free_testp2__container__basic_map_entry(msg->basic_map[i]);
+    }
+    free(msg->basic_map);
+    int string_map_size = msg->n_string_map;
+    for (int i = 0; i < string_map_size; i++)
+    {
+        free_testp2__container__string_map_entry(msg->string_map[i]);
+    }
+    free(msg->string_map);
+    int repeated_string_size = msg->n_repeated_string;
+    for (int i = 0; i < repeated_string_size; i++)
+    {
+        free_string(msg->repeated_string[i]);
+    }
+    free(msg->repeated_string);
+    int repeated_basic_size = msg->n_repeated_basic;
+    for (int i = 0; i < repeated_basic_size; i++)
+    {
+        free_testp2__basic(msg->repeated_basic[i]);
+    }
+    free(msg->repeated_basic);
+    free_string(msg->optional_string1);
+    free_string(msg->optional_string2);
+    free_testp2__basic(msg->optional_basic1);
+    free_testp2__basic(msg->optional_basic2);
+    free(msg);
+}
+static void free_testp2__container__basic_map_entry(Testp2__Container__BasicMapEntry* msg)
+{
+    free(msg);
+}
+static void free_testp2__container__string_map_entry(Testp2__Container__StringMapEntry* msg)
+{
+    free(msg);
+}
 
 
 
 /******************************************************************************
  * ENCODE AND DECODE
  ******************************************************************************/
-
-// item.proto
-static int DecodeGame__Item(lua_State* L)
-{
-    DM_LUA_STACK_CHECK(L, 1);
-    size_t data_length;
-    const char* data = luaL_checklstring(L, 1, &data_length);
-
-    Game__Item *msg = game__item__unpack(0, data_length, (uint8_t*)data);
-    lua_pushgame__item(L, msg);
-    game__item__free_unpacked(msg, 0);
-
-    return 1;
-}
-static int EncodeGame__Item(lua_State* L)
-{
-    DM_LUA_STACK_CHECK(L, 1);
-    Game__Item *msg = luaL_checkgame__item(L, 1);
-
-    size_t item_packed_size = game__item__get_packed_size(msg);
-    char* buffer = (char*)malloc(item_packed_size);
-    game__item__pack(msg, (uint8_t*)buffer);
-
-    lua_pushlstring(L, buffer, item_packed_size);
-    free(buffer);
-
-    free_game__item(msg);
-
-    return 1;
-}
-
-// inventory.proto
-static int DecodeGame__Inventory(lua_State* L)
-{
-    DM_LUA_STACK_CHECK(L, 1);
-    size_t data_length;
-    const char* data = luaL_checklstring(L, 1, &data_length);
-
-    Game__Inventory *msg = game__inventory__unpack(0, data_length, (uint8_t*)data);
-    lua_pushgame__inventory(L, msg);
-    game__inventory__free_unpacked(msg, 0);
-
-    return 1;
-}
-static int EncodeGame__Inventory(lua_State* L)
-{
-    DM_LUA_STACK_CHECK(L, 1);
-    Game__Inventory *msg = luaL_checkgame__inventory(L, 1);
-
-    size_t inventory_packed_size = game__inventory__get_packed_size(msg);
-    char* buffer = (char*)malloc(inventory_packed_size);
-    game__inventory__pack(msg, (uint8_t*)buffer);
-
-    lua_pushlstring(L, buffer, inventory_packed_size);
-    free(buffer);
-
-    free_game__inventory(msg);
-
-    return 1;
-}
 
 // testproto3.proto
 static int DecodeTestp3__Scalars(lua_State* L)
@@ -1239,13 +1827,129 @@ static int EncodeTestp3__Container(lua_State* L)
     return 1;
 }
 
+// testproto2.proto
+static int DecodeTestp2__Scalars(lua_State* L)
+{
+    DM_LUA_STACK_CHECK(L, 1);
+    size_t data_length;
+    const char* data = luaL_checklstring(L, 1, &data_length);
+
+    Testp2__Scalars *msg = testp2__scalars__unpack(0, data_length, (uint8_t*)data);
+    lua_pushtestp2__scalars(L, msg);
+    testp2__scalars__free_unpacked(msg, 0);
+
+    return 1;
+}
+static int EncodeTestp2__Scalars(lua_State* L)
+{
+    DM_LUA_STACK_CHECK(L, 1);
+    Testp2__Scalars *msg = luaL_checktestp2__scalars(L, 1);
+
+    size_t scalars_packed_size = testp2__scalars__get_packed_size(msg);
+    char* buffer = (char*)malloc(scalars_packed_size);
+    testp2__scalars__pack(msg, (uint8_t*)buffer);
+
+    lua_pushlstring(L, buffer, scalars_packed_size);
+    free(buffer);
+
+    free_testp2__scalars(msg);
+
+    return 1;
+}
+
+// testproto2.proto
+static int DecodeTestp2__Outer(lua_State* L)
+{
+    DM_LUA_STACK_CHECK(L, 1);
+    size_t data_length;
+    const char* data = luaL_checklstring(L, 1, &data_length);
+
+    Testp2__Outer *msg = testp2__outer__unpack(0, data_length, (uint8_t*)data);
+    lua_pushtestp2__outer(L, msg);
+    testp2__outer__free_unpacked(msg, 0);
+
+    return 1;
+}
+static int EncodeTestp2__Outer(lua_State* L)
+{
+    DM_LUA_STACK_CHECK(L, 1);
+    Testp2__Outer *msg = luaL_checktestp2__outer(L, 1);
+
+    size_t outer_packed_size = testp2__outer__get_packed_size(msg);
+    char* buffer = (char*)malloc(outer_packed_size);
+    testp2__outer__pack(msg, (uint8_t*)buffer);
+
+    lua_pushlstring(L, buffer, outer_packed_size);
+    free(buffer);
+
+    free_testp2__outer(msg);
+
+    return 1;
+}
+
+// testproto2.proto
+static int DecodeTestp2__Basic(lua_State* L)
+{
+    DM_LUA_STACK_CHECK(L, 1);
+    size_t data_length;
+    const char* data = luaL_checklstring(L, 1, &data_length);
+
+    Testp2__Basic *msg = testp2__basic__unpack(0, data_length, (uint8_t*)data);
+    lua_pushtestp2__basic(L, msg);
+    testp2__basic__free_unpacked(msg, 0);
+
+    return 1;
+}
+static int EncodeTestp2__Basic(lua_State* L)
+{
+    DM_LUA_STACK_CHECK(L, 1);
+    Testp2__Basic *msg = luaL_checktestp2__basic(L, 1);
+
+    size_t basic_packed_size = testp2__basic__get_packed_size(msg);
+    char* buffer = (char*)malloc(basic_packed_size);
+    testp2__basic__pack(msg, (uint8_t*)buffer);
+
+    lua_pushlstring(L, buffer, basic_packed_size);
+    free(buffer);
+
+    free_testp2__basic(msg);
+
+    return 1;
+}
+
+// testproto2.proto
+static int DecodeTestp2__Container(lua_State* L)
+{
+    DM_LUA_STACK_CHECK(L, 1);
+    size_t data_length;
+    const char* data = luaL_checklstring(L, 1, &data_length);
+
+    Testp2__Container *msg = testp2__container__unpack(0, data_length, (uint8_t*)data);
+    lua_pushtestp2__container(L, msg);
+    testp2__container__free_unpacked(msg, 0);
+
+    return 1;
+}
+static int EncodeTestp2__Container(lua_State* L)
+{
+    DM_LUA_STACK_CHECK(L, 1);
+    Testp2__Container *msg = luaL_checktestp2__container(L, 1);
+
+    size_t container_packed_size = testp2__container__get_packed_size(msg);
+    char* buffer = (char*)malloc(container_packed_size);
+    testp2__container__pack(msg, (uint8_t*)buffer);
+
+    lua_pushlstring(L, buffer, container_packed_size);
+    free(buffer);
+
+    free_testp2__container(msg);
+
+    return 1;
+}
+
 
 static const luaL_reg Module_methods[] =
 {
-    {"encode_game_item", EncodeGame__Item },
-    {"decode_game_item", DecodeGame__Item },
-    {"encode_game_inventory", EncodeGame__Inventory },
-    {"decode_game_inventory", DecodeGame__Inventory },
     {"encode_testp3_scalars", EncodeTestp3__Scalars },
     {"decode_testp3_scalars", DecodeTestp3__Scalars },
     {"encode_testp3_outer", EncodeTestp3__Outer },
@@ -1254,6 +1958,14 @@ static const luaL_reg Module_methods[] =
     {"decode_testp3_basic", DecodeTestp3__Basic },
     {"encode_testp3_container", EncodeTestp3__Container },
     {"decode_testp3_container", DecodeTestp3__Container },
+    {"encode_testp2_scalars", EncodeTestp2__Scalars },
+    {"decode_testp2_scalars", DecodeTestp2__Scalars },
+    {"encode_testp2_outer", EncodeTestp2__Outer },
+    {"decode_testp2_outer", DecodeTestp2__Outer },
+    {"encode_testp2_basic", EncodeTestp2__Basic },
+    {"decode_testp2_basic", DecodeTestp2__Basic },
+    {"encode_testp2_container", EncodeTestp2__Container },
+    {"decode_testp2_container", DecodeTestp2__Container },
     {0,0}
 };
 
@@ -1267,15 +1979,14 @@ static void LuaInit(lua_State* L)
     lua_pushnumber(L, (lua_Number) val); \
     lua_setfield(L, -2, #name);
 
-    // ItemType
-    SETCONSTANT(GAME__ITEM__ITEM_TYPE_WEAPON, GAME__ITEM__ITEM_TYPE__WEAPON);
-    SETCONSTANT(GAME__ITEM__ITEM_TYPE_ARMOUR, GAME__ITEM__ITEM_TYPE__ARMOUR);
-    SETCONSTANT(GAME__ITEM__ITEM_TYPE_RING, GAME__ITEM__ITEM_TYPE__RING);
-    SETCONSTANT(GAME__ITEM__ITEM_TYPE_BOOK, GAME__ITEM__ITEM_TYPE__BOOK);
     // Language
     SETCONSTANT(TESTP3__LANGUAGE_LANGUAGE_LUA, TESTP3__LANGUAGE__LANGUAGE_LUA);
     SETCONSTANT(TESTP3__LANGUAGE_LANGUAGE_CPP, TESTP3__LANGUAGE__LANGUAGE_CPP);
     SETCONSTANT(TESTP3__LANGUAGE_LANGUAGE_JAVA, TESTP3__LANGUAGE__LANGUAGE_JAVA);
+    // Language
+    SETCONSTANT(TESTP2__LANGUAGE_LANGUAGE_LUA, TESTP2__LANGUAGE__LANGUAGE_LUA);
+    SETCONSTANT(TESTP2__LANGUAGE_LANGUAGE_CPP, TESTP2__LANGUAGE__LANGUAGE_CPP);
+    SETCONSTANT(TESTP2__LANGUAGE_LANGUAGE_JAVA, TESTP2__LANGUAGE__LANGUAGE_JAVA);
     #undef SETCONSTANT
 
     lua_pop(L, 1);

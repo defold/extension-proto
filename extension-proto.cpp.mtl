@@ -165,34 +165,41 @@ static {{type_cpp}}* luaL_check{{type_cpp_lower}}(lua_State* L, int narg)
     lua_pushstring(L, "{{name}}");
     lua_gettable(L, narg);
     int {{name}}_index = lua_gettop(L);
+    {{#is_proto2_syntax}}
     if (!lua_istable(L, {{name}}_index))
     {
         luaL_error(L, "Expected value for key '{{name}}' to be a table");
         return 0;
     }
-    int {{name}}_size = lua_tablelen(L, {{name}}_index);
-    msg->n_{{name_cpp_lower}} = {{name}}_size;
-    msg->{{name_cpp_lower}} = ({{type_cpp}}*)malloc(sizeof({{type_cpp}}) * {{name}}_size);
-    {{#type_is_map}}
+    {{/is_proto2_syntax}}
+    {{^is_proto2_syntax}}
+    if (!lua_isnil(L, {{name}}_index))
+    {{/is_proto2_syntax}}
     {
-        int i = 0;
-        lua_pushnil(L);  // first key
-        while (lua_next(L, {{name}}_index) != 0) // pops key, pushes key-value pair
+        int {{name}}_size = lua_tablelen(L, {{name}}_index);
+        msg->n_{{name_cpp_lower}} = {{name}}_size;
+        msg->{{name_cpp_lower}} = ({{type_cpp}}*)malloc(sizeof({{type_cpp}}) * {{name}}_size);
+        {{#type_is_map}}
         {
-            msg->{{name_cpp_lower}}[i++] = ({{type_cpp}})luaL_check{{type_lua}}(L, lua_gettop(L) - 1, lua_gettop(L));
+            int i = 0;
+            lua_pushnil(L);  // first key
+            while (lua_next(L, {{name}}_index) != 0) // pops key, pushes key-value pair
+            {
+                msg->{{name_cpp_lower}}[i++] = ({{type_cpp}})luaL_check{{type_lua}}(L, lua_gettop(L) - 1, lua_gettop(L));
+                lua_pop(L, 1); // pop value
+            }
+        }
+        {{/type_is_map}}
+        {{^type_is_map}}
+        for (int i = 0; i < {{name}}_size; i++)
+        {
+            lua_pushnumber(L, i + 1); // key
+            lua_gettable(L, {{name}}_index); // pops key, pushes value
+            msg->{{name_cpp_lower}}[i] = ({{type_cpp}})luaL_check{{type_lua}}(L, lua_gettop(L));
             lua_pop(L, 1); // pop value
         }
+        {{/type_is_map}}
     }
-    {{/type_is_map}}
-    {{^type_is_map}}
-    for (int i = 0; i < {{name}}_size; i++)
-    {
-        lua_pushnumber(L, i + 1); // key
-        lua_gettable(L, {{name}}_index); // pops key, pushes value
-        msg->{{name_cpp_lower}}[i] = ({{type_cpp}})luaL_check{{type_lua}}(L, lua_gettop(L));
-        lua_pop(L, 1); // pop value
-    }
-    {{/type_is_map}}
     lua_pop(L, 1); // pop table "{{name}}"
 
     {{/repeated}}

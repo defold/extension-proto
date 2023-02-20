@@ -1,0 +1,61 @@
+syntax = "proto2";
+
+package testp2;
+
+/* 
+ * Multi-line comment
+ */
+message Scalars {
+	// all proto3 scalar values
+	required int32    i32    = 1;
+	required int64    i64    = 2;
+	required uint32   ui32   = 3;
+	required uint64   ui64   = 4;
+	required sint32   si32   = 5;
+	required sint64   si64   = 6;
+	required fixed32  fix32  = 7;
+	required fixed64  fix64  = 8;
+	required sfixed32 sfix32 = 9;
+	required sfixed64 sfix64 = 10;
+	required bool     b      = 11;
+	required string   s      = 12; // comment
+	required bytes    bytes  = 13;
+	required double   d      = 14;
+	required float    f      = 15;
+}
+
+message Outer {
+	message Middle {
+		message Inner {
+			required string text = 1;
+		}
+		required string text = 1;
+		required Inner inner = 2;
+	}
+
+	required string text = 1;
+	required Middle middle = 2;
+}
+
+enum Language {
+	LANGUAGE_LUA  = 0;
+	LANGUAGE_CPP  = 1;
+	LANGUAGE_JAVA = 2;
+}
+
+message Basic {
+	required string    s = 1;
+	required int32     i = 2;
+	required Language lang = 3;
+}
+
+message Container {
+	map<string, Basic>  basic_map = 1;
+	map<string, string> string_map = 2;
+	repeated string     repeated_string = 3;
+	repeated Basic      repeated_basic = 4;
+	optional string     optional_string1 = 5;
+	optional string     optional_string2 = 6;
+	optional Basic      optional_basic1 = 7;
+	optional Basic      optional_basic2 = 8;
+}

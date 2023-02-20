@@ -6,46 +6,6 @@
 
 #*****************************************************************************************************
 
-    - name: encode_game_item
-      type: function
-      parameters:
-      - name: msg
-        type: table
-      returns:
-      - name: msg
-        type: string
-
-    - name: decode_game_item
-      type: function
-      parameters:
-      - name: msg
-        type: string
-      returns:
-      - name: msg
-        type: table
-
-#*****************************************************************************************************
-
-    - name: encode_game_inventory
-      type: function
-      parameters:
-      - name: msg
-        type: table
-      returns:
-      - name: msg
-        type: string
-
-    - name: decode_game_inventory
-      type: function
-      parameters:
-      - name: msg
-        type: string
-      returns:
-      - name: msg
-        type: table
-
-#*****************************************************************************************************
-
     - name: encode_testp3_scalars
       type: function
       parameters:
@@ -124,18 +84,87 @@
       - name: msg
         type: table
 
+#*****************************************************************************************************
 
+    - name: encode_testp2_scalars
+      type: function
+      parameters:
+      - name: msg
+        type: table
+      returns:
+      - name: msg
+        type: string
+
+    - name: decode_testp2_scalars
+      type: function
+      parameters:
+      - name: msg
+        type: string
+      returns:
+      - name: msg
+        type: table
 
 #*****************************************************************************************************
 
-    - name: GAME__ITEM__ITEM_TYPE_WEAPON
-      type: number
-    - name: GAME__ITEM__ITEM_TYPE_ARMOUR
-      type: number
-    - name: GAME__ITEM__ITEM_TYPE_RING
-      type: number
-    - name: GAME__ITEM__ITEM_TYPE_BOOK
-      type: number
+    - name: encode_testp2_outer
+      type: function
+      parameters:
+      - name: msg
+        type: table
+      returns:
+      - name: msg
+        type: string
+
+    - name: decode_testp2_outer
+      type: function
+      parameters:
+      - name: msg
+        type: string
+      returns:
+      - name: msg
+        type: table
+
+#*****************************************************************************************************
+
+    - name: encode_testp2_basic
+      type: function
+      parameters:
+      - name: msg
+        type: table
+      returns:
+      - name: msg
+        type: string
+
+    - name: decode_testp2_basic
+      type: function
+      parameters:
+      - name: msg
+        type: string
+      returns:
+      - name: msg
+        type: table
+
+#*****************************************************************************************************
+
+    - name: encode_testp2_container
+      type: function
+      parameters:
+      - name: msg
+        type: table
+      returns:
+      - name: msg
+        type: string
+
+    - name: decode_testp2_container
+      type: function
+      parameters:
+      - name: msg
+        type: string
+      returns:
+      - name: msg
+        type: table
+
+
 
 #*****************************************************************************************************
 
@@ -144,4 +173,13 @@
     - name: TESTP3__LANGUAGE_LANGUAGE_CPP
       type: number
     - name: TESTP3__LANGUAGE_LANGUAGE_JAVA
+      type: number
+
+#*****************************************************************************************************
+
+    - name: TESTP2__LANGUAGE_LANGUAGE_LUA
+      type: number
+    - name: TESTP2__LANGUAGE_LANGUAGE_CPP
+      type: number
+    - name: TESTP2__LANGUAGE_LANGUAGE_JAVA
       type: number

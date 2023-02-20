@@ -236,7 +236,6 @@ def generate_code(request, response):
         for m in messages:
             for f in m.get("fields"):
                 if f.get("type_cpp").replace("*", "") == message.get("type_cpp"):
-                    log("found message using this map entry", m.get("name"))
                     f["type_is_map"] = True
 
 

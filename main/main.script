@@ -1,127 +1,203 @@
-local function test_proto2()
-	local broadsword = {
-		id = 1,
-		type = proto.GAME__ITEM__ITEM_TYPE_WEAPON,
-		name = "Broadsword",
-		weight = 2
-	}
-	local chainmail = {
-		id = 2,
-		type = proto.GAME__ITEM__ITEM_TYPE_ARMOUR,
-		name = "Chainmail",
-		weight = 25,
-		magic = false
-	}
-	local ring_of_wisdom = {
-		id = 3,
-		type = proto.GAME__ITEM__ITEM_TYPE_RING,
-		name = "Ring of Wisdom",
-		weight = 0,
-		magic = true
-	}
-	
-	local item = ring_of_wisdom
-	-- serialize the Lua table to an Item message
-	print("Encoding item")
-	pprint(item)
-	local item_msg = proto.encode_game_item(item)
-	assert(item_msg)
-	assert(#item_msg == 27)
+local SCALARS = {
+	i32    = (2^31)-1,
+	i64    = (2^62)-1,
+	ui32   = (2^32)-1,
+	ui64   = (2^63)-1,
+	si32   = -2^31,
+	si64   = -2^63,
+	fix32  = (2^31)-1,
+	fix64  = (2^63)-1,
+	sfix32 = -2^31,
+	sfix64 = -2^63,
+	b      = true,
+	s      = "foobar",
+	bytes  = "\0x0\0x1\0x2\0x3",
+	d      = 1000.0001,
+	f      = 1000.0001,
+}
 
-	-- decode the binary message back to a Lua table
-	print("Decoding item")
-	local decoded_item = proto.decode_game_item(item_msg)
-	pprint(decoded_item)
-	assert(decoded_item.id == item.id)
-	assert(decoded_item.name == item.name)
-	assert(decoded_item.type == item.type)
-	assert(decoded_item.weight == item.weight)
-	assert(decoded_item.magic == item.magic)
+local function assert_scalars(decoded_scalars)
+	assert(SCALARS.i32 == decoded_scalars.i32)
+	assert(SCALARS.i64 == decoded_scalars.i64)
+	assert(SCALARS.ui32 == decoded_scalars.ui32)
+	assert(SCALARS.ui64 == decoded_scalars.ui64)
+	assert(SCALARS.si32 == decoded_scalars.si32)
+	assert(SCALARS.si64 == decoded_scalars.si64)
+	assert(SCALARS.fix32 == decoded_scalars.fix32)
+	assert(SCALARS.fix64 == decoded_scalars.fix64)
+	assert(SCALARS.sfix32 == decoded_scalars.sfix32)
+	assert(SCALARS.sfix64 == decoded_scalars.sfix64)
+	assert(SCALARS.b == decoded_scalars.b)
+	assert(SCALARS.s == decoded_scalars.s)
+	assert(SCALARS.bytes == decoded_scalars.bytes)
+	assert(math.abs(SCALARS.d - decoded_scalars.d) < 0.001)
+	assert(math.abs(SCALARS.f - decoded_scalars.f) < 0.001)
 end
 
+local function assert_table(expected, actual)
+	for k,v in pairs(expected) do
+		assert(actual[k], "Expected key '" .. k .. "' to exist in table")
+		assert(type(actual[k]) == type(expected[k]), "Expected key '" .. k .. "' to have value of type '" .. type(expected[k]) .. "' but it was of type '" .. type(actual[k]) .. "'")
+		if type(v) == "table" then
+			assert_table(v, actual[k])
+		else
+			assert(actual[k] == expected[k], "Expected key '" .. k .. "' to have value '" .. expected[k] .. "' but it was '" .. actual[k] .. "'")
+		end
+	end
+end
+
+local function test_proto2()
+	local function test_scalars()
+		print("Encoding scalars")
+		pprint(SCALARS)
+		local encoded_scalars = proto.encode_testp2_scalars(SCALARS)
+		assert(encoded_scalars)
+		assert(#encoded_scalars > 0)
+
+		print("Decoding scalars")
+		local decoded_scalars = proto.decode_testp2_scalars(encoded_scalars)
+		pprint(decoded_scalars)
+		assert_scalars(decoded_scalars)
+	end
+
+	local function test_basics()
+		print("Basic message and enums")
+		local basic1 = { s = "cpp", i = 123, lang = proto.TESTP2__LANGUAGE_LANGUAGE_CPP }
+		local basic2 = { s = "lua", i = 345, lang = proto.TESTP2__LANGUAGE_LANGUAGE_LUA }
+
+		local encoded_b1 = proto.encode_testp2_basic(basic1)
+		local encoded_b2 = proto.encode_testp2_basic(basic2)
+		local decoded_b1 = proto.decode_testp2_basic(encoded_b1)
+		local decoded_b2 = proto.decode_testp2_basic(encoded_b2)
+		assert_table(basic1, decoded_b1)
+		assert_table(basic2, decoded_b2)
+	end
+
+	local function test_nested()
+		print("Nested messages")
+		local inner = { text = "inner" }
+		local middle = { text = "middle", inner = inner }
+		local outer = { text = "outer", middle = middle }
+		local encoded_outer = proto.encode_testp2_outer(outer)
+		local decoded_outer = proto.decode_testp2_outer(encoded_outer)
+		pprint(decoded_outer)
+		assert_table(outer, decoded_outer)
+	end
+	
+	local function test_container()
+		print("Repeated messages and maps")
+		local basic1 = { s = "cpp", i = 123, lang = proto.TESTP2__LANGUAGE_LANGUAGE_CPP }
+		local basic2 = { s = "lua", i = 345, lang = proto.TESTP2__LANGUAGE_LANGUAGE_LUA }
+
+		local container = {
+			basic_map = {
+				b1 = basic1,
+				b2 = basic2,
+			},
+			string_map = {
+				luke = "skywalker",
+				han = "solo",
+			},
+			repeated_string = { "a", "b", "c" },
+			repeated_basic = { basic1, basic2 },
+			optional_string1 = "foobar",
+			optional_string2 = nil,
+			optional_basic1 = basic1,
+			optional_basic2 = nil,
+		}
+		local encoded_container = proto.encode_testp2_container(container)
+		local decoded_container = proto.decode_testp2_container(encoded_container)
+		pprint(decoded_container)
+		assert_table(container, decoded_container)
+		assert(not decoded_container.optional_string2)
+		assert(not decoded_container.optional_basic2)
+	end	
+
+	print("Testing proto2")
+	test_scalars()
+	test_basics()
+	test_nested()
+	test_container()
+end
+
+
+
+
 local function test_proto3()
-	local scalars = {
-		i32    = (2^31)-1,
-		i64    = (2^62)-1,
-		ui32   = (2^32)-1,
-		ui64   = (2^63)-1,
-		si32   = -2^31,
-		si64   = -2^63,
-		fix32  = (2^31)-1,
-		fix64  = (2^63)-1,
-		sfix32 = -2^31,
-		sfix64 = -2^63,
-		b      = true,
-		s      = "foobar",
-		bytes  = "\0x0\0x1\0x2\0x3",
-		d      = 1000.0001,
-		f      = 1000.0001,
-	}
-	print("Encoding scalars")
-	pprint(scalars)
-	local encoded_scalars = proto.encode_testp3_scalars(scalars)
-	assert(encoded_scalars)
-	assert(#encoded_scalars > 0)
+	local function test_scalars()
+		print("Encoding scalars")
+		pprint(SCALARS)
+		local encoded_scalars = proto.encode_testp3_scalars(SCALARS)
+		assert(encoded_scalars)
+		assert(#encoded_scalars > 0)
 
-	print("Decoding scalars")
-	local decoded_scalars = proto.decode_testp3_scalars(encoded_scalars)
-	pprint(decoded_scalars)
-	assert(scalars.i32 == decoded_scalars.i32)
-	assert(scalars.i64 == decoded_scalars.i64)
-	assert(scalars.ui32 == decoded_scalars.ui32)
-	assert(scalars.ui64 == decoded_scalars.ui64)
-	assert(scalars.si32 == decoded_scalars.si32)
-	assert(scalars.si64 == decoded_scalars.si64)
-	assert(scalars.fix32 == decoded_scalars.fix32)
-	assert(scalars.fix64 == decoded_scalars.fix64)
-	assert(scalars.sfix32 == decoded_scalars.sfix32)
-	assert(scalars.sfix64 == decoded_scalars.sfix64)
-	assert(scalars.b == decoded_scalars.b)
-	assert(scalars.s == decoded_scalars.s)
-	assert(scalars.bytes == decoded_scalars.bytes)
-	assert(math.abs(scalars.d - decoded_scalars.d) < 0.001)
-	assert(math.abs(scalars.f - decoded_scalars.f) < 0.001)
+		print("Decoding scalars")
+		local decoded_scalars = proto.decode_testp3_scalars(encoded_scalars)
+		pprint(decoded_scalars)
+		assert_scalars(decoded_scalars)
+	end
 
-	print("Basic message and enums")
-	local basic1 = { s = "cpp", i = 123, lang = proto.TESTP3__LANGUAGE_LANGUAGE_CPP }
-	local basic2 = { s = "lua", i = 345, lang = proto.TESTP3__LANGUAGES_LANGUAGE_LUA }
-	local encoded_b1 = proto.encode_testp3_basic(basic1)
-	local encoded_b2 = proto.encode_testp3_basic(basic2)
-	local decoded_b1 = proto.decode_testp3_basic(encoded_b1)
-	local decoded_b2 = proto.decode_testp3_basic(encoded_b2)
-	assert(basic1.s == decoded_b1.s)
-	assert(basic1.i == decoded_b1.i)
-	assert(basic1.lang == decoded_b1.lang)
+	local function test_basics()
+		print("Basic message and enums")
+		local basic1 = { s = "cpp", i = 123, lang = proto.TESTP3__LANGUAGE_LANGUAGE_CPP }
+		local basic2 = { s = "lua", i = 345, lang = proto.TESTP3__LANGUAGE_LANGUAGE_LUA }
+		local basic3 = {}
+		
+		local encoded_b1 = proto.encode_testp3_basic(basic1)
+		local encoded_b2 = proto.encode_testp3_basic(basic2)
+		local encoded_b3 = proto.encode_testp3_basic(basic3)
+		local decoded_b1 = proto.decode_testp3_basic(encoded_b1)
+		local decoded_b2 = proto.decode_testp3_basic(encoded_b2)
+		local decoded_b3 = proto.decode_testp3_basic(encoded_b3)
+		assert_table(basic1, decoded_b1)
+		assert_table(basic2, decoded_b2)
+		assert(decoded_b3.i == 0)
+		assert(decoded_b3.s == "")
+		assert(decoded_b3.lang == proto.TESTP3__LANGUAGE_LANGUAGE_LUA)
+	end
 
-	print("Nested messages")
-	local inner = { text = "inner" }
-	local middle = { text = "middle", inner = inner }
-	local outer = { text = "outer", middle = middle }
-	local encoded_outer = proto.encode_testp3_outer(outer)
-	local decoded_outer = proto.decode_testp3_outer(encoded_outer)
-	pprint(decoded_outer)
+	local function test_nested()
+		print("Nested messages")
+		local inner = { text = "inner" }
+		local middle = { text = "middle", inner = inner }
+		local outer = { text = "outer", middle = middle }
+		local encoded_outer = proto.encode_testp3_outer(outer)
+		local decoded_outer = proto.decode_testp3_outer(encoded_outer)
+		pprint(decoded_outer)
+		assert_table(outer, decoded_outer)
+	end
 
-	print("Repeated messages and maps")
-	local container = {
-		basic_map = {
-			b1 = basic1,
-			b2 = basic2,
-		},
-		string_map = {
-			luke = "skywalker",
-			han = "solo",
-		},
-		repeated_string = { "a", "b", "c" },
-		repeated_basic = { basic1, basic2 }
-	}
-	local encoded_container = proto.encode_testp3_container(container)
-	local decoded_container = proto.decode_testp3_container(encoded_container)
-	pprint(decoded_container)
-	assert(decoded_container.basic_map)
-	assert(decoded_container.basic_map.b1.s == container.basic_map.b1.s)
-	assert(decoded_container.string_map.luke == container.string_map.luke)
-	assert(decoded_container.repeated_string[1] == container.repeated_string[1])
-	assert(decoded_container.repeated_basic[1].s == container.repeated_basic[1].s)
+	local function test_container()
+		print("Repeated messages and maps")
+		local basic1 = { s = "cpp", i = 123, lang = proto.TESTP3__LANGUAGE_LANGUAGE_CPP }
+		local basic2 = { s = "lua", i = 345, lang = proto.TESTP3__LANGUAGE_LANGUAGE_LUA }
+
+		local container = {
+			basic_map = {
+				b1 = basic1,
+				b2 = basic2,
+			},
+			string_map = {
+				luke = "skywalker",
+				han = "solo",
+			},
+			repeated_string1 = { "a", "b", "c" },
+			repeated_string2 = nil,
+			repeated_basic1 = { basic1, basic2 },
+			repeated_basic2 = nil,
+		}
+		local encoded_container = proto.encode_testp3_container(container)
+		local decoded_container = proto.decode_testp3_container(encoded_container)
+		assert_table(container, decoded_container)
+		assert(decoded_container.repeated_string2 and #decoded_container.repeated_string2 == 0)
+		assert(decoded_container.repeated_basic2 and #decoded_container.repeated_basic2 == 0)
+	end
+
+	print("Testing proto3")
+	test_scalars()
+	test_basics()
+	test_nested()
+	test_container()
 end
 
 function init(self)
