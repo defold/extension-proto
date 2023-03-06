@@ -1556,6 +1556,7 @@ static void free_boolean(bool) {};
 
 static void free_testp3__scalars(Testp3__Scalars* msg)
 {
+    if (msg == 0x0) return;
     free_number(msg->i32);
     free_number(msg->i64);
     free_number(msg->ui32);
@@ -1575,23 +1576,27 @@ static void free_testp3__scalars(Testp3__Scalars* msg)
 }
 static void free_testp3__outer(Testp3__Outer* msg)
 {
+    if (msg == 0x0) return;
     free_string(msg->text);
     free_testp3__outer__middle(msg->middle);
     free(msg);
 }
 static void free_testp3__outer__middle(Testp3__Outer__Middle* msg)
 {
+    if (msg == 0x0) return;
     free_string(msg->text);
     free_testp3__outer__middle__inner(msg->inner);
     free(msg);
 }
 static void free_testp3__outer__middle__inner(Testp3__Outer__Middle__Inner* msg)
 {
+    if (msg == 0x0) return;
     free_string(msg->text);
     free(msg);
 }
 static void free_testp3__basic(Testp3__Basic* msg)
 {
+    if (msg == 0x0) return;
     free_string(msg->s);
     free_number(msg->i);
     free_number(msg->lang);
@@ -1599,6 +1604,7 @@ static void free_testp3__basic(Testp3__Basic* msg)
 }
 static void free_testp3__container(Testp3__Container* msg)
 {
+    if (msg == 0x0) return;
     int basic_map_size = msg->n_basic_map;
     for (int i = 0; i < basic_map_size; i++)
     {
@@ -1639,14 +1645,17 @@ static void free_testp3__container(Testp3__Container* msg)
 }
 static void free_testp3__container__basic_map_entry(Testp3__Container__BasicMapEntry* msg)
 {
+    if (msg == 0x0) return;
     free(msg);
 }
 static void free_testp3__container__string_map_entry(Testp3__Container__StringMapEntry* msg)
 {
+    if (msg == 0x0) return;
     free(msg);
 }
 static void free_testp2__scalars(Testp2__Scalars* msg)
 {
+    if (msg == 0x0) return;
     free_number(msg->i32);
     free_number(msg->i64);
     free_number(msg->ui32);
@@ -1666,23 +1675,27 @@ static void free_testp2__scalars(Testp2__Scalars* msg)
 }
 static void free_testp2__outer(Testp2__Outer* msg)
 {
+    if (msg == 0x0) return;
     free_string(msg->text);
     free_testp2__outer__middle(msg->middle);
     free(msg);
 }
 static void free_testp2__outer__middle(Testp2__Outer__Middle* msg)
 {
+    if (msg == 0x0) return;
     free_string(msg->text);
     free_testp2__outer__middle__inner(msg->inner);
     free(msg);
 }
 static void free_testp2__outer__middle__inner(Testp2__Outer__Middle__Inner* msg)
 {
+    if (msg == 0x0) return;
     free_string(msg->text);
     free(msg);
 }
 static void free_testp2__basic(Testp2__Basic* msg)
 {
+    if (msg == 0x0) return;
     free_string(msg->s);
     free_number(msg->i);
     free_number(msg->lang);
@@ -1690,6 +1703,7 @@ static void free_testp2__basic(Testp2__Basic* msg)
 }
 static void free_testp2__container(Testp2__Container* msg)
 {
+    if (msg == 0x0) return;
     int basic_map_size = msg->n_basic_map;
     for (int i = 0; i < basic_map_size; i++)
     {
@@ -1722,10 +1736,12 @@ static void free_testp2__container(Testp2__Container* msg)
 }
 static void free_testp2__container__basic_map_entry(Testp2__Container__BasicMapEntry* msg)
 {
+    if (msg == 0x0) return;
     free(msg);
 }
 static void free_testp2__container__string_map_entry(Testp2__Container__StringMapEntry* msg)
 {
+    if (msg == 0x0) return;
     free(msg);
 }
 

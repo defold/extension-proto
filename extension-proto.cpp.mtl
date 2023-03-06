@@ -261,6 +261,7 @@ static void free_boolean(bool) {};
 {{#messages}}
 static void free_{{type_cpp_lower}}({{type_cpp}}* msg)
 {
+    if (msg == 0x0) return;
     {{#fields}}
     {{#repeated}}
     int {{name}}_size = msg->n_{{name_cpp_lower}};
