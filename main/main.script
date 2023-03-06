@@ -167,6 +167,15 @@ local function test_proto3()
 		assert_table(outer, decoded_outer)
 	end
 
+	local function test_optional()
+		print("Optional messages")
+		local outer = { text = "outer", middle = nil }
+		local encoded_outer = proto.encode_testp3_outer(outer)
+		local decoded_outer = proto.decode_testp3_outer(encoded_outer)
+		pprint(decoded_outer)
+		assert_table(outer, decoded_outer)
+	end
+	
 	local function test_container()
 		print("Repeated messages and maps")
 		local basic1 = { s = "cpp", i = 123, lang = proto.TESTP3__LANGUAGE_LANGUAGE_CPP }
@@ -196,6 +205,7 @@ local function test_proto3()
 	print("Testing proto3")
 	test_scalars()
 	test_basics()
+	test_optional()
 	test_nested()
 	test_container()
 end
