@@ -283,7 +283,14 @@ static void lua_pushtestp3__outer(lua_State* L, Testp3__Outer *msg)
     // middle
     {
         lua_pushstring(L, "middle");
-        lua_pushtestp3__outer__middle(L, (Testp3__Outer__Middle*)(msg->middle));
+        if (msg->middle)
+        {
+            lua_pushtestp3__outer__middle(L, (Testp3__Outer__Middle*)(msg->middle));
+        }
+        else
+        {
+            lua_pushnil(L);
+        }
         lua_settable(L, -3);
     }
 
@@ -302,7 +309,14 @@ static void lua_pushtestp3__outer__middle(lua_State* L, Testp3__Outer__Middle *m
     // inner
     {
         lua_pushstring(L, "inner");
-        lua_pushtestp3__outer__middle__inner(L, (Testp3__Outer__Middle__Inner*)(msg->inner));
+        if (msg->inner)
+        {
+            lua_pushtestp3__outer__middle__inner(L, (Testp3__Outer__Middle__Inner*)(msg->inner));
+        }
+        else
+        {
+            lua_pushnil(L);
+        }
         lua_settable(L, -3);
     }
 
@@ -637,7 +651,14 @@ static void lua_pushtestp2__container(lua_State* L, Testp2__Container *msg)
     if (msg->optional_basic1 != 0)
     {
         lua_pushstring(L, "optional_basic1");
-        lua_pushtestp2__basic(L, (Testp2__Basic*)(msg->optional_basic1));
+        if (msg->optional_basic1)
+        {
+            lua_pushtestp2__basic(L, (Testp2__Basic*)(msg->optional_basic1));
+        }
+        else
+        {
+            lua_pushnil(L);
+        }
         lua_settable(L, -3);
     }
 
@@ -645,7 +666,14 @@ static void lua_pushtestp2__container(lua_State* L, Testp2__Container *msg)
     if (msg->optional_basic2 != 0)
     {
         lua_pushstring(L, "optional_basic2");
-        lua_pushtestp2__basic(L, (Testp2__Basic*)(msg->optional_basic2));
+        if (msg->optional_basic2)
+        {
+            lua_pushtestp2__basic(L, (Testp2__Basic*)(msg->optional_basic2));
+        }
+        else
+        {
+            lua_pushnil(L);
+        }
         lua_settable(L, -3);
     }
 
