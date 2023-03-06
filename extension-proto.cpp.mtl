@@ -87,7 +87,19 @@ static void lua_push{{type_cpp_lower}}(lua_State* L, {{type_cpp}} *msg)
     {{/is_proto2_syntax}}
     {
         lua_pushstring(L, "{{name}}");
+        {{#type_is_message}}
+        if (msg->{{name_cpp_lower}})
+        {
+            lua_push{{type_lua}}(L, ({{type_cpp}})(msg->{{name_cpp_lower}}));
+        }
+        else
+        {
+            lua_pushnil(L);
+        }
+        {{/type_is_message}}
+        {{^type_is_message}}
         lua_push{{type_lua}}(L, ({{type_cpp}})(msg->{{name_cpp_lower}}));
+        {{/type_is_message}}
         lua_settable(L, -3);
     }
 
