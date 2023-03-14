@@ -295,8 +295,15 @@ static int Decode{{type_cpp}}(lua_State* L)
     const char* data = luaL_checklstring(L, 1, &data_length);
 
     {{type_cpp}} *msg = {{type_cpp_lower}}__unpack(0, data_length, (uint8_t*)data);
-    lua_push{{type_cpp_lower}}(L, msg);
-    {{type_cpp_lower}}__free_unpacked(msg, 0);
+    if (msg != 0)
+    {
+        lua_push{{type_cpp_lower}}(L, msg);
+        {{type_cpp_lower}}__free_unpacked(msg, 0);
+    }
+    else
+    {
+        lua_pushnil(L);
+    }
 
     return 1;
 }
