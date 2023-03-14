@@ -1759,8 +1759,15 @@ static int DecodeTestp3__Scalars(lua_State* L)
     const char* data = luaL_checklstring(L, 1, &data_length);
 
     Testp3__Scalars *msg = testp3__scalars__unpack(0, data_length, (uint8_t*)data);
-    lua_pushtestp3__scalars(L, msg);
-    testp3__scalars__free_unpacked(msg, 0);
+    if (msg != 0)
+    {
+        lua_pushtestp3__scalars(L, msg);
+        testp3__scalars__free_unpacked(msg, 0);
+    }
+    else
+    {
+        lua_pushnil(L);
+    }
 
     return 1;
 }
@@ -1789,8 +1796,15 @@ static int DecodeTestp3__Outer(lua_State* L)
     const char* data = luaL_checklstring(L, 1, &data_length);
 
     Testp3__Outer *msg = testp3__outer__unpack(0, data_length, (uint8_t*)data);
-    lua_pushtestp3__outer(L, msg);
-    testp3__outer__free_unpacked(msg, 0);
+    if (msg != 0)
+    {
+        lua_pushtestp3__outer(L, msg);
+        testp3__outer__free_unpacked(msg, 0);
+    }
+    else
+    {
+        lua_pushnil(L);
+    }
 
     return 1;
 }
@@ -1819,8 +1833,15 @@ static int DecodeTestp3__Basic(lua_State* L)
     const char* data = luaL_checklstring(L, 1, &data_length);
 
     Testp3__Basic *msg = testp3__basic__unpack(0, data_length, (uint8_t*)data);
-    lua_pushtestp3__basic(L, msg);
-    testp3__basic__free_unpacked(msg, 0);
+    if (msg != 0)
+    {
+        lua_pushtestp3__basic(L, msg);
+        testp3__basic__free_unpacked(msg, 0);
+    }
+    else
+    {
+        lua_pushnil(L);
+    }
 
     return 1;
 }
@@ -1849,8 +1870,15 @@ static int DecodeTestp3__Container(lua_State* L)
     const char* data = luaL_checklstring(L, 1, &data_length);
 
     Testp3__Container *msg = testp3__container__unpack(0, data_length, (uint8_t*)data);
-    lua_pushtestp3__container(L, msg);
-    testp3__container__free_unpacked(msg, 0);
+    if (msg != 0)
+    {
+        lua_pushtestp3__container(L, msg);
+        testp3__container__free_unpacked(msg, 0);
+    }
+    else
+    {
+        lua_pushnil(L);
+    }
 
     return 1;
 }
@@ -1879,8 +1907,15 @@ static int DecodeTestp2__Scalars(lua_State* L)
     const char* data = luaL_checklstring(L, 1, &data_length);
 
     Testp2__Scalars *msg = testp2__scalars__unpack(0, data_length, (uint8_t*)data);
-    lua_pushtestp2__scalars(L, msg);
-    testp2__scalars__free_unpacked(msg, 0);
+    if (msg != 0)
+    {
+        lua_pushtestp2__scalars(L, msg);
+        testp2__scalars__free_unpacked(msg, 0);
+    }
+    else
+    {
+        lua_pushnil(L);
+    }
 
     return 1;
 }
@@ -1909,8 +1944,15 @@ static int DecodeTestp2__Outer(lua_State* L)
     const char* data = luaL_checklstring(L, 1, &data_length);
 
     Testp2__Outer *msg = testp2__outer__unpack(0, data_length, (uint8_t*)data);
-    lua_pushtestp2__outer(L, msg);
-    testp2__outer__free_unpacked(msg, 0);
+    if (msg != 0)
+    {
+        lua_pushtestp2__outer(L, msg);
+        testp2__outer__free_unpacked(msg, 0);
+    }
+    else
+    {
+        lua_pushnil(L);
+    }
 
     return 1;
 }
@@ -1939,8 +1981,15 @@ static int DecodeTestp2__Basic(lua_State* L)
     const char* data = luaL_checklstring(L, 1, &data_length);
 
     Testp2__Basic *msg = testp2__basic__unpack(0, data_length, (uint8_t*)data);
-    lua_pushtestp2__basic(L, msg);
-    testp2__basic__free_unpacked(msg, 0);
+    if (msg != 0)
+    {
+        lua_pushtestp2__basic(L, msg);
+        testp2__basic__free_unpacked(msg, 0);
+    }
+    else
+    {
+        lua_pushnil(L);
+    }
 
     return 1;
 }
@@ -1969,8 +2018,15 @@ static int DecodeTestp2__Container(lua_State* L)
     const char* data = luaL_checklstring(L, 1, &data_length);
 
     Testp2__Container *msg = testp2__container__unpack(0, data_length, (uint8_t*)data);
-    lua_pushtestp2__container(L, msg);
-    testp2__container__free_unpacked(msg, 0);
+    if (msg != 0)
+    {
+        lua_pushtestp2__container(L, msg);
+        testp2__container__free_unpacked(msg, 0);
+    }
+    else
+    {
+        lua_pushnil(L);
+    }
 
     return 1;
 }
