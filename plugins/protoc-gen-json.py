@@ -84,7 +84,7 @@ def parse_field(f):
     field =  {
         "name": f.name,
         "name_cpp": name_to_cpp(f.name),
-        "name_cpp_lower": name_to_cpp(f.name).lower(),
+        "name_cpp_lower": name_to_cpp(f.name.lower()),
         "type": field_type,
         "repeated": (f.label == FieldDescriptorProto.LABEL_REPEATED),
         "required": (f.label == FieldDescriptorProto.LABEL_REQUIRED),
