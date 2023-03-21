@@ -146,6 +146,8 @@ def parse_field(f):
     else:
         raise TypeError("Unknown field type!")
 
+    field["type_cpp_lower"] = field["type_cpp"].lower()
+
     return field
 
 
