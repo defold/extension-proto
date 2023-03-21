@@ -142,9 +142,9 @@ def parse_field(f):
         field["type_is_message"] = True
         field["type_is_primitive"] = False
     elif field_type == Field.TYPE_GROUP:
-        print("Unsupported type 'group'")
+        raise TypeError("Unsupported type 'group'")
     else:
-        print("Unknown field type!")
+        raise TypeError("Unknown field type!")
 
     return field
 
