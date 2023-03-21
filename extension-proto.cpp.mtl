@@ -147,6 +147,9 @@ static {{type_cpp}}* luaL_check{{type_cpp_lower}}(lua_State* L, int key, int val
 static {{type_cpp}}* luaL_check{{type_cpp_lower}}(lua_State* L, int narg);
 {{/is_map_entry}}
 {{/messages}}
+{{#enums}}
+static int luaL_check{{type_cpp_lower}}(lua_State* L, int narg);
+{{/enums}}
 
 {{#messages}}
 {{#is_map_entry}}
@@ -219,7 +222,12 @@ static {{type_cpp}}* luaL_check{{type_cpp_lower}}(lua_State* L, int narg)
     // {{name}}
     lua_pushstring(L, "{{name}}");
     lua_gettable(L, narg);
+    {{#type_is_enum}}
+    msg->{{name_cpp_lower}} = ({{type_cpp}})luaL_check{{type_cpp_lower}}(L, lua_gettop(L));
+    {{/type_is_enum}}
+    {{^type_is_enum}}
     msg->{{name_cpp_lower}} = ({{type_cpp}})luaL_check{{type_lua}}(L, lua_gettop(L));
+    {{/type_is_enum}}
     lua_pop(L, 1);
 
     {{/required}}
@@ -242,6 +250,28 @@ static {{type_cpp}}* luaL_check{{type_cpp_lower}}(lua_State* L, int narg)
 {{/is_map_entry}}
 {{/messages}}
 
+{{#enums}}
+static int luaL_check{{type_cpp_lower}}(lua_State* L, int narg)
+{
+    if (lua_isnumber(L, narg))
+    {
+        return lua_tonumber(L, narg);
+    }
+    else if (lua_isstring(L, narg))
+    {
+        const ProtobufCEnumDescriptor desc = {{type_cpp_lower}}__descriptor;
+        const char* s = lua_tostring(L, narg);
+        const ProtobufCEnumValue* e = protobuf_c_enum_descriptor_get_value_by_name(&desc, s);
+        return e->value;
+    }
+    else
+    {
+        const char* tn = lua_typename(L, narg);
+        luaL_error(L, "Unable to convert value of type %s at index %d to {{type_cpp_lower}}", tn, narg);
+        return 0;
+    }
+}
+{{/enums}}
 
 
 /******************************************************************************
