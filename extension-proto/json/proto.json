@@ -30,6 +30,7 @@
                     "optional": true,
                     "type_lua": "number",
                     "type_cpp": "int32_t",
+                    "type_cpp_lower": "int32_t",
                     "type_is_primitive": true
                 },
                 {
@@ -42,6 +43,7 @@
                     "optional": true,
                     "type_lua": "number",
                     "type_cpp": "int64_t",
+                    "type_cpp_lower": "int64_t",
                     "type_is_primitive": true
                 },
                 {
@@ -54,6 +56,7 @@
                     "optional": true,
                     "type_lua": "number",
                     "type_cpp": "uint32_t",
+                    "type_cpp_lower": "uint32_t",
                     "type_is_primitive": true
                 },
                 {
@@ -66,6 +69,7 @@
                     "optional": true,
                     "type_lua": "number",
                     "type_cpp": "uint64_t",
+                    "type_cpp_lower": "uint64_t",
                     "type_is_primitive": true
                 },
                 {
@@ -78,6 +82,7 @@
                     "optional": true,
                     "type_lua": "number",
                     "type_cpp": "int32_t",
+                    "type_cpp_lower": "int32_t",
                     "type_is_primitive": true
                 },
                 {
@@ -90,6 +95,7 @@
                     "optional": true,
                     "type_lua": "number",
                     "type_cpp": "int64_t",
+                    "type_cpp_lower": "int64_t",
                     "type_is_primitive": true
                 },
                 {
@@ -102,6 +108,7 @@
                     "optional": true,
                     "type_lua": "number",
                     "type_cpp": "uint32_t",
+                    "type_cpp_lower": "uint32_t",
                     "type_is_primitive": true
                 },
                 {
@@ -114,6 +121,7 @@
                     "optional": true,
                     "type_lua": "number",
                     "type_cpp": "uint64_t",
+                    "type_cpp_lower": "uint64_t",
                     "type_is_primitive": true
                 },
                 {
@@ -126,6 +134,7 @@
                     "optional": true,
                     "type_lua": "number",
                     "type_cpp": "int32_t",
+                    "type_cpp_lower": "int32_t",
                     "type_is_primitive": true
                 },
                 {
@@ -138,6 +147,7 @@
                     "optional": true,
                     "type_lua": "number",
                     "type_cpp": "int64_t",
+                    "type_cpp_lower": "int64_t",
                     "type_is_primitive": true
                 },
                 {
@@ -150,6 +160,7 @@
                     "optional": true,
                     "type_lua": "boolean",
                     "type_cpp": "protobuf_c_boolean",
+                    "type_cpp_lower": "protobuf_c_boolean",
                     "type_is_primitive": true
                 },
                 {
@@ -162,6 +173,7 @@
                     "optional": true,
                     "type_lua": "string",
                     "type_cpp": "char*",
+                    "type_cpp_lower": "char*",
                     "type_is_string": true,
                     "type_is_primitive": false
                 },
@@ -175,6 +187,7 @@
                     "optional": true,
                     "type_lua": "ProtobufCBinaryData",
                     "type_cpp": "ProtobufCBinaryData",
+                    "type_cpp_lower": "protobufcbinarydata",
                     "type_is_bytes": true,
                     "type_is_primitive": false
                 },
@@ -188,6 +201,7 @@
                     "optional": true,
                     "type_lua": "number",
                     "type_cpp": "double",
+                    "type_cpp_lower": "double",
                     "type_is_primitive": true
                 },
                 {
@@ -200,6 +214,7 @@
                     "optional": true,
                     "type_lua": "number",
                     "type_cpp": "float",
+                    "type_cpp_lower": "float",
                     "type_is_primitive": true
                 }
             ],
@@ -235,6 +250,7 @@
                     "optional": true,
                     "type_lua": "string",
                     "type_cpp": "char*",
+                    "type_cpp_lower": "char*",
                     "type_is_string": true,
                     "type_is_primitive": false
                 },
@@ -285,6 +301,7 @@
                     "optional": true,
                     "type_lua": "string",
                     "type_cpp": "char*",
+                    "type_cpp_lower": "char*",
                     "type_is_string": true,
                     "type_is_primitive": false
                 },
@@ -335,6 +352,7 @@
                     "optional": true,
                     "type_lua": "string",
                     "type_cpp": "char*",
+                    "type_cpp_lower": "char*",
                     "type_is_string": true,
                     "type_is_primitive": false
                 }
@@ -371,6 +389,7 @@
                     "optional": true,
                     "type_lua": "string",
                     "type_cpp": "char*",
+                    "type_cpp_lower": "char*",
                     "type_is_string": true,
                     "type_is_primitive": false
                 },
@@ -384,6 +403,7 @@
                     "optional": true,
                     "type_lua": "number",
                     "type_cpp": "int32_t",
+                    "type_cpp_lower": "int32_t",
                     "type_is_primitive": true
                 },
                 {
@@ -396,6 +416,7 @@
                     "optional": true,
                     "type_lua": "number",
                     "type_cpp": "Testp3__Language",
+                    "type_cpp_lower": "testp3__language",
                     "type_is_enum": true,
                     "type_is_primitive": true
                 }
@@ -462,6 +483,7 @@
                     "optional": false,
                     "type_lua": "string",
                     "type_cpp": "char*",
+                    "type_cpp_lower": "char*",
                     "type_is_string": true,
                     "type_is_primitive": false
                 },
@@ -475,6 +497,7 @@
                     "optional": false,
                     "type_lua": "string",
                     "type_cpp": "char*",
+                    "type_cpp_lower": "char*",
                     "type_is_string": true,
                     "type_is_primitive": false
                 },
@@ -540,6 +563,7 @@
                 "optional": true,
                 "type_lua": "string",
                 "type_cpp": "char*",
+                "type_cpp_lower": "char*",
                 "type_is_string": true,
                 "type_is_primitive": false
             },
@@ -589,6 +613,7 @@
                 "optional": true,
                 "type_lua": "string",
                 "type_cpp": "char*",
+                "type_cpp_lower": "char*",
                 "type_is_string": true,
                 "type_is_primitive": false
             },
@@ -602,6 +627,7 @@
                 "optional": true,
                 "type_lua": "string",
                 "type_cpp": "char*",
+                "type_cpp_lower": "char*",
                 "type_is_string": true,
                 "type_is_primitive": false
             }
@@ -636,6 +662,7 @@
                     "optional": false,
                     "type_lua": "number",
                     "type_cpp": "int32_t",
+                    "type_cpp_lower": "int32_t",
                     "type_is_primitive": true
                 },
                 {
@@ -648,6 +675,7 @@
                     "optional": false,
                     "type_lua": "number",
                     "type_cpp": "int64_t",
+                    "type_cpp_lower": "int64_t",
                     "type_is_primitive": true
                 },
                 {
@@ -660,6 +688,7 @@
                     "optional": false,
                     "type_lua": "number",
                     "type_cpp": "uint32_t",
+                    "type_cpp_lower": "uint32_t",
                     "type_is_primitive": true
                 },
                 {
@@ -672,6 +701,7 @@
                     "optional": false,
                     "type_lua": "number",
                     "type_cpp": "uint64_t",
+                    "type_cpp_lower": "uint64_t",
                     "type_is_primitive": true
                 },
                 {
@@ -684,6 +714,7 @@
                     "optional": false,
                     "type_lua": "number",
                     "type_cpp": "int32_t",
+                    "type_cpp_lower": "int32_t",
                     "type_is_primitive": true
                 },
                 {
@@ -696,6 +727,7 @@
                     "optional": false,
                     "type_lua": "number",
                     "type_cpp": "int64_t",
+                    "type_cpp_lower": "int64_t",
                     "type_is_primitive": true
                 },
                 {
@@ -708,6 +740,7 @@
                     "optional": false,
                     "type_lua": "number",
                     "type_cpp": "uint32_t",
+                    "type_cpp_lower": "uint32_t",
                     "type_is_primitive": true
                 },
                 {
@@ -720,6 +753,7 @@
                     "optional": false,
                     "type_lua": "number",
                     "type_cpp": "uint64_t",
+                    "type_cpp_lower": "uint64_t",
                     "type_is_primitive": true
                 },
                 {
@@ -732,6 +766,7 @@
                     "optional": false,
                     "type_lua": "number",
                     "type_cpp": "int32_t",
+                    "type_cpp_lower": "int32_t",
                     "type_is_primitive": true
                 },
                 {
@@ -744,6 +779,7 @@
                     "optional": false,
                     "type_lua": "number",
                     "type_cpp": "int64_t",
+                    "type_cpp_lower": "int64_t",
                     "type_is_primitive": true
                 },
                 {
@@ -756,6 +792,7 @@
                     "optional": false,
                     "type_lua": "boolean",
                     "type_cpp": "protobuf_c_boolean",
+                    "type_cpp_lower": "protobuf_c_boolean",
                     "type_is_primitive": true
                 },
                 {
@@ -768,6 +805,7 @@
                     "optional": false,
                     "type_lua": "string",
                     "type_cpp": "char*",
+                    "type_cpp_lower": "char*",
                     "type_is_string": true,
                     "type_is_primitive": false
                 },
@@ -781,6 +819,7 @@
                     "optional": false,
                     "type_lua": "ProtobufCBinaryData",
                     "type_cpp": "ProtobufCBinaryData",
+                    "type_cpp_lower": "protobufcbinarydata",
                     "type_is_bytes": true,
                     "type_is_primitive": false
                 },
@@ -794,6 +833,7 @@
                     "optional": false,
                     "type_lua": "number",
                     "type_cpp": "double",
+                    "type_cpp_lower": "double",
                     "type_is_primitive": true
                 },
                 {
@@ -806,6 +846,7 @@
                     "optional": false,
                     "type_lua": "number",
                     "type_cpp": "float",
+                    "type_cpp_lower": "float",
                     "type_is_primitive": true
                 }
             ],
@@ -841,6 +882,7 @@
                     "optional": false,
                     "type_lua": "string",
                     "type_cpp": "char*",
+                    "type_cpp_lower": "char*",
                     "type_is_string": true,
                     "type_is_primitive": false
                 },
@@ -891,6 +933,7 @@
                     "optional": false,
                     "type_lua": "string",
                     "type_cpp": "char*",
+                    "type_cpp_lower": "char*",
                     "type_is_string": true,
                     "type_is_primitive": false
                 },
@@ -941,6 +984,7 @@
                     "optional": false,
                     "type_lua": "string",
                     "type_cpp": "char*",
+                    "type_cpp_lower": "char*",
                     "type_is_string": true,
                     "type_is_primitive": false
                 }
@@ -977,6 +1021,7 @@
                     "optional": false,
                     "type_lua": "string",
                     "type_cpp": "char*",
+                    "type_cpp_lower": "char*",
                     "type_is_string": true,
                     "type_is_primitive": false
                 },
@@ -990,6 +1035,7 @@
                     "optional": false,
                     "type_lua": "number",
                     "type_cpp": "int32_t",
+                    "type_cpp_lower": "int32_t",
                     "type_is_primitive": true
                 },
                 {
@@ -1002,6 +1048,7 @@
                     "optional": false,
                     "type_lua": "number",
                     "type_cpp": "Testp2__Language",
+                    "type_cpp_lower": "testp2__language",
                     "type_is_enum": true,
                     "type_is_primitive": true
                 }
@@ -1068,6 +1115,7 @@
                     "optional": false,
                     "type_lua": "string",
                     "type_cpp": "char*",
+                    "type_cpp_lower": "char*",
                     "type_is_string": true,
                     "type_is_primitive": false
                 },
@@ -1095,6 +1143,7 @@
                     "optional": true,
                     "type_lua": "string",
                     "type_cpp": "char*",
+                    "type_cpp_lower": "char*",
                     "type_is_string": true,
                     "type_is_primitive": false
                 },
@@ -1108,6 +1157,7 @@
                     "optional": true,
                     "type_lua": "string",
                     "type_cpp": "char*",
+                    "type_cpp_lower": "char*",
                     "type_is_string": true,
                     "type_is_primitive": false
                 },
@@ -1173,6 +1223,7 @@
                 "optional": true,
                 "type_lua": "string",
                 "type_cpp": "char*",
+                "type_cpp_lower": "char*",
                 "type_is_string": true,
                 "type_is_primitive": false
             },
@@ -1222,6 +1273,7 @@
                 "optional": true,
                 "type_lua": "string",
                 "type_cpp": "char*",
+                "type_cpp_lower": "char*",
                 "type_is_string": true,
                 "type_is_primitive": false
             },
@@ -1235,6 +1287,7 @@
                 "optional": true,
                 "type_lua": "string",
                 "type_cpp": "char*",
+                "type_cpp_lower": "char*",
                 "type_is_string": true,
                 "type_is_primitive": false
             }

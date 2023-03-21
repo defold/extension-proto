@@ -202,12 +202,23 @@ local function test_proto3()
 		assert(decoded_container.repeated_basic2 and #decoded_container.repeated_basic2 == 0)
 	end
 
+	local function test_enums()
+		print("Enums")
+		local basic1 = { s = "cpp", i = 123, lang = "LANGUAGE_JAVA" }
+		
+		local encoded_b1 = proto.encode_testp3_basic(basic1)
+		local decoded_b1 = proto.decode_testp3_basic(encoded_b1)
+
+		assert(decoded_b1.lang == proto.TESTP3__LANGUAGE_LANGUAGE_JAVA)
+	end
+	
 	print("Testing proto3")
 	test_scalars()
 	test_basics()
 	test_optional()
 	test_nested()
 	test_container()
+	test_enums()
 end
 
 function init(self)

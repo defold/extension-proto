@@ -736,6 +736,8 @@ static Testp2__Basic* luaL_checktestp2__basic(lua_State* L, int narg);
 static Testp2__Container* luaL_checktestp2__container(lua_State* L, int narg);
 static Testp2__Container__BasicMapEntry* luaL_checktestp2__container__basic_map_entry(lua_State* L, int key, int value);
 static Testp2__Container__StringMapEntry* luaL_checktestp2__container__string_map_entry(lua_State* L, int key, int value);
+static int luaL_checktestp3__language(lua_State* L, int narg);
+static int luaL_checktestp2__language(lua_State* L, int narg);
 
 static Testp3__Scalars* luaL_checktestp3__scalars(lua_State* L, int narg)
 {
@@ -1002,7 +1004,7 @@ static Testp3__Basic* luaL_checktestp3__basic(lua_State* L, int narg)
     lua_gettable(L, narg);
     if (!lua_isnil(L, lua_gettop(L)))
     {
-        msg->lang = (Testp3__Language)luaL_checknumber(L, lua_gettop(L));
+        msg->lang = (Testp3__Language)luaL_checktestp3__language(L, lua_gettop(L));
     }
     lua_pop(L, 1);
 
@@ -1355,7 +1357,7 @@ static Testp2__Basic* luaL_checktestp2__basic(lua_State* L, int narg)
     // lang
     lua_pushstring(L, "lang");
     lua_gettable(L, narg);
-    msg->lang = (Testp2__Language)luaL_checknumber(L, lua_gettop(L));
+    msg->lang = (Testp2__Language)luaL_checktestp2__language(L, lua_gettop(L));
     lua_pop(L, 1);
 
     return msg;
@@ -1525,6 +1527,52 @@ static Testp2__Container__StringMapEntry* luaL_checktestp2__container__string_ma
 }
 
 
+static int luaL_checktestp3__language(lua_State* L, int narg)
+{
+    if (lua_isnumber(L, narg))
+    {
+        return lua_tonumber(L, narg);
+    }
+    else if (lua_isstring(L, narg))
+    {
+        const ProtobufCEnumDescriptor desc = testp3__language__descriptor;
+        const char* s = lua_tostring(L, narg);
+        const ProtobufCEnumValue* e = protobuf_c_enum_descriptor_get_value_by_name(&desc, s);
+        if (e == 0)
+        {
+            return luaL_error(L, "Unable to convert %s to testp3__language", s);
+        }
+        return e->value;
+    }
+    else
+    {
+        const char* tn = lua_typename(L, narg);
+        return luaL_error(L, "Unable to convert value of type %s at index %d to testp3__language", tn, narg);
+    }
+}
+static int luaL_checktestp2__language(lua_State* L, int narg)
+{
+    if (lua_isnumber(L, narg))
+    {
+        return lua_tonumber(L, narg);
+    }
+    else if (lua_isstring(L, narg))
+    {
+        const ProtobufCEnumDescriptor desc = testp2__language__descriptor;
+        const char* s = lua_tostring(L, narg);
+        const ProtobufCEnumValue* e = protobuf_c_enum_descriptor_get_value_by_name(&desc, s);
+        if (e == 0)
+        {
+            return luaL_error(L, "Unable to convert %s to testp2__language", s);
+        }
+        return e->value;
+    }
+    else
+    {
+        const char* tn = lua_typename(L, narg);
+        return luaL_error(L, "Unable to convert value of type %s at index %d to testp2__language", tn, narg);
+    }
+}
 
 
 /******************************************************************************

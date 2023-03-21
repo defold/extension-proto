@@ -237,8 +237,14 @@ static {{type_cpp}}* luaL_check{{type_cpp_lower}}(lua_State* L, int narg)
     lua_gettable(L, narg);
     if (!lua_isnil(L, lua_gettop(L)))
     {
+        {{#type_is_enum}}
+        {{#is_proto2_syntax}}{{#type_is_primitive}}msg->has_{{name_cpp_lower}} = 1;
+        {{/type_is_primitive}}{{/is_proto2_syntax}}msg->{{name_cpp_lower}} = ({{type_cpp}})luaL_check{{type_cpp_lower}}(L, lua_gettop(L));
+        {{/type_is_enum}}
+        {{^type_is_enum}}
         {{#is_proto2_syntax}}{{#type_is_primitive}}msg->has_{{name_cpp_lower}} = 1;
         {{/type_is_primitive}}{{/is_proto2_syntax}}msg->{{name_cpp_lower}} = ({{type_cpp}})luaL_check{{type_lua}}(L, lua_gettop(L));
+        {{/type_is_enum}}
     }
     lua_pop(L, 1);
 
@@ -262,13 +268,16 @@ static int luaL_check{{type_cpp_lower}}(lua_State* L, int narg)
         const ProtobufCEnumDescriptor desc = {{type_cpp_lower}}__descriptor;
         const char* s = lua_tostring(L, narg);
         const ProtobufCEnumValue* e = protobuf_c_enum_descriptor_get_value_by_name(&desc, s);
+        if (e == 0)
+        {
+            return luaL_error(L, "Unable to convert %s to {{type_cpp_lower}}", s);
+        }
         return e->value;
     }
     else
     {
         const char* tn = lua_typename(L, narg);
-        luaL_error(L, "Unable to convert value of type %s at index %d to {{type_cpp_lower}}", tn, narg);
-        return 0;
+        return luaL_error(L, "Unable to convert value of type %s at index %d to {{type_cpp_lower}}", tn, narg);
     }
 }
 {{/enums}}
