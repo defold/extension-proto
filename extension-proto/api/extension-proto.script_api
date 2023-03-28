@@ -86,6 +86,26 @@
 
 #*****************************************************************************************************
 
+    - name: encode_testp3_oneof
+      type: function
+      parameters:
+      - name: msg
+        type: table
+      returns:
+      - name: msg
+        type: string
+
+    - name: decode_testp3_oneof
+      type: function
+      parameters:
+      - name: msg
+        type: string
+      returns:
+      - name: msg
+        type: table
+
+#*****************************************************************************************************
+
     - name: encode_testp2_scalars
       type: function
       parameters:
@@ -156,6 +176,26 @@
         type: string
 
     - name: decode_testp2_container
+      type: function
+      parameters:
+      - name: msg
+        type: string
+      returns:
+      - name: msg
+        type: table
+
+#*****************************************************************************************************
+
+    - name: encode_testp2_oneof
+      type: function
+      parameters:
+      - name: msg
+        type: table
+      returns:
+      - name: msg
+        type: string
+
+    - name: decode_testp2_oneof
       type: function
       parameters:
       - name: msg

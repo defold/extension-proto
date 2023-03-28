@@ -23,6 +23,8 @@ typedef struct Testp2__Basic Testp2__Basic;
 typedef struct Testp2__Container Testp2__Container;
 typedef struct Testp2__Container__BasicMapEntry Testp2__Container__BasicMapEntry;
 typedef struct Testp2__Container__StringMapEntry Testp2__Container__StringMapEntry;
+typedef struct Testp2__OneOf Testp2__OneOf;
+typedef struct Testp2__OneOf__FirstAndLast Testp2__OneOf__FirstAndLast;
 
 
 /* --- enums --- */
@@ -157,6 +159,50 @@ struct  Testp2__Container
     , 0,NULL, 0,NULL, 0,NULL, 0,NULL, NULL, NULL, NULL, NULL }
 
 
+struct  Testp2__OneOf__FirstAndLast
+{
+  ProtobufCMessage base;
+  char *first;
+  char *last;
+};
+#define TESTP2__ONE_OF__FIRST_AND_LAST__INIT \
+ { PROTOBUF_C_MESSAGE_INIT (&testp2__one_of__first_and_last__descriptor) \
+    , NULL, NULL }
+
+
+typedef enum {
+  TESTP2__ONE_OF__OFTEST1__NOT_SET = 0,
+  TESTP2__ONE_OF__OFTEST1_NAME = 1,
+  TESTP2__ONE_OF__OFTEST1_FIRST_AND_LAST = 2
+    PROTOBUF_C__FORCE_ENUM_TO_BE_INT_SIZE(TESTP2__ONE_OF__OFTEST1__CASE)
+} Testp2__OneOf__Oftest1Case;
+
+typedef enum {
+  TESTP2__ONE_OF__OFTEST2__NOT_SET = 0,
+  TESTP2__ONE_OF__OFTEST2_FOO = 3,
+  TESTP2__ONE_OF__OFTEST2_BAR = 4
+    PROTOBUF_C__FORCE_ENUM_TO_BE_INT_SIZE(TESTP2__ONE_OF__OFTEST2__CASE)
+} Testp2__OneOf__Oftest2Case;
+
+struct  Testp2__OneOf
+{
+  ProtobufCMessage base;
+  Testp2__OneOf__Oftest1Case oftest1_case;
+  union {
+    char *name;
+    Testp2__OneOf__FirstAndLast *first_and_last;
+  };
+  Testp2__OneOf__Oftest2Case oftest2_case;
+  union {
+    int32_t foo;
+    protobuf_c_boolean bar;
+  };
+};
+#define TESTP2__ONE_OF__INIT \
+ { PROTOBUF_C_MESSAGE_INIT (&testp2__one_of__descriptor) \
+    , TESTP2__ONE_OF__OFTEST1__NOT_SET, {0}, TESTP2__ONE_OF__OFTEST2__NOT_SET, {0} }
+
+
 /* Testp2__Scalars methods */
 void   testp2__scalars__init
                      (Testp2__Scalars         *message);
@@ -245,6 +291,28 @@ Testp2__Container *
 void   testp2__container__free_unpacked
                      (Testp2__Container *message,
                       ProtobufCAllocator *allocator);
+/* Testp2__OneOf__FirstAndLast methods */
+void   testp2__one_of__first_and_last__init
+                     (Testp2__OneOf__FirstAndLast         *message);
+/* Testp2__OneOf methods */
+void   testp2__one_of__init
+                     (Testp2__OneOf         *message);
+size_t testp2__one_of__get_packed_size
+                     (const Testp2__OneOf   *message);
+size_t testp2__one_of__pack
+                     (const Testp2__OneOf   *message,
+                      uint8_t             *out);
+size_t testp2__one_of__pack_to_buffer
+                     (const Testp2__OneOf   *message,
+                      ProtobufCBuffer     *buffer);
+Testp2__OneOf *
+       testp2__one_of__unpack
+                     (ProtobufCAllocator  *allocator,
+                      size_t               len,
+                      const uint8_t       *data);
+void   testp2__one_of__free_unpacked
+                     (Testp2__OneOf *message,
+                      ProtobufCAllocator *allocator);
 /* --- per-message closures --- */
 
 typedef void (*Testp2__Scalars_Closure)
@@ -271,6 +339,12 @@ typedef void (*Testp2__Container__StringMapEntry_Closure)
 typedef void (*Testp2__Container_Closure)
                  (const Testp2__Container *message,
                   void *closure_data);
+typedef void (*Testp2__OneOf__FirstAndLast_Closure)
+                 (const Testp2__OneOf__FirstAndLast *message,
+                  void *closure_data);
+typedef void (*Testp2__OneOf_Closure)
+                 (const Testp2__OneOf *message,
+                  void *closure_data);
 
 /* --- services --- */
 
@@ -286,6 +360,8 @@ extern const ProtobufCMessageDescriptor testp2__basic__descriptor;
 extern const ProtobufCMessageDescriptor testp2__container__descriptor;
 extern const ProtobufCMessageDescriptor testp2__container__basic_map_entry__descriptor;
 extern const ProtobufCMessageDescriptor testp2__container__string_map_entry__descriptor;
+extern const ProtobufCMessageDescriptor testp2__one_of__descriptor;
+extern const ProtobufCMessageDescriptor testp2__one_of__first_and_last__descriptor;
 
 PROTOBUF_C__END_DECLS
 

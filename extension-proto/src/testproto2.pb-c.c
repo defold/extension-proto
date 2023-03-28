@@ -211,6 +211,57 @@ void   testp2__container__free_unpacked
   assert(message->base.descriptor == &testp2__container__descriptor);
   protobuf_c_message_free_unpacked ((ProtobufCMessage*)message, allocator);
 }
+void   testp2__one_of__first_and_last__init
+                     (Testp2__OneOf__FirstAndLast         *message)
+{
+  static const Testp2__OneOf__FirstAndLast init_value = TESTP2__ONE_OF__FIRST_AND_LAST__INIT;
+  *message = init_value;
+}
+void   testp2__one_of__init
+                     (Testp2__OneOf         *message)
+{
+  static const Testp2__OneOf init_value = TESTP2__ONE_OF__INIT;
+  *message = init_value;
+}
+size_t testp2__one_of__get_packed_size
+                     (const Testp2__OneOf *message)
+{
+  assert(message->base.descriptor == &testp2__one_of__descriptor);
+  return protobuf_c_message_get_packed_size ((const ProtobufCMessage*)(message));
+}
+size_t testp2__one_of__pack
+                     (const Testp2__OneOf *message,
+                      uint8_t       *out)
+{
+  assert(message->base.descriptor == &testp2__one_of__descriptor);
+  return protobuf_c_message_pack ((const ProtobufCMessage*)message, out);
+}
+size_t testp2__one_of__pack_to_buffer
+                     (const Testp2__OneOf *message,
+                      ProtobufCBuffer *buffer)
+{
+  assert(message->base.descriptor == &testp2__one_of__descriptor);
+  return protobuf_c_message_pack_to_buffer ((const ProtobufCMessage*)message, buffer);
+}
+Testp2__OneOf *
+       testp2__one_of__unpack
+                     (ProtobufCAllocator  *allocator,
+                      size_t               len,
+                      const uint8_t       *data)
+{
+  return (Testp2__OneOf *)
+     protobuf_c_message_unpack (&testp2__one_of__descriptor,
+                                allocator, len, data);
+}
+void   testp2__one_of__free_unpacked
+                     (Testp2__OneOf *message,
+                      ProtobufCAllocator *allocator)
+{
+  if(!message)
+    return;
+  assert(message->base.descriptor == &testp2__one_of__descriptor);
+  protobuf_c_message_free_unpacked ((ProtobufCMessage*)message, allocator);
+}
 static const ProtobufCFieldDescriptor testp2__scalars__field_descriptors[15] =
 {
   {
@@ -864,6 +915,134 @@ const ProtobufCMessageDescriptor testp2__container__descriptor =
   testp2__container__field_indices_by_name,
   1,  testp2__container__number_ranges,
   (ProtobufCMessageInit) testp2__container__init,
+  NULL,NULL,NULL    /* reserved[123] */
+};
+static const ProtobufCFieldDescriptor testp2__one_of__first_and_last__field_descriptors[2] =
+{
+  {
+    "first",
+    1,
+    PROTOBUF_C_LABEL_REQUIRED,
+    PROTOBUF_C_TYPE_STRING,
+    0,   /* quantifier_offset */
+    offsetof(Testp2__OneOf__FirstAndLast, first),
+    NULL,
+    NULL,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+  {
+    "last",
+    2,
+    PROTOBUF_C_LABEL_REQUIRED,
+    PROTOBUF_C_TYPE_STRING,
+    0,   /* quantifier_offset */
+    offsetof(Testp2__OneOf__FirstAndLast, last),
+    NULL,
+    NULL,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+};
+static const unsigned testp2__one_of__first_and_last__field_indices_by_name[] = {
+  0,   /* field[0] = first */
+  1,   /* field[1] = last */
+};
+static const ProtobufCIntRange testp2__one_of__first_and_last__number_ranges[1 + 1] =
+{
+  { 1, 0 },
+  { 0, 2 }
+};
+const ProtobufCMessageDescriptor testp2__one_of__first_and_last__descriptor =
+{
+  PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
+  "testp2.OneOf.FirstAndLast",
+  "FirstAndLast",
+  "Testp2__OneOf__FirstAndLast",
+  "testp2",
+  sizeof(Testp2__OneOf__FirstAndLast),
+  2,
+  testp2__one_of__first_and_last__field_descriptors,
+  testp2__one_of__first_and_last__field_indices_by_name,
+  1,  testp2__one_of__first_and_last__number_ranges,
+  (ProtobufCMessageInit) testp2__one_of__first_and_last__init,
+  NULL,NULL,NULL    /* reserved[123] */
+};
+static const ProtobufCFieldDescriptor testp2__one_of__field_descriptors[4] =
+{
+  {
+    "name",
+    1,
+    PROTOBUF_C_LABEL_OPTIONAL,
+    PROTOBUF_C_TYPE_STRING,
+    offsetof(Testp2__OneOf, oftest1_case),
+    offsetof(Testp2__OneOf, name),
+    NULL,
+    NULL,
+    0 | PROTOBUF_C_FIELD_FLAG_ONEOF,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+  {
+    "first_and_last",
+    2,
+    PROTOBUF_C_LABEL_OPTIONAL,
+    PROTOBUF_C_TYPE_MESSAGE,
+    offsetof(Testp2__OneOf, oftest1_case),
+    offsetof(Testp2__OneOf, first_and_last),
+    &testp2__one_of__first_and_last__descriptor,
+    NULL,
+    0 | PROTOBUF_C_FIELD_FLAG_ONEOF,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+  {
+    "foo",
+    3,
+    PROTOBUF_C_LABEL_OPTIONAL,
+    PROTOBUF_C_TYPE_INT32,
+    offsetof(Testp2__OneOf, oftest2_case),
+    offsetof(Testp2__OneOf, foo),
+    NULL,
+    NULL,
+    0 | PROTOBUF_C_FIELD_FLAG_ONEOF,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+  {
+    "bar",
+    4,
+    PROTOBUF_C_LABEL_OPTIONAL,
+    PROTOBUF_C_TYPE_BOOL,
+    offsetof(Testp2__OneOf, oftest2_case),
+    offsetof(Testp2__OneOf, bar),
+    NULL,
+    NULL,
+    0 | PROTOBUF_C_FIELD_FLAG_ONEOF,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+};
+static const unsigned testp2__one_of__field_indices_by_name[] = {
+  3,   /* field[3] = bar */
+  1,   /* field[1] = first_and_last */
+  2,   /* field[2] = foo */
+  0,   /* field[0] = name */
+};
+static const ProtobufCIntRange testp2__one_of__number_ranges[1 + 1] =
+{
+  { 1, 0 },
+  { 0, 4 }
+};
+const ProtobufCMessageDescriptor testp2__one_of__descriptor =
+{
+  PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
+  "testp2.OneOf",
+  "OneOf",
+  "Testp2__OneOf",
+  "testp2",
+  sizeof(Testp2__OneOf),
+  4,
+  testp2__one_of__field_descriptors,
+  testp2__one_of__field_indices_by_name,
+  1,  testp2__one_of__number_ranges,
+  (ProtobufCMessageInit) testp2__one_of__init,
   NULL,NULL,NULL    /* reserved[123] */
 };
 static const ProtobufCEnumValue testp2__language__enum_values_by_number[3] =

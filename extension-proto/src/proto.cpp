@@ -24,6 +24,8 @@ static void lua_pushtestp3__basic(lua_State* L, Testp3__Basic *msg);
 static void lua_pushtestp3__container(lua_State* L, Testp3__Container *msg);
 static void lua_pushtestp3__container__basic_map_entry(lua_State* L, Testp3__Container__BasicMapEntry *msg);
 static void lua_pushtestp3__container__string_map_entry(lua_State* L, Testp3__Container__StringMapEntry *msg);
+static void lua_pushtestp3__one_of(lua_State* L, Testp3__OneOf *msg);
+static void lua_pushtestp3__one_of__first_and_last(lua_State* L, Testp3__OneOf__FirstAndLast *msg);
 static void lua_pushtestp2__scalars(lua_State* L, Testp2__Scalars *msg);
 static void lua_pushtestp2__outer(lua_State* L, Testp2__Outer *msg);
 static void lua_pushtestp2__outer__middle(lua_State* L, Testp2__Outer__Middle *msg);
@@ -32,6 +34,8 @@ static void lua_pushtestp2__basic(lua_State* L, Testp2__Basic *msg);
 static void lua_pushtestp2__container(lua_State* L, Testp2__Container *msg);
 static void lua_pushtestp2__container__basic_map_entry(lua_State* L, Testp2__Container__BasicMapEntry *msg);
 static void lua_pushtestp2__container__string_map_entry(lua_State* L, Testp2__Container__StringMapEntry *msg);
+static void lua_pushtestp2__one_of(lua_State* L, Testp2__OneOf *msg);
+static void lua_pushtestp2__one_of__first_and_last(lua_State* L, Testp2__OneOf__FirstAndLast *msg);
 static void lua_pushtestp3__scalars_repeated(lua_State* L, Testp3__Scalars *msg, int count);
 static void lua_pushtestp3__outer_repeated(lua_State* L, Testp3__Outer *msg, int count);
 static void lua_pushtestp3__outer__middle_repeated(lua_State* L, Testp3__Outer__Middle *msg, int count);
@@ -40,6 +44,8 @@ static void lua_pushtestp3__basic_repeated(lua_State* L, Testp3__Basic *msg, int
 static void lua_pushtestp3__container_repeated(lua_State* L, Testp3__Container *msg, int count);
 static void lua_pushtestp3__container__basic_map_entry_repeated(lua_State* L, Testp3__Container__BasicMapEntry *msg, int count);
 static void lua_pushtestp3__container__string_map_entry_repeated(lua_State* L, Testp3__Container__StringMapEntry *msg, int count);
+static void lua_pushtestp3__one_of_repeated(lua_State* L, Testp3__OneOf *msg, int count);
+static void lua_pushtestp3__one_of__first_and_last_repeated(lua_State* L, Testp3__OneOf__FirstAndLast *msg, int count);
 static void lua_pushtestp2__scalars_repeated(lua_State* L, Testp2__Scalars *msg, int count);
 static void lua_pushtestp2__outer_repeated(lua_State* L, Testp2__Outer *msg, int count);
 static void lua_pushtestp2__outer__middle_repeated(lua_State* L, Testp2__Outer__Middle *msg, int count);
@@ -48,6 +54,8 @@ static void lua_pushtestp2__basic_repeated(lua_State* L, Testp2__Basic *msg, int
 static void lua_pushtestp2__container_repeated(lua_State* L, Testp2__Container *msg, int count);
 static void lua_pushtestp2__container__basic_map_entry_repeated(lua_State* L, Testp2__Container__BasicMapEntry *msg, int count);
 static void lua_pushtestp2__container__string_map_entry_repeated(lua_State* L, Testp2__Container__StringMapEntry *msg, int count);
+static void lua_pushtestp2__one_of_repeated(lua_State* L, Testp2__OneOf *msg, int count);
+static void lua_pushtestp2__one_of__first_and_last_repeated(lua_State* L, Testp2__OneOf__FirstAndLast *msg, int count);
 
 static void lua_pushProtobufCBinaryData(lua_State* L, ProtobufCBinaryData binarydata)
 {
@@ -106,6 +114,18 @@ static void lua_pushtestp3__container__string_map_entry_repeated(lua_State* L, T
     lua_pushstring(L, value);
     lua_settable(L, -3);
 }
+static void lua_pushtestp3__one_of_repeated(lua_State* L, Testp3__OneOf *msg, int index)
+{
+    lua_pushnumber(L, index);
+    lua_pushtestp3__one_of(L, msg);
+    lua_settable(L, -3);
+}
+static void lua_pushtestp3__one_of__first_and_last_repeated(lua_State* L, Testp3__OneOf__FirstAndLast *msg, int index)
+{
+    lua_pushnumber(L, index);
+    lua_pushtestp3__one_of__first_and_last(L, msg);
+    lua_settable(L, -3);
+}
 static void lua_pushtestp2__scalars_repeated(lua_State* L, Testp2__Scalars *msg, int index)
 {
     lua_pushnumber(L, index);
@@ -156,6 +176,18 @@ static void lua_pushtestp2__container__string_map_entry_repeated(lua_State* L, T
     char* value = (char*)(msg->value);
     lua_pushstring(L, key);
     lua_pushstring(L, value);
+    lua_settable(L, -3);
+}
+static void lua_pushtestp2__one_of_repeated(lua_State* L, Testp2__OneOf *msg, int index)
+{
+    lua_pushnumber(L, index);
+    lua_pushtestp2__one_of(L, msg);
+    lua_settable(L, -3);
+}
+static void lua_pushtestp2__one_of__first_and_last_repeated(lua_State* L, Testp2__OneOf__FirstAndLast *msg, int index)
+{
+    lua_pushnumber(L, index);
+    lua_pushtestp2__one_of__first_and_last(L, msg);
     lua_settable(L, -3);
 }
 
@@ -442,6 +474,69 @@ static void lua_pushtestp3__container__string_map_entry(lua_State* L, Testp3__Co
     lua_newtable(L);
 
 }
+static void lua_pushtestp3__one_of(lua_State* L, Testp3__OneOf *msg)
+{
+    lua_newtable(L);
+
+    // name
+    if (msg->oftest1_case == TESTP3__ONE_OF__OFTEST1_NAME)
+    {
+        lua_pushstring(L, "name");
+        lua_pushstring(L, (char*)(msg->name));
+        lua_settable(L, -3);
+    }
+
+    // first_and_last
+    if (msg->oftest1_case == TESTP3__ONE_OF__OFTEST1_FIRST_AND_LAST)
+    {
+        lua_pushstring(L, "first_and_last");
+        if (msg->first_and_last)
+        {
+            lua_pushtestp3__one_of__first_and_last(L, (Testp3__OneOf__FirstAndLast*)(msg->first_and_last));
+        }
+        else
+        {
+            lua_pushnil(L);
+        }
+        lua_settable(L, -3);
+    }
+
+    // foo
+    if (msg->oftest2_case == TESTP3__ONE_OF__OFTEST2_FOO)
+    {
+        lua_pushstring(L, "foo");
+        lua_pushnumber(L, (int32_t)(msg->foo));
+        lua_settable(L, -3);
+    }
+
+    // bar
+    if (msg->oftest2_case == TESTP3__ONE_OF__OFTEST2_BAR)
+    {
+        lua_pushstring(L, "bar");
+        lua_pushboolean(L, (protobuf_c_boolean)(msg->bar));
+        lua_settable(L, -3);
+    }
+
+}
+static void lua_pushtestp3__one_of__first_and_last(lua_State* L, Testp3__OneOf__FirstAndLast *msg)
+{
+    lua_newtable(L);
+
+    // first
+    {
+        lua_pushstring(L, "first");
+        lua_pushstring(L, (char*)(msg->first));
+        lua_settable(L, -3);
+    }
+
+    // last
+    {
+        lua_pushstring(L, "last");
+        lua_pushstring(L, (char*)(msg->last));
+        lua_settable(L, -3);
+    }
+
+}
 static void lua_pushtestp2__scalars(lua_State* L, Testp2__Scalars *msg)
 {
     lua_newtable(L);
@@ -688,6 +783,65 @@ static void lua_pushtestp2__container__string_map_entry(lua_State* L, Testp2__Co
     lua_newtable(L);
 
 }
+static void lua_pushtestp2__one_of(lua_State* L, Testp2__OneOf *msg)
+{
+    lua_newtable(L);
+
+    // name
+    if (msg->oftest1_case == TESTP2__ONE_OF__OFTEST1_NAME)
+    {
+        lua_pushstring(L, "name");
+        lua_pushstring(L, (char*)(msg->name));
+        lua_settable(L, -3);
+    }
+
+    // first_and_last
+    if (msg->oftest1_case == TESTP2__ONE_OF__OFTEST1_FIRST_AND_LAST)
+    {
+        lua_pushstring(L, "first_and_last");
+        if (msg->first_and_last)
+        {
+            lua_pushtestp2__one_of__first_and_last(L, (Testp2__OneOf__FirstAndLast*)(msg->first_and_last));
+        }
+        else
+        {
+            lua_pushnil(L);
+        }
+        lua_settable(L, -3);
+    }
+
+    // foo
+    if (msg->oftest2_case == TESTP2__ONE_OF__OFTEST2_FOO)
+    {
+        lua_pushstring(L, "foo");
+        lua_pushnumber(L, (int32_t)(msg->foo));
+        lua_settable(L, -3);
+    }
+
+    // bar
+    if (msg->oftest2_case == TESTP2__ONE_OF__OFTEST2_BAR)
+    {
+        lua_pushstring(L, "bar");
+        lua_pushboolean(L, (protobuf_c_boolean)(msg->bar));
+        lua_settable(L, -3);
+    }
+
+}
+static void lua_pushtestp2__one_of__first_and_last(lua_State* L, Testp2__OneOf__FirstAndLast *msg)
+{
+    lua_newtable(L);
+
+    // first
+    lua_pushstring(L, "first");
+    lua_pushstring(L, (char*)(msg->first));
+    lua_settable(L, -3);
+
+    // last
+    lua_pushstring(L, "last");
+    lua_pushstring(L, (char*)(msg->last));
+    lua_settable(L, -3);
+
+}
 
 
 /******************************************************************************
@@ -728,6 +882,8 @@ static Testp3__Basic* luaL_checktestp3__basic(lua_State* L, int narg);
 static Testp3__Container* luaL_checktestp3__container(lua_State* L, int narg);
 static Testp3__Container__BasicMapEntry* luaL_checktestp3__container__basic_map_entry(lua_State* L, int key, int value);
 static Testp3__Container__StringMapEntry* luaL_checktestp3__container__string_map_entry(lua_State* L, int key, int value);
+static Testp3__OneOf* luaL_checktestp3__one_of(lua_State* L, int narg);
+static Testp3__OneOf__FirstAndLast* luaL_checktestp3__one_of__first_and_last(lua_State* L, int narg);
 static Testp2__Scalars* luaL_checktestp2__scalars(lua_State* L, int narg);
 static Testp2__Outer* luaL_checktestp2__outer(lua_State* L, int narg);
 static Testp2__Outer__Middle* luaL_checktestp2__outer__middle(lua_State* L, int narg);
@@ -736,6 +892,8 @@ static Testp2__Basic* luaL_checktestp2__basic(lua_State* L, int narg);
 static Testp2__Container* luaL_checktestp2__container(lua_State* L, int narg);
 static Testp2__Container__BasicMapEntry* luaL_checktestp2__container__basic_map_entry(lua_State* L, int key, int value);
 static Testp2__Container__StringMapEntry* luaL_checktestp2__container__string_map_entry(lua_State* L, int key, int value);
+static Testp2__OneOf* luaL_checktestp2__one_of(lua_State* L, int narg);
+static Testp2__OneOf__FirstAndLast* luaL_checktestp2__one_of__first_and_last(lua_State* L, int narg);
 static int luaL_checktestp3__language(lua_State* L, int narg);
 static int luaL_checktestp2__language(lua_State* L, int narg);
 
@@ -1160,6 +1318,90 @@ static Testp3__Container__StringMapEntry* luaL_checktestp3__container__string_ma
     return msg;
 }
 
+static Testp3__OneOf* luaL_checktestp3__one_of(lua_State* L, int narg)
+{
+    if (!lua_istable(L, narg)) {
+        luaL_error(L, "Expected value at index %d to be a table", narg);
+        return 0;
+    }
+
+    Testp3__OneOf *msg = (Testp3__OneOf*)malloc(sizeof(Testp3__OneOf));
+    testp3__one_of__init(msg);
+
+    // name
+    lua_pushstring(L, "name");
+    lua_gettable(L, narg);
+    if (!lua_isnil(L, lua_gettop(L)))
+    {
+        msg->oftest1_case = TESTP3__ONE_OF__OFTEST1_NAME;
+        msg->name = (char*)luaL_checkstring(L, lua_gettop(L));
+    }
+    lua_pop(L, 1);
+
+    // first_and_last
+    lua_pushstring(L, "first_and_last");
+    lua_gettable(L, narg);
+    if (!lua_isnil(L, lua_gettop(L)))
+    {
+        msg->oftest1_case = TESTP3__ONE_OF__OFTEST1_FIRST_AND_LAST;
+        msg->first_and_last = (Testp3__OneOf__FirstAndLast*)luaL_checktestp3__one_of__first_and_last(L, lua_gettop(L));
+    }
+    lua_pop(L, 1);
+
+    // foo
+    lua_pushstring(L, "foo");
+    lua_gettable(L, narg);
+    if (!lua_isnil(L, lua_gettop(L)))
+    {
+        msg->oftest2_case = TESTP3__ONE_OF__OFTEST2_FOO;
+        msg->foo = (int32_t)luaL_checknumber(L, lua_gettop(L));
+    }
+    lua_pop(L, 1);
+
+    // bar
+    lua_pushstring(L, "bar");
+    lua_gettable(L, narg);
+    if (!lua_isnil(L, lua_gettop(L)))
+    {
+        msg->oftest2_case = TESTP3__ONE_OF__OFTEST2_BAR;
+        msg->bar = (protobuf_c_boolean)luaL_checkboolean(L, lua_gettop(L));
+    }
+    lua_pop(L, 1);
+
+    return msg;
+}
+
+static Testp3__OneOf__FirstAndLast* luaL_checktestp3__one_of__first_and_last(lua_State* L, int narg)
+{
+    if (!lua_istable(L, narg)) {
+        luaL_error(L, "Expected value at index %d to be a table", narg);
+        return 0;
+    }
+
+    Testp3__OneOf__FirstAndLast *msg = (Testp3__OneOf__FirstAndLast*)malloc(sizeof(Testp3__OneOf__FirstAndLast));
+    testp3__one_of__first_and_last__init(msg);
+
+    // first
+    lua_pushstring(L, "first");
+    lua_gettable(L, narg);
+    if (!lua_isnil(L, lua_gettop(L)))
+    {
+        msg->first = (char*)luaL_checkstring(L, lua_gettop(L));
+    }
+    lua_pop(L, 1);
+
+    // last
+    lua_pushstring(L, "last");
+    lua_gettable(L, narg);
+    if (!lua_isnil(L, lua_gettop(L)))
+    {
+        msg->last = (char*)luaL_checkstring(L, lua_gettop(L));
+    }
+    lua_pop(L, 1);
+
+    return msg;
+}
+
 static Testp2__Scalars* luaL_checktestp2__scalars(lua_State* L, int narg)
 {
     if (!lua_istable(L, narg)) {
@@ -1526,6 +1768,84 @@ static Testp2__Container__StringMapEntry* luaL_checktestp2__container__string_ma
     return msg;
 }
 
+static Testp2__OneOf* luaL_checktestp2__one_of(lua_State* L, int narg)
+{
+    if (!lua_istable(L, narg)) {
+        luaL_error(L, "Expected value at index %d to be a table", narg);
+        return 0;
+    }
+
+    Testp2__OneOf *msg = (Testp2__OneOf*)malloc(sizeof(Testp2__OneOf));
+    testp2__one_of__init(msg);
+
+    // name
+    lua_pushstring(L, "name");
+    lua_gettable(L, narg);
+    if (!lua_isnil(L, lua_gettop(L)))
+    {
+        msg->oftest1_case = TESTP2__ONE_OF__OFTEST1_NAME;
+        msg->name = (char*)luaL_checkstring(L, lua_gettop(L));
+    }
+    lua_pop(L, 1);
+
+    // first_and_last
+    lua_pushstring(L, "first_and_last");
+    lua_gettable(L, narg);
+    if (!lua_isnil(L, lua_gettop(L)))
+    {
+        msg->oftest1_case = TESTP2__ONE_OF__OFTEST1_FIRST_AND_LAST;
+        msg->first_and_last = (Testp2__OneOf__FirstAndLast*)luaL_checktestp2__one_of__first_and_last(L, lua_gettop(L));
+    }
+    lua_pop(L, 1);
+
+    // foo
+    lua_pushstring(L, "foo");
+    lua_gettable(L, narg);
+    if (!lua_isnil(L, lua_gettop(L)))
+    {
+        msg->oftest2_case = TESTP2__ONE_OF__OFTEST2_FOO;
+        msg->foo = (int32_t)luaL_checknumber(L, lua_gettop(L));
+    }
+    lua_pop(L, 1);
+
+    // bar
+    lua_pushstring(L, "bar");
+    lua_gettable(L, narg);
+    if (!lua_isnil(L, lua_gettop(L)))
+    {
+        msg->oftest2_case = TESTP2__ONE_OF__OFTEST2_BAR;
+        msg->bar = (protobuf_c_boolean)luaL_checkboolean(L, lua_gettop(L));
+    }
+    lua_pop(L, 1);
+
+    return msg;
+}
+
+static Testp2__OneOf__FirstAndLast* luaL_checktestp2__one_of__first_and_last(lua_State* L, int narg)
+{
+    if (!lua_istable(L, narg)) {
+        luaL_error(L, "Expected value at index %d to be a table", narg);
+        return 0;
+    }
+
+    Testp2__OneOf__FirstAndLast *msg = (Testp2__OneOf__FirstAndLast*)malloc(sizeof(Testp2__OneOf__FirstAndLast));
+    testp2__one_of__first_and_last__init(msg);
+
+    // first
+    lua_pushstring(L, "first");
+    lua_gettable(L, narg);
+    msg->first = (char*)luaL_checkstring(L, lua_gettop(L));
+    lua_pop(L, 1);
+
+    // last
+    lua_pushstring(L, "last");
+    lua_gettable(L, narg);
+    msg->last = (char*)luaL_checkstring(L, lua_gettop(L));
+    lua_pop(L, 1);
+
+    return msg;
+}
+
 
 static int luaL_checktestp3__language(lua_State* L, int narg)
 {
@@ -1587,6 +1907,8 @@ static void free_testp3__basic(Testp3__Basic* msg);
 static void free_testp3__container(Testp3__Container* msg);
 static void free_testp3__container__basic_map_entry(Testp3__Container__BasicMapEntry* msg);
 static void free_testp3__container__string_map_entry(Testp3__Container__StringMapEntry* msg);
+static void free_testp3__one_of(Testp3__OneOf* msg);
+static void free_testp3__one_of__first_and_last(Testp3__OneOf__FirstAndLast* msg);
 static void free_testp2__scalars(Testp2__Scalars* msg);
 static void free_testp2__outer(Testp2__Outer* msg);
 static void free_testp2__outer__middle(Testp2__Outer__Middle* msg);
@@ -1595,6 +1917,8 @@ static void free_testp2__basic(Testp2__Basic* msg);
 static void free_testp2__container(Testp2__Container* msg);
 static void free_testp2__container__basic_map_entry(Testp2__Container__BasicMapEntry* msg);
 static void free_testp2__container__string_map_entry(Testp2__Container__StringMapEntry* msg);
+static void free_testp2__one_of(Testp2__OneOf* msg);
+static void free_testp2__one_of__first_and_last(Testp2__OneOf__FirstAndLast* msg);
 
 static void free_ProtobufCBinaryData(ProtobufCBinaryData) {};
 static void free_number(int32_t) {};
@@ -1701,6 +2025,22 @@ static void free_testp3__container__string_map_entry(Testp3__Container__StringMa
     if (msg == 0x0) return;
     free(msg);
 }
+static void free_testp3__one_of(Testp3__OneOf* msg)
+{
+    if (msg == 0x0) return;
+    free_string(msg->name);
+    free_testp3__one_of__first_and_last(msg->first_and_last);
+    free_number(msg->foo);
+    free_boolean(msg->bar);
+    free(msg);
+}
+static void free_testp3__one_of__first_and_last(Testp3__OneOf__FirstAndLast* msg)
+{
+    if (msg == 0x0) return;
+    free_string(msg->first);
+    free_string(msg->last);
+    free(msg);
+}
 static void free_testp2__scalars(Testp2__Scalars* msg)
 {
     if (msg == 0x0) return;
@@ -1790,6 +2130,22 @@ static void free_testp2__container__basic_map_entry(Testp2__Container__BasicMapE
 static void free_testp2__container__string_map_entry(Testp2__Container__StringMapEntry* msg)
 {
     if (msg == 0x0) return;
+    free(msg);
+}
+static void free_testp2__one_of(Testp2__OneOf* msg)
+{
+    if (msg == 0x0) return;
+    free_string(msg->name);
+    free_testp2__one_of__first_and_last(msg->first_and_last);
+    free_number(msg->foo);
+    free_boolean(msg->bar);
+    free(msg);
+}
+static void free_testp2__one_of__first_and_last(Testp2__OneOf__FirstAndLast* msg)
+{
+    if (msg == 0x0) return;
+    free_string(msg->first);
+    free_string(msg->last);
     free(msg);
 }
 
@@ -1947,6 +2303,43 @@ static int EncodeTestp3__Container(lua_State* L)
     return 1;
 }
 
+// testproto3.proto
+static int DecodeTestp3__OneOf(lua_State* L)
+{
+    DM_LUA_STACK_CHECK(L, 1);
+    size_t data_length;
+    const char* data = luaL_checklstring(L, 1, &data_length);
+
+    Testp3__OneOf *msg = testp3__one_of__unpack(0, data_length, (uint8_t*)data);
+    if (msg != 0)
+    {
+        lua_pushtestp3__one_of(L, msg);
+        testp3__one_of__free_unpacked(msg, 0);
+    }
+    else
+    {
+        lua_pushnil(L);
+    }
+
+    return 1;
+}
+static int EncodeTestp3__OneOf(lua_State* L)
+{
+    DM_LUA_STACK_CHECK(L, 1);
+    Testp3__OneOf *msg = luaL_checktestp3__one_of(L, 1);
+
+    size_t oneof_packed_size = testp3__one_of__get_packed_size(msg);
+    char* buffer = (char*)malloc(oneof_packed_size);
+    testp3__one_of__pack(msg, (uint8_t*)buffer);
+
+    lua_pushlstring(L, buffer, oneof_packed_size);
+    free(buffer);
+
+    free_testp3__one_of(msg);
+
+    return 1;
+}
+
 // testproto2.proto
 static int DecodeTestp2__Scalars(lua_State* L)
 {
@@ -2095,6 +2488,43 @@ static int EncodeTestp2__Container(lua_State* L)
     return 1;
 }
 
+// testproto2.proto
+static int DecodeTestp2__OneOf(lua_State* L)
+{
+    DM_LUA_STACK_CHECK(L, 1);
+    size_t data_length;
+    const char* data = luaL_checklstring(L, 1, &data_length);
+
+    Testp2__OneOf *msg = testp2__one_of__unpack(0, data_length, (uint8_t*)data);
+    if (msg != 0)
+    {
+        lua_pushtestp2__one_of(L, msg);
+        testp2__one_of__free_unpacked(msg, 0);
+    }
+    else
+    {
+        lua_pushnil(L);
+    }
+
+    return 1;
+}
+static int EncodeTestp2__OneOf(lua_State* L)
+{
+    DM_LUA_STACK_CHECK(L, 1);
+    Testp2__OneOf *msg = luaL_checktestp2__one_of(L, 1);
+
+    size_t oneof_packed_size = testp2__one_of__get_packed_size(msg);
+    char* buffer = (char*)malloc(oneof_packed_size);
+    testp2__one_of__pack(msg, (uint8_t*)buffer);
+
+    lua_pushlstring(L, buffer, oneof_packed_size);
+    free(buffer);
+
+    free_testp2__one_of(msg);
+
+    return 1;
+}
+
 
 static const luaL_reg Module_methods[] =
 {
@@ -2106,6 +2536,8 @@ static const luaL_reg Module_methods[] =
     {"decode_testp3_basic", DecodeTestp3__Basic },
     {"encode_testp3_container", EncodeTestp3__Container },
     {"decode_testp3_container", DecodeTestp3__Container },
+    {"encode_testp3_oneof", EncodeTestp3__OneOf },
+    {"decode_testp3_oneof", DecodeTestp3__OneOf },
     {"encode_testp2_scalars", EncodeTestp2__Scalars },
     {"decode_testp2_scalars", DecodeTestp2__Scalars },
     {"encode_testp2_outer", EncodeTestp2__Outer },
@@ -2114,6 +2546,8 @@ static const luaL_reg Module_methods[] =
     {"decode_testp2_basic", DecodeTestp2__Basic },
     {"encode_testp2_container", EncodeTestp2__Container },
     {"decode_testp2_container", DecodeTestp2__Container },
+    {"encode_testp2_oneof", EncodeTestp2__OneOf },
+    {"decode_testp2_oneof", DecodeTestp2__OneOf },
     {0,0}
 };
 

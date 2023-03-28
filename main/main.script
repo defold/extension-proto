@@ -113,11 +113,29 @@ local function test_proto2()
 		assert(not decoded_container.optional_basic2)
 	end	
 
+	local function test_oneoff()
+		print("One of")
+		local msg = {
+			first_and_last = { first = "John", last = "Doe" },
+			bar = true,
+		}
+
+		local encoded = proto.encode_testp3_oneof(msg)
+		local decoded = proto.decode_testp3_oneof(encoded)
+		assert(decoded.name == nil)
+		assert(decoded.foo == nil)
+		assert(decoded.first_and_last)
+		assert(decoded.first_and_last.first == msg.first_and_last.first)
+		assert(decoded.first_and_last.last == msg.first_and_last.last)
+		assert(decoded.bar == msg.bar)
+	end
+	
 	print("Testing proto2")
 	test_scalars()
 	test_basics()
 	test_nested()
 	test_container()
+	test_oneoff()
 end
 
 
@@ -211,6 +229,24 @@ local function test_proto3()
 
 		assert(decoded_b1.lang == proto.TESTP3__LANGUAGE_LANGUAGE_JAVA)
 	end
+
+
+	local function test_oneoff()
+		print("One of")
+		local msg = {
+			first_and_last = { first = "John", last = "Doe" },
+			bar = true,
+		}
+
+		local encoded = proto.encode_testp3_oneof(msg)
+		local decoded = proto.decode_testp3_oneof(encoded)
+		assert(decoded.name == nil)
+		assert(decoded.foo == nil)
+		assert(decoded.first_and_last)
+		assert(decoded.first_and_last.first == msg.first_and_last.first)
+		assert(decoded.first_and_last.last == msg.first_and_last.last)
+		assert(decoded.bar == msg.bar)
+	end
 	
 	print("Testing proto3")
 	test_scalars()
@@ -219,6 +255,7 @@ local function test_proto3()
 	test_nested()
 	test_container()
 	test_enums()
+	test_oneoff()
 end
 
 function init(self)

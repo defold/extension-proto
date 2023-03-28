@@ -23,6 +23,8 @@ typedef struct Testp3__Basic Testp3__Basic;
 typedef struct Testp3__Container Testp3__Container;
 typedef struct Testp3__Container__BasicMapEntry Testp3__Container__BasicMapEntry;
 typedef struct Testp3__Container__StringMapEntry Testp3__Container__StringMapEntry;
+typedef struct Testp3__OneOf Testp3__OneOf;
+typedef struct Testp3__OneOf__FirstAndLast Testp3__OneOf__FirstAndLast;
 
 
 /* --- enums --- */
@@ -157,6 +159,50 @@ struct  Testp3__Container
     , 0,NULL, 0,NULL, 0,NULL, 0,NULL, 0,NULL, 0,NULL }
 
 
+struct  Testp3__OneOf__FirstAndLast
+{
+  ProtobufCMessage base;
+  char *first;
+  char *last;
+};
+#define TESTP3__ONE_OF__FIRST_AND_LAST__INIT \
+ { PROTOBUF_C_MESSAGE_INIT (&testp3__one_of__first_and_last__descriptor) \
+    , (char *)protobuf_c_empty_string, (char *)protobuf_c_empty_string }
+
+
+typedef enum {
+  TESTP3__ONE_OF__OFTEST1__NOT_SET = 0,
+  TESTP3__ONE_OF__OFTEST1_NAME = 1,
+  TESTP3__ONE_OF__OFTEST1_FIRST_AND_LAST = 2
+    PROTOBUF_C__FORCE_ENUM_TO_BE_INT_SIZE(TESTP3__ONE_OF__OFTEST1__CASE)
+} Testp3__OneOf__Oftest1Case;
+
+typedef enum {
+  TESTP3__ONE_OF__OFTEST2__NOT_SET = 0,
+  TESTP3__ONE_OF__OFTEST2_FOO = 3,
+  TESTP3__ONE_OF__OFTEST2_BAR = 4
+    PROTOBUF_C__FORCE_ENUM_TO_BE_INT_SIZE(TESTP3__ONE_OF__OFTEST2__CASE)
+} Testp3__OneOf__Oftest2Case;
+
+struct  Testp3__OneOf
+{
+  ProtobufCMessage base;
+  Testp3__OneOf__Oftest1Case oftest1_case;
+  union {
+    char *name;
+    Testp3__OneOf__FirstAndLast *first_and_last;
+  };
+  Testp3__OneOf__Oftest2Case oftest2_case;
+  union {
+    int32_t foo;
+    protobuf_c_boolean bar;
+  };
+};
+#define TESTP3__ONE_OF__INIT \
+ { PROTOBUF_C_MESSAGE_INIT (&testp3__one_of__descriptor) \
+    , TESTP3__ONE_OF__OFTEST1__NOT_SET, {0}, TESTP3__ONE_OF__OFTEST2__NOT_SET, {0} }
+
+
 /* Testp3__Scalars methods */
 void   testp3__scalars__init
                      (Testp3__Scalars         *message);
@@ -245,6 +291,28 @@ Testp3__Container *
 void   testp3__container__free_unpacked
                      (Testp3__Container *message,
                       ProtobufCAllocator *allocator);
+/* Testp3__OneOf__FirstAndLast methods */
+void   testp3__one_of__first_and_last__init
+                     (Testp3__OneOf__FirstAndLast         *message);
+/* Testp3__OneOf methods */
+void   testp3__one_of__init
+                     (Testp3__OneOf         *message);
+size_t testp3__one_of__get_packed_size
+                     (const Testp3__OneOf   *message);
+size_t testp3__one_of__pack
+                     (const Testp3__OneOf   *message,
+                      uint8_t             *out);
+size_t testp3__one_of__pack_to_buffer
+                     (const Testp3__OneOf   *message,
+                      ProtobufCBuffer     *buffer);
+Testp3__OneOf *
+       testp3__one_of__unpack
+                     (ProtobufCAllocator  *allocator,
+                      size_t               len,
+                      const uint8_t       *data);
+void   testp3__one_of__free_unpacked
+                     (Testp3__OneOf *message,
+                      ProtobufCAllocator *allocator);
 /* --- per-message closures --- */
 
 typedef void (*Testp3__Scalars_Closure)
@@ -271,6 +339,12 @@ typedef void (*Testp3__Container__StringMapEntry_Closure)
 typedef void (*Testp3__Container_Closure)
                  (const Testp3__Container *message,
                   void *closure_data);
+typedef void (*Testp3__OneOf__FirstAndLast_Closure)
+                 (const Testp3__OneOf__FirstAndLast *message,
+                  void *closure_data);
+typedef void (*Testp3__OneOf_Closure)
+                 (const Testp3__OneOf *message,
+                  void *closure_data);
 
 /* --- services --- */
 
@@ -286,6 +360,8 @@ extern const ProtobufCMessageDescriptor testp3__basic__descriptor;
 extern const ProtobufCMessageDescriptor testp3__container__descriptor;
 extern const ProtobufCMessageDescriptor testp3__container__basic_map_entry__descriptor;
 extern const ProtobufCMessageDescriptor testp3__container__string_map_entry__descriptor;
+extern const ProtobufCMessageDescriptor testp3__one_of__descriptor;
+extern const ProtobufCMessageDescriptor testp3__one_of__first_and_last__descriptor;
 
 PROTOBUF_C__END_DECLS
 

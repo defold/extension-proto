@@ -211,6 +211,57 @@ void   testp3__container__free_unpacked
   assert(message->base.descriptor == &testp3__container__descriptor);
   protobuf_c_message_free_unpacked ((ProtobufCMessage*)message, allocator);
 }
+void   testp3__one_of__first_and_last__init
+                     (Testp3__OneOf__FirstAndLast         *message)
+{
+  static const Testp3__OneOf__FirstAndLast init_value = TESTP3__ONE_OF__FIRST_AND_LAST__INIT;
+  *message = init_value;
+}
+void   testp3__one_of__init
+                     (Testp3__OneOf         *message)
+{
+  static const Testp3__OneOf init_value = TESTP3__ONE_OF__INIT;
+  *message = init_value;
+}
+size_t testp3__one_of__get_packed_size
+                     (const Testp3__OneOf *message)
+{
+  assert(message->base.descriptor == &testp3__one_of__descriptor);
+  return protobuf_c_message_get_packed_size ((const ProtobufCMessage*)(message));
+}
+size_t testp3__one_of__pack
+                     (const Testp3__OneOf *message,
+                      uint8_t       *out)
+{
+  assert(message->base.descriptor == &testp3__one_of__descriptor);
+  return protobuf_c_message_pack ((const ProtobufCMessage*)message, out);
+}
+size_t testp3__one_of__pack_to_buffer
+                     (const Testp3__OneOf *message,
+                      ProtobufCBuffer *buffer)
+{
+  assert(message->base.descriptor == &testp3__one_of__descriptor);
+  return protobuf_c_message_pack_to_buffer ((const ProtobufCMessage*)message, buffer);
+}
+Testp3__OneOf *
+       testp3__one_of__unpack
+                     (ProtobufCAllocator  *allocator,
+                      size_t               len,
+                      const uint8_t       *data)
+{
+  return (Testp3__OneOf *)
+     protobuf_c_message_unpack (&testp3__one_of__descriptor,
+                                allocator, len, data);
+}
+void   testp3__one_of__free_unpacked
+                     (Testp3__OneOf *message,
+                      ProtobufCAllocator *allocator)
+{
+  if(!message)
+    return;
+  assert(message->base.descriptor == &testp3__one_of__descriptor);
+  protobuf_c_message_free_unpacked ((ProtobufCMessage*)message, allocator);
+}
 static const ProtobufCFieldDescriptor testp3__scalars__field_descriptors[15] =
 {
   {
@@ -838,6 +889,134 @@ const ProtobufCMessageDescriptor testp3__container__descriptor =
   testp3__container__field_indices_by_name,
   1,  testp3__container__number_ranges,
   (ProtobufCMessageInit) testp3__container__init,
+  NULL,NULL,NULL    /* reserved[123] */
+};
+static const ProtobufCFieldDescriptor testp3__one_of__first_and_last__field_descriptors[2] =
+{
+  {
+    "first",
+    1,
+    PROTOBUF_C_LABEL_NONE,
+    PROTOBUF_C_TYPE_STRING,
+    0,   /* quantifier_offset */
+    offsetof(Testp3__OneOf__FirstAndLast, first),
+    NULL,
+    &protobuf_c_empty_string,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+  {
+    "last",
+    2,
+    PROTOBUF_C_LABEL_NONE,
+    PROTOBUF_C_TYPE_STRING,
+    0,   /* quantifier_offset */
+    offsetof(Testp3__OneOf__FirstAndLast, last),
+    NULL,
+    &protobuf_c_empty_string,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+};
+static const unsigned testp3__one_of__first_and_last__field_indices_by_name[] = {
+  0,   /* field[0] = first */
+  1,   /* field[1] = last */
+};
+static const ProtobufCIntRange testp3__one_of__first_and_last__number_ranges[1 + 1] =
+{
+  { 1, 0 },
+  { 0, 2 }
+};
+const ProtobufCMessageDescriptor testp3__one_of__first_and_last__descriptor =
+{
+  PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
+  "testp3.OneOf.FirstAndLast",
+  "FirstAndLast",
+  "Testp3__OneOf__FirstAndLast",
+  "testp3",
+  sizeof(Testp3__OneOf__FirstAndLast),
+  2,
+  testp3__one_of__first_and_last__field_descriptors,
+  testp3__one_of__first_and_last__field_indices_by_name,
+  1,  testp3__one_of__first_and_last__number_ranges,
+  (ProtobufCMessageInit) testp3__one_of__first_and_last__init,
+  NULL,NULL,NULL    /* reserved[123] */
+};
+static const ProtobufCFieldDescriptor testp3__one_of__field_descriptors[4] =
+{
+  {
+    "name",
+    1,
+    PROTOBUF_C_LABEL_NONE,
+    PROTOBUF_C_TYPE_STRING,
+    offsetof(Testp3__OneOf, oftest1_case),
+    offsetof(Testp3__OneOf, name),
+    NULL,
+    &protobuf_c_empty_string,
+    0 | PROTOBUF_C_FIELD_FLAG_ONEOF,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+  {
+    "first_and_last",
+    2,
+    PROTOBUF_C_LABEL_NONE,
+    PROTOBUF_C_TYPE_MESSAGE,
+    offsetof(Testp3__OneOf, oftest1_case),
+    offsetof(Testp3__OneOf, first_and_last),
+    &testp3__one_of__first_and_last__descriptor,
+    NULL,
+    0 | PROTOBUF_C_FIELD_FLAG_ONEOF,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+  {
+    "foo",
+    3,
+    PROTOBUF_C_LABEL_NONE,
+    PROTOBUF_C_TYPE_INT32,
+    offsetof(Testp3__OneOf, oftest2_case),
+    offsetof(Testp3__OneOf, foo),
+    NULL,
+    NULL,
+    0 | PROTOBUF_C_FIELD_FLAG_ONEOF,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+  {
+    "bar",
+    4,
+    PROTOBUF_C_LABEL_NONE,
+    PROTOBUF_C_TYPE_BOOL,
+    offsetof(Testp3__OneOf, oftest2_case),
+    offsetof(Testp3__OneOf, bar),
+    NULL,
+    NULL,
+    0 | PROTOBUF_C_FIELD_FLAG_ONEOF,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+};
+static const unsigned testp3__one_of__field_indices_by_name[] = {
+  3,   /* field[3] = bar */
+  1,   /* field[1] = first_and_last */
+  2,   /* field[2] = foo */
+  0,   /* field[0] = name */
+};
+static const ProtobufCIntRange testp3__one_of__number_ranges[1 + 1] =
+{
+  { 1, 0 },
+  { 0, 4 }
+};
+const ProtobufCMessageDescriptor testp3__one_of__descriptor =
+{
+  PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
+  "testp3.OneOf",
+  "OneOf",
+  "Testp3__OneOf",
+  "testp3",
+  sizeof(Testp3__OneOf),
+  4,
+  testp3__one_of__field_descriptors,
+  testp3__one_of__field_indices_by_name,
+  1,  testp3__one_of__number_ranges,
+  (ProtobufCMessageInit) testp3__one_of__init,
   NULL,NULL,NULL    /* reserved[123] */
 };
 static const ProtobufCEnumValue testp3__language__enum_values_by_number[3] =

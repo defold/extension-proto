@@ -59,3 +59,20 @@ message Container {
 	optional Basic      optional_basic1 = 7;
 	optional Basic      optional_basic2 = 8;
 }
+
+message OneOf {
+	message FirstAndLast {
+		required string first = 1;
+		required string last = 2;
+	}
+
+	oneof oftest1 {
+		string name = 1;
+		FirstAndLast first_and_last = 2;
+	}
+
+	oneof oftest2 {
+		int32 foo = 3;
+		bool  bar = 4;
+	}
+}

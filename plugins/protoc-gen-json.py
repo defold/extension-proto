@@ -85,11 +85,15 @@ def parse_field(f):
         "name": f.name,
         "name_cpp": name_to_cpp(f.name),
         "name_cpp_lower": name_to_cpp(f.name.lower()),
+        "name_cpp_upper": name_to_cpp(f.name.lower()).upper(),
         "type": field_type,
         "repeated": (f.label == FieldDescriptorProto.LABEL_REPEATED),
         "required": (f.label == FieldDescriptorProto.LABEL_REQUIRED),
         "optional": (f.label == FieldDescriptorProto.LABEL_OPTIONAL),
     }
+
+    if f.HasField('oneof_index'):
+        field["oneof_index"] = f.oneof_index
 
     # https://developers.google.com/protocol-buffers/docs/proto#scalar
     if field_type == Field.TYPE_DOUBLE:
@@ -224,7 +228,14 @@ def generate_code(request, response):
                             data["value"] = parse_field(f)
                 else:
                     for f in item.field:
-                        fields.append(parse_field(f))
+                        field = parse_field(f)
+                        if field.get("oneof_index") is not None:
+                            oneof_decl = item.oneof_decl
+                            oneof_index = field["oneof_index"]
+                            oneof_name = oneof_decl[oneof_index].name
+                            field["oneof"] = oneof_name
+                            field["oneof_enum"] = data["type_cpp_upper"] + "__" + oneof_name.upper() + "_" + field["name_cpp_upper"]
+                        fields.append(field)
 
             elif isinstance(item, EnumDescriptorProto):
                 values = []
