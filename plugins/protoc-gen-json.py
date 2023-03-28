@@ -15,21 +15,24 @@ CPP_KEYWORDS = [ "auto", "break", "case", "char", "const", "continue", "default"
 def log(*args):
     print(*args, file=sys.stderr)
 
-
+# https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/descriptor.proto
 def parse_proto_file(proto_file):
+    log("\nParsing file ",proto_file.name, " with package ", proto_file.package)
     out_items = []
 
-    def _parse(package, items):
+    def _parse(package, items, parent = None):
         for item in items:
-            out_items.append({ "item": item, "package": package, "parent": None })
-            
             if isinstance(item, DescriptorProto):
-                for enum in item.enum_type:
-                    out_items.append({ "item": enum, "package": package, "parent": item })
-                
+                log("  DescriptorProto", item.name)
+                out_items.append({ "item": item, "package": package, "parent": parent })
+                if item.enum_type:
+                    _parse(package, item.enum_type, item)
                 if item.nested_type:
-                    nested_package = package + "." + item.name
-                    _parse(nested_package, item.nested_type)
+                    _parse(package + "." + item.name, item.nested_type)
+
+            elif isinstance(item, EnumDescriptorProto):
+                log("  EnumDescriptorProto", item.name)
+                out_items.append({ "item": item, "package": package, "parent": parent })
 
     _parse(proto_file.package, proto_file.enum_type)
     _parse(proto_file.package, proto_file.message_type)
