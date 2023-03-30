@@ -236,8 +236,8 @@ def generate_code(request, response):
                             oneof_decl = item.oneof_decl
                             oneof_index = field["oneof_index"]
                             oneof_name = oneof_decl[oneof_index].name
-                            field["oneof"] = oneof_name
-                            field["oneof_enum"] = data["type_cpp_upper"] + "__" + oneof_name.upper() + "_" + field["name_cpp_upper"]
+                            field["oneof"] = oneof_name.lower()
+                            field["oneof_enum"] = data["type_cpp_upper"] + "__" + oneof_name.upper() + "_" + camel_to_snake(field["name_cpp"]).upper()
                         fields.append(field)
 
             elif isinstance(item, EnumDescriptorProto):
