@@ -17,6 +17,8 @@ This extension requires a bit more setup than most other Defold extensions befor
 1. To use this extension in your Defold project, either [download a copy](https://github.com/defold/extension-proto/archive/refs/heads/master.zip) of the project, [create a fork](https://github.com/defold/extension-proto/fork) or [create a new repo from this template project](https://github.com/defold/extension-proto/generate).
 
 2. Add the protobuf message definitions (files with `.proto` extension) that the extension should handle to the `proto/` folder located in the root of the project.
+   * argument -p can be used running `generate.py` to set list of paths where proto files are located (search paths)
+   * argument -f can be used running `generate.py` to define list of .proto that will be used in the project
 
 3. Run `generate.py` to generate Lua bindings and other required files. The script does the following:
    * Process all .proto files into a single intermediate data file in JSON format containing information about the protobuf messages

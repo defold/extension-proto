@@ -1,10 +1,9 @@
 #!/usr/bin/env python
-
+import argparse
 import pystache
 import json
 import codecs
 import html
-import subprocess
 import os
 import shutil
 import pathlib
@@ -23,7 +22,7 @@ EXTENSION_PROTO_CPP = EXTENSION_DIR_SRC + "/proto.cpp"
 EXTENSION_PROTO_API = EXTENSION_DIR_ROOT + "/api/extension-proto.script_api"
 
 PLUGINS_DIR = BASE_DIR + "/plugins"
-PROTO_DIR = "./proto"
+PROTO_DIR = BASE_DIR + "/proto"
 
 
 def call(args):
@@ -31,6 +30,7 @@ def call(args):
 	if ret != 0:
 		sys.exit(1)
 	return ret
+
 
 def clean_extension_src_dir(dir):
 	for r, d, f in os.walk(dir, topdown=True):
@@ -43,6 +43,7 @@ def clean_extension_src_dir(dir):
 			os.remove(os.path.join(r, file))
 		for dir in d:
 			shutil.rmtree(os.path.join(r, dir))
+
 
 # copy generated .h files from src/ to include/
 def move_extension_includes():
@@ -66,6 +67,7 @@ def find_all_proto_files(dir):
 				files.append(os.path.join(r, file))
 	return files
 
+
 def get_platform():
 	if platform == "linux" or platform == "linux2":
 		return "x86_64-linux"
@@ -76,6 +78,7 @@ def get_platform():
 	else:
 		raise Exception("Unknown platform")
 
+
 def get_protoc():
 	return PLUGINS_DIR + "/protoc-" + get_platform()
 
@@ -84,6 +87,13 @@ def get_protoc_gen_c():
 
 def get_protoc_gen_json():
 	return PLUGINS_DIR + "/protoc-gen-json.py"
+
+
+def gen_import_path_args(dirs):
+	if dirs is not None:
+		return ["--proto_path=" + path for path in dirs]
+	return None
+
 
 def generate_extension():
 	j = json.load(open("extension-proto/json/proto.json"))
@@ -94,17 +104,20 @@ def generate_extension():
 		with codecs.open(EXTENSION_PROTO_CPP, "wb", encoding="utf-8") as f:
 			f.write(html.unescape(result))
 
-def generate_json():
+
+def generate_json(arguments):
 	print("Generating json")
 	args = [
 		get_protoc(),
 		"--plugin=protoc-gen-json=" + get_protoc_gen_json(),
 		"--json_out=" + EXTENSION_DIR_JSON,
-		"--proto_path={}".format(PROTO_DIR),
 	]
-	call(" ".join(args + find_all_proto_files(PROTO_DIR)))
+	proto_files = arguments.files or find_all_proto_files(PROTO_DIR)
+	proto_path_args = gen_import_path_args(arguments.paths) or ["--proto_path=" + PROTO_DIR]
+	call(" ".join(args + proto_path_args + proto_files))
 
-def generate_c():
+
+def generate_c(arguments):
 	print("Generating C")
 	clean_extension_src_dir(EXTENSION_DIR_SRC)
 	clean_extension_src_dir(EXTENSION_DIR_HEADERS)
@@ -112,31 +125,45 @@ def generate_c():
 		get_protoc(),
 		"--plugin=protoc-gen-c=" + get_protoc_gen_c(),
 		"--c_out=" + EXTENSION_DIR_SRC,
-		"--proto_path={}".format(PROTO_DIR),
 	]
-	call(" ".join(args + find_all_proto_files(PROTO_DIR)))
+	proto_files = arguments.files or find_all_proto_files(PROTO_DIR)
+	proto_path_args = gen_import_path_args(arguments.paths) or ["--proto_path=" + PROTO_DIR]
+	call(" ".join(args + proto_path_args + proto_files))
 	move_extension_includes()
 
 
 def generate_proto_cpp():
 	print("Generating extension main")
-	with open("extension-proto.cpp.mtl", 'r') as f:
+	with open(BASE_DIR + "/extension-proto.cpp.mtl", 'r') as f:
 		proto_json = json.load(open(EXTENSION_PROTO_JSON))
 		extension_proto_mtl = f.read()
 		result = pystache.render(extension_proto_mtl, proto_json)
 		with codecs.open(EXTENSION_PROTO_CPP, "wb", encoding="utf-8") as f:
 			f.write(html.unescape(result))
 
+
 def generate_proto_api():
 	print("Generating extension docs")
-	with open("extension-proto.script_api.mtl", 'r') as f:
+	with open(BASE_DIR + "/extension-proto.script_api.mtl", 'r') as f:
 		proto_json = json.load(open(EXTENSION_PROTO_JSON))
 		extension_proto_mtl = f.read()
 		result = pystache.render(extension_proto_mtl, proto_json)
 		with codecs.open(EXTENSION_PROTO_API, "wb", encoding="utf-8") as f:
 			f.write(html.unescape(result))
 
-generate_json()
-generate_c()
-generate_proto_cpp()
-generate_proto_api()
+
+def parse_command_line_arguments():
+	parser = argparse.ArgumentParser(description='Protoc arguments to use instead of proto folder')
+	parser.add_argument('-f', '--files', metavar='files', type=str, nargs='+',
+						help='a list of proto files', required=False)
+	parser.add_argument('-p', '--paths', metavar='paths', type=str, nargs='+',
+						help='a list of search paths', required=False)
+	return parser.parse_args()
+
+
+if __name__ == "__main__":
+	arguments = parse_command_line_arguments()
+	generate_json(arguments)
+	generate_c(arguments)
+	generate_proto_cpp()
+	generate_proto_api()
