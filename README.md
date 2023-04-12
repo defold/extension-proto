@@ -16,9 +16,9 @@ This extension requires a bit more setup than most other Defold extensions befor
 
 1. To use this extension in your Defold project, either [download a copy](https://github.com/defold/extension-proto/archive/refs/heads/master.zip) of the project, [create a fork](https://github.com/defold/extension-proto/fork) or [create a new repo from this template project](https://github.com/defold/extension-proto/generate).
 
-2. Add the protobuf message definitions (files with `.proto` extension) that the extension should handle to the `proto/` folder located in the root of the project.
-   * argument -p can be used running `generate.py` to set list of paths where proto files are located (search paths)
-   * argument -f can be used running `generate.py` to define list of .proto that will be used in the project
+2. Add the protobuf message definitions (files with `.proto` extension) that the extension should handle to the `proto/` folder located in the root of the project. You can also load the `.proto` files from another location:
+   * Argument `-p` can be used when running `generate.py` to set list of paths where proto files are located (search paths)
+   * Argument `-f` can be used when running `generate.py` to define list of `.proto` files that will be used in the project
 
 3. Run `generate.py` to generate Lua bindings and other required files. The script does the following:
    * Process all .proto files into a single intermediate data file in JSON format containing information about the protobuf messages
@@ -26,13 +26,25 @@ This extension requires a bit more setup than most other Defold extensions befor
    * Generate Defold extension source code with Lua bindings to encode and decode all protobuf messages
    * Generate Defold script API definitions for the Lua bindings to enable auto-complete in the editor
 
+Example:
+
+```sh
+
+# Generate bindings for all '.proto' files in the 'proto' folder
+cd extension-proto
+python .generate.py
+
+# Generate bindings for file 'testproto3.proto' with imports located in './extension-proto/proto'
+python ./extension-proto/generate.py -f testproto3.proto -p ./extension-proto/proto
+```
+
 The `generate.py` script uses the `protoc` compiler and the `protobuf-c` C-code generator:
 
 * `protoc` from https://github.com/protocolbuffers/protobuf/releases/tag/v21.6
 * `protobuf-c` from https://github.com/defold/protobuf-c
 
 
-## Usage
+## Run-time usage
 The extension provides Lua bindings to encode and decode the protobuf messages defined in the `proto/` folder. Example:
 
 ```
