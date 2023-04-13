@@ -1929,90 +1929,113 @@ static void free_boolean(bool) {};
 static void free_testp3__scalars(Testp3__Scalars* msg)
 {
     if (msg == 0x0) return;
-    free_number(msg->i32);
-    free_number(msg->i64);
-    free_number(msg->ui32);
-    free_number(msg->ui64);
-    free_number(msg->si32);
-    free_number(msg->si64);
-    free_number(msg->fix32);
-    free_number(msg->fix64);
-    free_number(msg->sfix32);
-    free_number(msg->sfix64);
-    free_boolean(msg->b);
-    free_string(msg->s);
-    free_ProtobufCBinaryData(msg->bytes);
-    free_number(msg->d);
-    free_number(msg->f);
+    if (msg->s != 0x0)
+    {
+        free_string(msg->s);
+    }
     free(msg);
 }
 static void free_testp3__outer(Testp3__Outer* msg)
 {
     if (msg == 0x0) return;
-    free_string(msg->text);
-    free_testp3__outer__middle(msg->middle);
+    if (msg->text != 0x0)
+    {
+        free_string(msg->text);
+    }
+    if (msg->middle != 0x0)
+    {
+        free_testp3__outer__middle(msg->middle);
+    }
     free(msg);
 }
 static void free_testp3__outer__middle(Testp3__Outer__Middle* msg)
 {
     if (msg == 0x0) return;
-    free_string(msg->text);
-    free_testp3__outer__middle__inner(msg->inner);
+    if (msg->text != 0x0)
+    {
+        free_string(msg->text);
+    }
+    if (msg->inner != 0x0)
+    {
+        free_testp3__outer__middle__inner(msg->inner);
+    }
     free(msg);
 }
 static void free_testp3__outer__middle__inner(Testp3__Outer__Middle__Inner* msg)
 {
     if (msg == 0x0) return;
-    free_string(msg->text);
+    if (msg->text != 0x0)
+    {
+        free_string(msg->text);
+    }
     free(msg);
 }
 static void free_testp3__basic(Testp3__Basic* msg)
 {
     if (msg == 0x0) return;
-    free_string(msg->s);
-    free_number(msg->i);
-    free_number(msg->lang);
+    if (msg->s != 0x0)
+    {
+        free_string(msg->s);
+    }
     free(msg);
 }
 static void free_testp3__container(Testp3__Container* msg)
 {
     if (msg == 0x0) return;
-    int basic_map_size = msg->n_basic_map;
-    for (int i = 0; i < basic_map_size; i++)
+    if (msg->basic_map != 0x0)
     {
-        free_testp3__container__basic_map_entry(msg->basic_map[i]);
+        int basic_map_size = msg->n_basic_map;
+        for (int i = 0; i < basic_map_size; i++)
+        {
+            free_testp3__container__basic_map_entry(msg->basic_map[i]);
+        }
+        free(msg->basic_map);
     }
-    free(msg->basic_map);
-    int string_map_size = msg->n_string_map;
-    for (int i = 0; i < string_map_size; i++)
+    if (msg->string_map != 0x0)
     {
-        free_testp3__container__string_map_entry(msg->string_map[i]);
+        int string_map_size = msg->n_string_map;
+        for (int i = 0; i < string_map_size; i++)
+        {
+            free_testp3__container__string_map_entry(msg->string_map[i]);
+        }
+        free(msg->string_map);
     }
-    free(msg->string_map);
-    int repeated_string1_size = msg->n_repeated_string1;
-    for (int i = 0; i < repeated_string1_size; i++)
+    if (msg->repeated_string1 != 0x0)
     {
-        free_string(msg->repeated_string1[i]);
+        int repeated_string1_size = msg->n_repeated_string1;
+        for (int i = 0; i < repeated_string1_size; i++)
+        {
+            free_string(msg->repeated_string1[i]);
+        }
+        free(msg->repeated_string1);
     }
-    free(msg->repeated_string1);
-    int repeated_string2_size = msg->n_repeated_string2;
-    for (int i = 0; i < repeated_string2_size; i++)
+    if (msg->repeated_string2 != 0x0)
     {
-        free_string(msg->repeated_string2[i]);
+        int repeated_string2_size = msg->n_repeated_string2;
+        for (int i = 0; i < repeated_string2_size; i++)
+        {
+            free_string(msg->repeated_string2[i]);
+        }
+        free(msg->repeated_string2);
     }
-    free(msg->repeated_string2);
-    int repeated_basic1_size = msg->n_repeated_basic1;
-    for (int i = 0; i < repeated_basic1_size; i++)
+    if (msg->repeated_basic1 != 0x0)
     {
-        free_testp3__basic(msg->repeated_basic1[i]);
+        int repeated_basic1_size = msg->n_repeated_basic1;
+        for (int i = 0; i < repeated_basic1_size; i++)
+        {
+            free_testp3__basic(msg->repeated_basic1[i]);
+        }
+        free(msg->repeated_basic1);
     }
-    free(msg->repeated_basic1);
-    int repeated_basic2_size = msg->n_repeated_basic2;
-    for (int i = 0; i < repeated_basic2_size; i++)
+    if (msg->repeated_basic2 != 0x0)
     {
-        free_testp3__basic(msg->repeated_basic2[i]);
+        int repeated_basic2_size = msg->n_repeated_basic2;
+        for (int i = 0; i < repeated_basic2_size; i++)
+        {
+            free_testp3__basic(msg->repeated_basic2[i]);
+        }
+        free(msg->repeated_basic2);
     }
-    free(msg->repeated_basic2);
     free(msg);
 }
 static void free_testp3__container__basic_map_entry(Testp3__Container__BasicMapEntry* msg)
@@ -2028,98 +2051,149 @@ static void free_testp3__container__string_map_entry(Testp3__Container__StringMa
 static void free_testp3__one_of(Testp3__OneOf* msg)
 {
     if (msg == 0x0) return;
-    free_string(msg->name);
-    free_testp3__one_of__first_and_last(msg->first_and_last);
-    free_number(msg->foo);
-    free_boolean(msg->bar);
+    if (msg->oftest1_case == TESTP3__ONE_OF__OFTEST1_NAME)
+    {
+        if (msg->name != 0x0)
+        {
+            free_string(msg->name);
+        }
+    }
+    if (msg->oftest1_case == TESTP3__ONE_OF__OFTEST1_FIRST_AND_LAST)
+    {
+        if (msg->first_and_last != 0x0)
+        {
+            free_testp3__one_of__first_and_last(msg->first_and_last);
+        }
+    }
+    if (msg->oftest2_case == TESTP3__ONE_OF__OFTEST2_FOO)
+    {
+    }
+    if (msg->oftest2_case == TESTP3__ONE_OF__OFTEST2_BAR)
+    {
+    }
     free(msg);
 }
 static void free_testp3__one_of__first_and_last(Testp3__OneOf__FirstAndLast* msg)
 {
     if (msg == 0x0) return;
-    free_string(msg->first);
-    free_string(msg->last);
+    if (msg->first != 0x0)
+    {
+        free_string(msg->first);
+    }
+    if (msg->last != 0x0)
+    {
+        free_string(msg->last);
+    }
     free(msg);
 }
 static void free_testp2__scalars(Testp2__Scalars* msg)
 {
     if (msg == 0x0) return;
-    free_number(msg->i32);
-    free_number(msg->i64);
-    free_number(msg->ui32);
-    free_number(msg->ui64);
-    free_number(msg->si32);
-    free_number(msg->si64);
-    free_number(msg->fix32);
-    free_number(msg->fix64);
-    free_number(msg->sfix32);
-    free_number(msg->sfix64);
-    free_boolean(msg->b);
-    free_string(msg->s);
-    free_ProtobufCBinaryData(msg->bytes);
-    free_number(msg->d);
-    free_number(msg->f);
+    if (msg->s != 0x0)
+    {
+        free_string(msg->s);
+    }
     free(msg);
 }
 static void free_testp2__outer(Testp2__Outer* msg)
 {
     if (msg == 0x0) return;
-    free_string(msg->text);
-    free_testp2__outer__middle(msg->middle);
+    if (msg->text != 0x0)
+    {
+        free_string(msg->text);
+    }
+    if (msg->middle != 0x0)
+    {
+        free_testp2__outer__middle(msg->middle);
+    }
     free(msg);
 }
 static void free_testp2__outer__middle(Testp2__Outer__Middle* msg)
 {
     if (msg == 0x0) return;
-    free_string(msg->text);
-    free_testp2__outer__middle__inner(msg->inner);
+    if (msg->text != 0x0)
+    {
+        free_string(msg->text);
+    }
+    if (msg->inner != 0x0)
+    {
+        free_testp2__outer__middle__inner(msg->inner);
+    }
     free(msg);
 }
 static void free_testp2__outer__middle__inner(Testp2__Outer__Middle__Inner* msg)
 {
     if (msg == 0x0) return;
-    free_string(msg->text);
+    if (msg->text != 0x0)
+    {
+        free_string(msg->text);
+    }
     free(msg);
 }
 static void free_testp2__basic(Testp2__Basic* msg)
 {
     if (msg == 0x0) return;
-    free_string(msg->s);
-    free_number(msg->i);
-    free_number(msg->lang);
+    if (msg->s != 0x0)
+    {
+        free_string(msg->s);
+    }
     free(msg);
 }
 static void free_testp2__container(Testp2__Container* msg)
 {
     if (msg == 0x0) return;
-    int basic_map_size = msg->n_basic_map;
-    for (int i = 0; i < basic_map_size; i++)
+    if (msg->basic_map != 0x0)
     {
-        free_testp2__container__basic_map_entry(msg->basic_map[i]);
+        int basic_map_size = msg->n_basic_map;
+        for (int i = 0; i < basic_map_size; i++)
+        {
+            free_testp2__container__basic_map_entry(msg->basic_map[i]);
+        }
+        free(msg->basic_map);
     }
-    free(msg->basic_map);
-    int string_map_size = msg->n_string_map;
-    for (int i = 0; i < string_map_size; i++)
+    if (msg->string_map != 0x0)
     {
-        free_testp2__container__string_map_entry(msg->string_map[i]);
+        int string_map_size = msg->n_string_map;
+        for (int i = 0; i < string_map_size; i++)
+        {
+            free_testp2__container__string_map_entry(msg->string_map[i]);
+        }
+        free(msg->string_map);
     }
-    free(msg->string_map);
-    int repeated_string_size = msg->n_repeated_string;
-    for (int i = 0; i < repeated_string_size; i++)
+    if (msg->repeated_string != 0x0)
     {
-        free_string(msg->repeated_string[i]);
+        int repeated_string_size = msg->n_repeated_string;
+        for (int i = 0; i < repeated_string_size; i++)
+        {
+            free_string(msg->repeated_string[i]);
+        }
+        free(msg->repeated_string);
     }
-    free(msg->repeated_string);
-    int repeated_basic_size = msg->n_repeated_basic;
-    for (int i = 0; i < repeated_basic_size; i++)
+    if (msg->repeated_basic != 0x0)
     {
-        free_testp2__basic(msg->repeated_basic[i]);
+        int repeated_basic_size = msg->n_repeated_basic;
+        for (int i = 0; i < repeated_basic_size; i++)
+        {
+            free_testp2__basic(msg->repeated_basic[i]);
+        }
+        free(msg->repeated_basic);
     }
-    free(msg->repeated_basic);
-    free_string(msg->optional_string1);
-    free_string(msg->optional_string2);
-    free_testp2__basic(msg->optional_basic1);
-    free_testp2__basic(msg->optional_basic2);
+    if (msg->optional_string1 != 0x0)
+    {
+        free_string(msg->optional_string1);
+    }
+    if (msg->optional_string2 != 0x0)
+    {
+        free_string(msg->optional_string2);
+    }
+    if (msg->optional_basic1 != 0x0)
+    {
+        free_testp2__basic(msg->optional_basic1);
+    }
+    if (msg->optional_basic2 != 0x0)
+    {
+        free_testp2__basic(msg->optional_basic2);
+    }
     free(msg);
 }
 static void free_testp2__container__basic_map_entry(Testp2__Container__BasicMapEntry* msg)
@@ -2135,17 +2209,39 @@ static void free_testp2__container__string_map_entry(Testp2__Container__StringMa
 static void free_testp2__one_of(Testp2__OneOf* msg)
 {
     if (msg == 0x0) return;
-    free_string(msg->name);
-    free_testp2__one_of__first_and_last(msg->first_and_last);
-    free_number(msg->foo);
-    free_boolean(msg->bar);
+    if (msg->oftest1_case == TESTP2__ONE_OF__OFTEST1_NAME)
+    {
+        if (msg->name != 0x0)
+        {
+            free_string(msg->name);
+        }
+    }
+    if (msg->oftest1_case == TESTP2__ONE_OF__OFTEST1_FIRST_AND_LAST)
+    {
+        if (msg->first_and_last != 0x0)
+        {
+            free_testp2__one_of__first_and_last(msg->first_and_last);
+        }
+    }
+    if (msg->oftest2_case == TESTP2__ONE_OF__OFTEST2_FOO)
+    {
+    }
+    if (msg->oftest2_case == TESTP2__ONE_OF__OFTEST2_BAR)
+    {
+    }
     free(msg);
 }
 static void free_testp2__one_of__first_and_last(Testp2__OneOf__FirstAndLast* msg)
 {
     if (msg == 0x0) return;
-    free_string(msg->first);
-    free_string(msg->last);
+    if (msg->first != 0x0)
+    {
+        free_string(msg->first);
+    }
+    if (msg->last != 0x0)
+    {
+        free_string(msg->last);
+    }
     free(msg);
 }
 

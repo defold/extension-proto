@@ -103,60 +103,71 @@ def parse_field(f):
         field["type_lua"] = "number"
         field["type_cpp"] = "double"
         field["type_cpp_lower"] = "double"
+        field["type_is_allocated"] = False
         field["type_is_primitive"] = True
     elif field_type == Field.TYPE_FLOAT:
         field["type_lua"] = "number"
         field["type_cpp"] = "float"
         field["type_cpp_lower"] = "float"
+        field["type_is_allocated"] = False
         field["type_is_primitive"] = True
     elif field_type == Field.TYPE_INT64 or field_type == Field.TYPE_SFIXED64 or field_type == Field.TYPE_SINT64:
         field["type_lua"] = "number"
         field["type_cpp"] = "int64_t"
         field["type_cpp_lower"] = "int64_t"
+        field["type_is_allocated"] = False
         field["type_is_primitive"] = True
     elif field_type == Field.TYPE_INT32 or field_type == Field.TYPE_SFIXED32 or field_type == Field.TYPE_SINT32:
         field["type_lua"] = "number"
         field["type_cpp"] = "int32_t"
         field["type_cpp_lower"] = "int32_t"
+        field["type_is_allocated"] = False
         field["type_is_primitive"] = True
     elif field_type == Field.TYPE_FIXED64 or field_type == Field.TYPE_UINT64:
         field["type_lua"] = "number"
         field["type_cpp"] = "uint64_t"
         field["type_cpp_lower"] = "uint64_t"
+        field["type_is_allocated"] = False
         field["type_is_primitive"] = True
     elif field_type == Field.TYPE_FIXED32 or field_type == Field.TYPE_UINT32:
         field["type_lua"] = "number"
         field["type_cpp"] = "uint32_t"
         field["type_cpp_lower"] = "uint32_t"
+        field["type_is_allocated"] = False
         field["type_is_primitive"] = True
     elif field_type == Field.TYPE_BOOL:
         field["type_lua"] = "boolean"
         field["type_cpp"] = "protobuf_c_boolean"
         field["type_cpp_lower"] = "protobuf_c_boolean"
+        field["type_is_allocated"] = False
         field["type_is_primitive"] = True
     elif field_type == Field.TYPE_ENUM:
         field["type_lua"] = "number"
         field["type_cpp"] = type_name_to_cpp(f.type_name)
         field["type_cpp_lower"] = type_name_to_cpp(f.type_name, lower=True)
         field["type_is_enum"] = True
+        field["type_is_allocated"] = False
         field["type_is_primitive"] = True
     elif field_type == Field.TYPE_STRING:
         field["type_lua"] = "string"
         field["type_cpp"] = "char*"
         field["type_cpp_lower"] = "char*"
         field["type_is_string"] = True
+        field["type_is_allocated"] = True
         field["type_is_primitive"] = False
     elif field_type == Field.TYPE_BYTES:
         field["type_lua"] = "ProtobufCBinaryData"
         field["type_cpp"] = "ProtobufCBinaryData"
         field["type_cpp_lower"] = "protobufcbinarydata"
         field["type_is_bytes"] = True
+        field["type_is_allocated"] = False
         field["type_is_primitive"] = False
     elif field_type == Field.TYPE_MESSAGE:
         field["type_lua"] = type_name_to_lua(f.type_name)
         field["type_cpp"] = type_name_to_cpp(f.type_name) + "*"
         field["type_cpp_lower"] = type_name_to_cpp(f.type_name, lower=True)
         field["type_is_message"] = True
+        field["type_is_allocated"] = True
         field["type_is_primitive"] = False
     elif field_type == Field.TYPE_GROUP:
         raise TypeError("Unsupported type 'group'")

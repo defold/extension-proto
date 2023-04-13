@@ -319,15 +319,38 @@ static void free_{{type_cpp_lower}}({{type_cpp}}* msg)
     if (msg == 0x0) return;
     {{#fields}}
     {{#repeated}}
-    int {{name}}_size = msg->n_{{name_cpp_lower}};
-    for (int i = 0; i < {{name}}_size; i++)
+    if (msg->{{name_cpp_lower}} != 0x0)
     {
-        free_{{type_lua}}(msg->{{name_cpp_lower}}[i]);
+        int {{name}}_size = msg->n_{{name_cpp_lower}};
+        for (int i = 0; i < {{name}}_size; i++)
+        {
+            free_{{type_lua}}(msg->{{name_cpp_lower}}[i]);
+        }
+        {{#type_is_allocated}}
+        free(msg->{{name_cpp_lower}});
+        {{/type_is_allocated}}
     }
-    free(msg->{{name_cpp_lower}});
     {{/repeated}}
     {{^repeated}}
-    free_{{type_lua}}(msg->{{name_cpp_lower}});
+    {{#oneof}}
+    if (msg->{{oneof}}_case == {{oneof_enum}})
+    {
+        {{#type_is_allocated}}
+        if (msg->{{name_cpp_lower}} != 0x0)
+        {
+            free_{{type_lua}}(msg->{{name_cpp_lower}});
+        }
+        {{/type_is_allocated}}
+    }
+    {{/oneof}}
+    {{^oneof}}
+    {{#type_is_allocated}}
+    if (msg->{{name_cpp_lower}} != 0x0)
+    {
+        free_{{type_lua}}(msg->{{name_cpp_lower}});
+    }
+    {{/type_is_allocated}}
+    {{/oneof}}
     {{/repeated}}
     {{/fields}}
     free(msg);

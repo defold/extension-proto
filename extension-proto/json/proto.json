@@ -32,6 +32,7 @@
                     "type_lua": "number",
                     "type_cpp": "int32_t",
                     "type_cpp_lower": "int32_t",
+                    "type_is_allocated": false,
                     "type_is_primitive": true
                 },
                 {
@@ -46,6 +47,7 @@
                     "type_lua": "number",
                     "type_cpp": "int64_t",
                     "type_cpp_lower": "int64_t",
+                    "type_is_allocated": false,
                     "type_is_primitive": true
                 },
                 {
@@ -60,6 +62,7 @@
                     "type_lua": "number",
                     "type_cpp": "uint32_t",
                     "type_cpp_lower": "uint32_t",
+                    "type_is_allocated": false,
                     "type_is_primitive": true
                 },
                 {
@@ -74,6 +77,7 @@
                     "type_lua": "number",
                     "type_cpp": "uint64_t",
                     "type_cpp_lower": "uint64_t",
+                    "type_is_allocated": false,
                     "type_is_primitive": true
                 },
                 {
@@ -88,6 +92,7 @@
                     "type_lua": "number",
                     "type_cpp": "int32_t",
                     "type_cpp_lower": "int32_t",
+                    "type_is_allocated": false,
                     "type_is_primitive": true
                 },
                 {
@@ -102,6 +107,7 @@
                     "type_lua": "number",
                     "type_cpp": "int64_t",
                     "type_cpp_lower": "int64_t",
+                    "type_is_allocated": false,
                     "type_is_primitive": true
                 },
                 {
@@ -116,6 +122,7 @@
                     "type_lua": "number",
                     "type_cpp": "uint32_t",
                     "type_cpp_lower": "uint32_t",
+                    "type_is_allocated": false,
                     "type_is_primitive": true
                 },
                 {
@@ -130,6 +137,7 @@
                     "type_lua": "number",
                     "type_cpp": "uint64_t",
                     "type_cpp_lower": "uint64_t",
+                    "type_is_allocated": false,
                     "type_is_primitive": true
                 },
                 {
@@ -144,6 +152,7 @@
                     "type_lua": "number",
                     "type_cpp": "int32_t",
                     "type_cpp_lower": "int32_t",
+                    "type_is_allocated": false,
                     "type_is_primitive": true
                 },
                 {
@@ -158,6 +167,7 @@
                     "type_lua": "number",
                     "type_cpp": "int64_t",
                     "type_cpp_lower": "int64_t",
+                    "type_is_allocated": false,
                     "type_is_primitive": true
                 },
                 {
@@ -172,6 +182,7 @@
                     "type_lua": "boolean",
                     "type_cpp": "protobuf_c_boolean",
                     "type_cpp_lower": "protobuf_c_boolean",
+                    "type_is_allocated": false,
                     "type_is_primitive": true
                 },
                 {
@@ -187,6 +198,7 @@
                     "type_cpp": "char*",
                     "type_cpp_lower": "char*",
                     "type_is_string": true,
+                    "type_is_allocated": true,
                     "type_is_primitive": false
                 },
                 {
@@ -202,6 +214,7 @@
                     "type_cpp": "ProtobufCBinaryData",
                     "type_cpp_lower": "protobufcbinarydata",
                     "type_is_bytes": true,
+                    "type_is_allocated": false,
                     "type_is_primitive": false
                 },
                 {
@@ -216,6 +229,7 @@
                     "type_lua": "number",
                     "type_cpp": "double",
                     "type_cpp_lower": "double",
+                    "type_is_allocated": false,
                     "type_is_primitive": true
                 },
                 {
@@ -230,6 +244,7 @@
                     "type_lua": "number",
                     "type_cpp": "float",
                     "type_cpp_lower": "float",
+                    "type_is_allocated": false,
                     "type_is_primitive": true
                 }
             ],
@@ -268,6 +283,7 @@
                     "type_cpp": "char*",
                     "type_cpp_lower": "char*",
                     "type_is_string": true,
+                    "type_is_allocated": true,
                     "type_is_primitive": false
                 },
                 {
@@ -283,6 +299,7 @@
                     "type_cpp": "Testp3__Outer__Middle*",
                     "type_cpp_lower": "testp3__outer__middle",
                     "type_is_message": true,
+                    "type_is_allocated": true,
                     "type_is_primitive": false
                 }
             ],
@@ -321,6 +338,7 @@
                     "type_cpp": "char*",
                     "type_cpp_lower": "char*",
                     "type_is_string": true,
+                    "type_is_allocated": true,
                     "type_is_primitive": false
                 },
                 {
@@ -336,6 +354,7 @@
                     "type_cpp": "Testp3__Outer__Middle__Inner*",
                     "type_cpp_lower": "testp3__outer__middle__inner",
                     "type_is_message": true,
+                    "type_is_allocated": true,
                     "type_is_primitive": false
                 }
             ],
@@ -374,6 +393,7 @@
                     "type_cpp": "char*",
                     "type_cpp_lower": "char*",
                     "type_is_string": true,
+                    "type_is_allocated": true,
                     "type_is_primitive": false
                 }
             ],
@@ -412,6 +432,7 @@
                     "type_cpp": "char*",
                     "type_cpp_lower": "char*",
                     "type_is_string": true,
+                    "type_is_allocated": true,
                     "type_is_primitive": false
                 },
                 {
@@ -426,6 +447,7 @@
                     "type_lua": "number",
                     "type_cpp": "int32_t",
                     "type_cpp_lower": "int32_t",
+                    "type_is_allocated": false,
                     "type_is_primitive": true
                 },
                 {
@@ -441,6 +463,7 @@
                     "type_cpp": "Testp3__Language",
                     "type_cpp_lower": "testp3__language",
                     "type_is_enum": true,
+                    "type_is_allocated": false,
                     "type_is_primitive": true
                 }
             ],
@@ -479,6 +502,7 @@
                     "type_cpp": "Testp3__Container__BasicMapEntry*",
                     "type_cpp_lower": "testp3__container__basic_map_entry",
                     "type_is_message": true,
+                    "type_is_allocated": true,
                     "type_is_primitive": false,
                     "type_is_map": true
                 },
@@ -495,6 +519,7 @@
                     "type_cpp": "Testp3__Container__StringMapEntry*",
                     "type_cpp_lower": "testp3__container__string_map_entry",
                     "type_is_message": true,
+                    "type_is_allocated": true,
                     "type_is_primitive": false,
                     "type_is_map": true
                 },
@@ -511,6 +536,7 @@
                     "type_cpp": "char*",
                     "type_cpp_lower": "char*",
                     "type_is_string": true,
+                    "type_is_allocated": true,
                     "type_is_primitive": false
                 },
                 {
@@ -526,6 +552,7 @@
                     "type_cpp": "char*",
                     "type_cpp_lower": "char*",
                     "type_is_string": true,
+                    "type_is_allocated": true,
                     "type_is_primitive": false
                 },
                 {
@@ -541,6 +568,7 @@
                     "type_cpp": "Testp3__Basic*",
                     "type_cpp_lower": "testp3__basic",
                     "type_is_message": true,
+                    "type_is_allocated": true,
                     "type_is_primitive": false
                 },
                 {
@@ -556,6 +584,7 @@
                     "type_cpp": "Testp3__Basic*",
                     "type_cpp_lower": "testp3__basic",
                     "type_is_message": true,
+                    "type_is_allocated": true,
                     "type_is_primitive": false
                 }
             ],
@@ -595,6 +624,7 @@
                 "type_cpp": "char*",
                 "type_cpp_lower": "char*",
                 "type_is_string": true,
+                "type_is_allocated": true,
                 "type_is_primitive": false
             },
             "value": {
@@ -610,6 +640,7 @@
                 "type_cpp": "Testp3__Basic*",
                 "type_cpp_lower": "testp3__basic",
                 "type_is_message": true,
+                "type_is_allocated": true,
                 "type_is_primitive": false
             }
         },
@@ -647,6 +678,7 @@
                 "type_cpp": "char*",
                 "type_cpp_lower": "char*",
                 "type_is_string": true,
+                "type_is_allocated": true,
                 "type_is_primitive": false
             },
             "value": {
@@ -662,6 +694,7 @@
                 "type_cpp": "char*",
                 "type_cpp_lower": "char*",
                 "type_is_string": true,
+                "type_is_allocated": true,
                 "type_is_primitive": false
             }
         },
@@ -699,6 +732,7 @@
                     "type_cpp": "char*",
                     "type_cpp_lower": "char*",
                     "type_is_string": true,
+                    "type_is_allocated": true,
                     "type_is_primitive": false,
                     "oneof": "oftest1",
                     "oneof_enum": "TESTP3__ONE_OF__OFTEST1_NAME"
@@ -717,6 +751,7 @@
                     "type_cpp": "Testp3__OneOf__FirstAndLast*",
                     "type_cpp_lower": "testp3__one_of__first_and_last",
                     "type_is_message": true,
+                    "type_is_allocated": true,
                     "type_is_primitive": false,
                     "oneof": "oftest1",
                     "oneof_enum": "TESTP3__ONE_OF__OFTEST1_FIRST_AND_LAST"
@@ -734,6 +769,7 @@
                     "type_lua": "number",
                     "type_cpp": "int32_t",
                     "type_cpp_lower": "int32_t",
+                    "type_is_allocated": false,
                     "type_is_primitive": true,
                     "oneof": "oftest2",
                     "oneof_enum": "TESTP3__ONE_OF__OFTEST2_FOO"
@@ -751,6 +787,7 @@
                     "type_lua": "boolean",
                     "type_cpp": "protobuf_c_boolean",
                     "type_cpp_lower": "protobuf_c_boolean",
+                    "type_is_allocated": false,
                     "type_is_primitive": true,
                     "oneof": "oftest2",
                     "oneof_enum": "TESTP3__ONE_OF__OFTEST2_BAR"
@@ -791,6 +828,7 @@
                     "type_cpp": "char*",
                     "type_cpp_lower": "char*",
                     "type_is_string": true,
+                    "type_is_allocated": true,
                     "type_is_primitive": false
                 },
                 {
@@ -806,6 +844,7 @@
                     "type_cpp": "char*",
                     "type_cpp_lower": "char*",
                     "type_is_string": true,
+                    "type_is_allocated": true,
                     "type_is_primitive": false
                 }
             ],
@@ -843,6 +882,7 @@
                     "type_lua": "number",
                     "type_cpp": "int32_t",
                     "type_cpp_lower": "int32_t",
+                    "type_is_allocated": false,
                     "type_is_primitive": true
                 },
                 {
@@ -857,6 +897,7 @@
                     "type_lua": "number",
                     "type_cpp": "int64_t",
                     "type_cpp_lower": "int64_t",
+                    "type_is_allocated": false,
                     "type_is_primitive": true
                 },
                 {
@@ -871,6 +912,7 @@
                     "type_lua": "number",
                     "type_cpp": "uint32_t",
                     "type_cpp_lower": "uint32_t",
+                    "type_is_allocated": false,
                     "type_is_primitive": true
                 },
                 {
@@ -885,6 +927,7 @@
                     "type_lua": "number",
                     "type_cpp": "uint64_t",
                     "type_cpp_lower": "uint64_t",
+                    "type_is_allocated": false,
                     "type_is_primitive": true
                 },
                 {
@@ -899,6 +942,7 @@
                     "type_lua": "number",
                     "type_cpp": "int32_t",
                     "type_cpp_lower": "int32_t",
+                    "type_is_allocated": false,
                     "type_is_primitive": true
                 },
                 {
@@ -913,6 +957,7 @@
                     "type_lua": "number",
                     "type_cpp": "int64_t",
                     "type_cpp_lower": "int64_t",
+                    "type_is_allocated": false,
                     "type_is_primitive": true
                 },
                 {
@@ -927,6 +972,7 @@
                     "type_lua": "number",
                     "type_cpp": "uint32_t",
                     "type_cpp_lower": "uint32_t",
+                    "type_is_allocated": false,
                     "type_is_primitive": true
                 },
                 {
@@ -941,6 +987,7 @@
                     "type_lua": "number",
                     "type_cpp": "uint64_t",
                     "type_cpp_lower": "uint64_t",
+                    "type_is_allocated": false,
                     "type_is_primitive": true
                 },
                 {
@@ -955,6 +1002,7 @@
                     "type_lua": "number",
                     "type_cpp": "int32_t",
                     "type_cpp_lower": "int32_t",
+                    "type_is_allocated": false,
                     "type_is_primitive": true
                 },
                 {
@@ -969,6 +1017,7 @@
                     "type_lua": "number",
                     "type_cpp": "int64_t",
                     "type_cpp_lower": "int64_t",
+                    "type_is_allocated": false,
                     "type_is_primitive": true
                 },
                 {
@@ -983,6 +1032,7 @@
                     "type_lua": "boolean",
                     "type_cpp": "protobuf_c_boolean",
                     "type_cpp_lower": "protobuf_c_boolean",
+                    "type_is_allocated": false,
                     "type_is_primitive": true
                 },
                 {
@@ -998,6 +1048,7 @@
                     "type_cpp": "char*",
                     "type_cpp_lower": "char*",
                     "type_is_string": true,
+                    "type_is_allocated": true,
                     "type_is_primitive": false
                 },
                 {
@@ -1013,6 +1064,7 @@
                     "type_cpp": "ProtobufCBinaryData",
                     "type_cpp_lower": "protobufcbinarydata",
                     "type_is_bytes": true,
+                    "type_is_allocated": false,
                     "type_is_primitive": false
                 },
                 {
@@ -1027,6 +1079,7 @@
                     "type_lua": "number",
                     "type_cpp": "double",
                     "type_cpp_lower": "double",
+                    "type_is_allocated": false,
                     "type_is_primitive": true
                 },
                 {
@@ -1041,6 +1094,7 @@
                     "type_lua": "number",
                     "type_cpp": "float",
                     "type_cpp_lower": "float",
+                    "type_is_allocated": false,
                     "type_is_primitive": true
                 }
             ],
@@ -1079,6 +1133,7 @@
                     "type_cpp": "char*",
                     "type_cpp_lower": "char*",
                     "type_is_string": true,
+                    "type_is_allocated": true,
                     "type_is_primitive": false
                 },
                 {
@@ -1094,6 +1149,7 @@
                     "type_cpp": "Testp2__Outer__Middle*",
                     "type_cpp_lower": "testp2__outer__middle",
                     "type_is_message": true,
+                    "type_is_allocated": true,
                     "type_is_primitive": false
                 }
             ],
@@ -1132,6 +1188,7 @@
                     "type_cpp": "char*",
                     "type_cpp_lower": "char*",
                     "type_is_string": true,
+                    "type_is_allocated": true,
                     "type_is_primitive": false
                 },
                 {
@@ -1147,6 +1204,7 @@
                     "type_cpp": "Testp2__Outer__Middle__Inner*",
                     "type_cpp_lower": "testp2__outer__middle__inner",
                     "type_is_message": true,
+                    "type_is_allocated": true,
                     "type_is_primitive": false
                 }
             ],
@@ -1185,6 +1243,7 @@
                     "type_cpp": "char*",
                     "type_cpp_lower": "char*",
                     "type_is_string": true,
+                    "type_is_allocated": true,
                     "type_is_primitive": false
                 }
             ],
@@ -1223,6 +1282,7 @@
                     "type_cpp": "char*",
                     "type_cpp_lower": "char*",
                     "type_is_string": true,
+                    "type_is_allocated": true,
                     "type_is_primitive": false
                 },
                 {
@@ -1237,6 +1297,7 @@
                     "type_lua": "number",
                     "type_cpp": "int32_t",
                     "type_cpp_lower": "int32_t",
+                    "type_is_allocated": false,
                     "type_is_primitive": true
                 },
                 {
@@ -1252,6 +1313,7 @@
                     "type_cpp": "Testp2__Language",
                     "type_cpp_lower": "testp2__language",
                     "type_is_enum": true,
+                    "type_is_allocated": false,
                     "type_is_primitive": true
                 }
             ],
@@ -1290,6 +1352,7 @@
                     "type_cpp": "Testp2__Container__BasicMapEntry*",
                     "type_cpp_lower": "testp2__container__basic_map_entry",
                     "type_is_message": true,
+                    "type_is_allocated": true,
                     "type_is_primitive": false,
                     "type_is_map": true
                 },
@@ -1306,6 +1369,7 @@
                     "type_cpp": "Testp2__Container__StringMapEntry*",
                     "type_cpp_lower": "testp2__container__string_map_entry",
                     "type_is_message": true,
+                    "type_is_allocated": true,
                     "type_is_primitive": false,
                     "type_is_map": true
                 },
@@ -1322,6 +1386,7 @@
                     "type_cpp": "char*",
                     "type_cpp_lower": "char*",
                     "type_is_string": true,
+                    "type_is_allocated": true,
                     "type_is_primitive": false
                 },
                 {
@@ -1337,6 +1402,7 @@
                     "type_cpp": "Testp2__Basic*",
                     "type_cpp_lower": "testp2__basic",
                     "type_is_message": true,
+                    "type_is_allocated": true,
                     "type_is_primitive": false
                 },
                 {
@@ -1352,6 +1418,7 @@
                     "type_cpp": "char*",
                     "type_cpp_lower": "char*",
                     "type_is_string": true,
+                    "type_is_allocated": true,
                     "type_is_primitive": false
                 },
                 {
@@ -1367,6 +1434,7 @@
                     "type_cpp": "char*",
                     "type_cpp_lower": "char*",
                     "type_is_string": true,
+                    "type_is_allocated": true,
                     "type_is_primitive": false
                 },
                 {
@@ -1382,6 +1450,7 @@
                     "type_cpp": "Testp2__Basic*",
                     "type_cpp_lower": "testp2__basic",
                     "type_is_message": true,
+                    "type_is_allocated": true,
                     "type_is_primitive": false
                 },
                 {
@@ -1397,6 +1466,7 @@
                     "type_cpp": "Testp2__Basic*",
                     "type_cpp_lower": "testp2__basic",
                     "type_is_message": true,
+                    "type_is_allocated": true,
                     "type_is_primitive": false
                 }
             ],
@@ -1436,6 +1506,7 @@
                 "type_cpp": "char*",
                 "type_cpp_lower": "char*",
                 "type_is_string": true,
+                "type_is_allocated": true,
                 "type_is_primitive": false
             },
             "value": {
@@ -1451,6 +1522,7 @@
                 "type_cpp": "Testp2__Basic*",
                 "type_cpp_lower": "testp2__basic",
                 "type_is_message": true,
+                "type_is_allocated": true,
                 "type_is_primitive": false
             }
         },
@@ -1488,6 +1560,7 @@
                 "type_cpp": "char*",
                 "type_cpp_lower": "char*",
                 "type_is_string": true,
+                "type_is_allocated": true,
                 "type_is_primitive": false
             },
             "value": {
@@ -1503,6 +1576,7 @@
                 "type_cpp": "char*",
                 "type_cpp_lower": "char*",
                 "type_is_string": true,
+                "type_is_allocated": true,
                 "type_is_primitive": false
             }
         },
@@ -1540,6 +1614,7 @@
                     "type_cpp": "char*",
                     "type_cpp_lower": "char*",
                     "type_is_string": true,
+                    "type_is_allocated": true,
                     "type_is_primitive": false,
                     "oneof": "oftest1",
                     "oneof_enum": "TESTP2__ONE_OF__OFTEST1_NAME"
@@ -1558,6 +1633,7 @@
                     "type_cpp": "Testp2__OneOf__FirstAndLast*",
                     "type_cpp_lower": "testp2__one_of__first_and_last",
                     "type_is_message": true,
+                    "type_is_allocated": true,
                     "type_is_primitive": false,
                     "oneof": "oftest1",
                     "oneof_enum": "TESTP2__ONE_OF__OFTEST1_FIRST_AND_LAST"
@@ -1575,6 +1651,7 @@
                     "type_lua": "number",
                     "type_cpp": "int32_t",
                     "type_cpp_lower": "int32_t",
+                    "type_is_allocated": false,
                     "type_is_primitive": true,
                     "oneof": "oftest2",
                     "oneof_enum": "TESTP2__ONE_OF__OFTEST2_FOO"
@@ -1592,6 +1669,7 @@
                     "type_lua": "boolean",
                     "type_cpp": "protobuf_c_boolean",
                     "type_cpp_lower": "protobuf_c_boolean",
+                    "type_is_allocated": false,
                     "type_is_primitive": true,
                     "oneof": "oftest2",
                     "oneof_enum": "TESTP2__ONE_OF__OFTEST2_BAR"
@@ -1632,6 +1710,7 @@
                     "type_cpp": "char*",
                     "type_cpp_lower": "char*",
                     "type_is_string": true,
+                    "type_is_allocated": true,
                     "type_is_primitive": false
                 },
                 {
@@ -1647,6 +1726,7 @@
                     "type_cpp": "char*",
                     "type_cpp_lower": "char*",
                     "type_is_string": true,
+                    "type_is_allocated": true,
                     "type_is_primitive": false
                 }
             ],
