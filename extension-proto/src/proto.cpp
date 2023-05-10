@@ -2041,11 +2041,13 @@ static void free_testp3__container(Testp3__Container* msg)
 static void free_testp3__container__basic_map_entry(Testp3__Container__BasicMapEntry* msg)
 {
     if (msg == 0x0) return;
+    free_testp3__basic(msg->value);
     free(msg);
 }
 static void free_testp3__container__string_map_entry(Testp3__Container__StringMapEntry* msg)
 {
     if (msg == 0x0) return;
+    free_string(msg->value);
     free(msg);
 }
 static void free_testp3__one_of(Testp3__OneOf* msg)
@@ -2199,11 +2201,13 @@ static void free_testp2__container(Testp2__Container* msg)
 static void free_testp2__container__basic_map_entry(Testp2__Container__BasicMapEntry* msg)
 {
     if (msg == 0x0) return;
+    free_testp2__basic(msg->value);
     free(msg);
 }
 static void free_testp2__container__string_map_entry(Testp2__Container__StringMapEntry* msg)
 {
     if (msg == 0x0) return;
+    free_string(msg->value);
     free(msg);
 }
 static void free_testp2__one_of(Testp2__OneOf* msg)

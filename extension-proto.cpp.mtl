@@ -314,6 +314,15 @@ static void free_bool(bool) {};
 static void free_boolean(bool) {};
 
 {{#messages}}
+{{#is_map_entry}}
+static void free_{{type_cpp_lower}}({{type_cpp}}* msg)
+{
+    if (msg == 0x0) return;
+    free_{{value.type_lua}}(msg->value);
+    free(msg);
+}
+{{/is_map_entry}}
+{{^is_map_entry}}
 static void free_{{type_cpp_lower}}({{type_cpp}}* msg)
 {
     if (msg == 0x0) return;
@@ -355,6 +364,7 @@ static void free_{{type_cpp_lower}}({{type_cpp}}* msg)
     {{/fields}}
     free(msg);
 }
+{{/is_map_entry}}
 {{/messages}}
 
 
