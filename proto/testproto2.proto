@@ -58,6 +58,7 @@ message Container {
 	optional string     optional_string2 = 6;
 	optional Basic      optional_basic1 = 7;
 	optional Basic      optional_basic2 = 8;
+	repeated double     repeated_double = 9;
 }
 
 message OneOf {

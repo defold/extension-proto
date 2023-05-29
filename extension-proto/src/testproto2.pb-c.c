@@ -788,7 +788,7 @@ const ProtobufCMessageDescriptor testp2__container__string_map_entry__descriptor
   (ProtobufCMessageInit) testp2__container__string_map_entry__init,
   NULL,NULL,NULL    /* reserved[123] */
 };
-static const ProtobufCFieldDescriptor testp2__container__field_descriptors[8] =
+static const ProtobufCFieldDescriptor testp2__container__field_descriptors[9] =
 {
   {
     "basic_map",
@@ -886,6 +886,18 @@ static const ProtobufCFieldDescriptor testp2__container__field_descriptors[8] =
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
   },
+  {
+    "repeated_double",
+    9,
+    PROTOBUF_C_LABEL_REPEATED,
+    PROTOBUF_C_TYPE_DOUBLE,
+    offsetof(Testp2__Container, n_repeated_double),
+    offsetof(Testp2__Container, repeated_double),
+    NULL,
+    NULL,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
 };
 static const unsigned testp2__container__field_indices_by_name[] = {
   0,   /* field[0] = basic_map */
@@ -894,13 +906,14 @@ static const unsigned testp2__container__field_indices_by_name[] = {
   4,   /* field[4] = optional_string1 */
   5,   /* field[5] = optional_string2 */
   3,   /* field[3] = repeated_basic */
+  8,   /* field[8] = repeated_double */
   2,   /* field[2] = repeated_string */
   1,   /* field[1] = string_map */
 };
 static const ProtobufCIntRange testp2__container__number_ranges[1 + 1] =
 {
   { 1, 0 },
-  { 0, 8 }
+  { 0, 9 }
 };
 const ProtobufCMessageDescriptor testp2__container__descriptor =
 {
@@ -910,7 +923,7 @@ const ProtobufCMessageDescriptor testp2__container__descriptor =
   "Testp2__Container",
   "testp2",
   sizeof(Testp2__Container),
-  8,
+  9,
   testp2__container__field_descriptors,
   testp2__container__field_indices_by_name,
   1,  testp2__container__number_ranges,

@@ -153,10 +153,12 @@ struct  Testp2__Container
   char *optional_string2;
   Testp2__Basic *optional_basic1;
   Testp2__Basic *optional_basic2;
+  size_t n_repeated_double;
+  double *repeated_double;
 };
 #define TESTP2__CONTAINER__INIT \
  { PROTOBUF_C_MESSAGE_INIT (&testp2__container__descriptor) \
-    , 0,NULL, 0,NULL, 0,NULL, 0,NULL, NULL, NULL, NULL, NULL }
+    , 0,NULL, 0,NULL, 0,NULL, 0,NULL, NULL, NULL, NULL, NULL, 0,NULL }
 
 
 struct  Testp2__OneOf__FirstAndLast

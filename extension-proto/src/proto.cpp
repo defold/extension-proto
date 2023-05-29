@@ -772,6 +772,18 @@ static void lua_pushtestp2__container(lua_State* L, Testp2__Container *msg)
         lua_settable(L, -3);
     }
 
+    // repeated_double
+    lua_pushstring(L, "repeated_double");
+    lua_newtable(L);
+    int repeated_double_size = msg->n_repeated_double;
+    for (int i = 0; i < repeated_double_size; i++)
+    {
+        lua_pushnumber(L, i + 1);
+        lua_pushnumber(L, (double)(msg->repeated_double[i]));
+        lua_settable(L, -3);
+    }
+    lua_settable(L, -3);
+
 }
 static void lua_pushtestp2__container__basic_map_entry(lua_State* L, Testp2__Container__BasicMapEntry *msg)
 {
@@ -1747,6 +1759,29 @@ static Testp2__Container* luaL_checktestp2__container(lua_State* L, int narg)
     }
     lua_pop(L, 1);
 
+    // repeated_double [repeated]
+    lua_pushstring(L, "repeated_double");
+    lua_gettable(L, narg);
+    int repeated_double_index = lua_gettop(L);
+    if (!lua_istable(L, repeated_double_index))
+    {
+        luaL_error(L, "Expected value for key 'repeated_double' to be a table");
+        return 0;
+    }
+    {
+        int repeated_double_size = lua_tablelen(L, repeated_double_index);
+        msg->n_repeated_double = repeated_double_size;
+        msg->repeated_double = (double*)malloc(sizeof(double) * repeated_double_size);
+        for (int i = 0; i < repeated_double_size; i++)
+        {
+            lua_pushnumber(L, i + 1); // key
+            lua_gettable(L, repeated_double_index); // pops key, pushes value
+            msg->repeated_double[i] = (double)luaL_checknumber(L, lua_gettop(L));
+            lua_pop(L, 1); // pop value
+        }
+    }
+    lua_pop(L, 1); // pop table "repeated_double"
+
     return msg;
 }
 
@@ -2195,6 +2230,15 @@ static void free_testp2__container(Testp2__Container* msg)
     if (msg->optional_basic2 != 0x0)
     {
         free_testp2__basic(msg->optional_basic2);
+    }
+    if (msg->repeated_double != 0x0)
+    {
+        int repeated_double_size = msg->n_repeated_double;
+        for (int i = 0; i < repeated_double_size; i++)
+        {
+            free_number(msg->repeated_double[i]);
+        }
+        free(msg->repeated_double);
     }
     free(msg);
 }
