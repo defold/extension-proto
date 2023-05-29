@@ -1468,6 +1468,21 @@
                     "type_is_message": true,
                     "type_is_allocated": true,
                     "type_is_primitive": false
+                },
+                {
+                    "name": "repeated_double",
+                    "name_cpp": "repeated_double",
+                    "name_cpp_lower": "repeated_double",
+                    "name_cpp_upper": "REPEATED_DOUBLE",
+                    "type": 1,
+                    "repeated": true,
+                    "required": false,
+                    "optional": false,
+                    "type_lua": "number",
+                    "type_cpp": "double",
+                    "type_cpp_lower": "double",
+                    "type_is_allocated": true,
+                    "type_is_primitive": true
                 }
             ],
             "is_map_entry": false
