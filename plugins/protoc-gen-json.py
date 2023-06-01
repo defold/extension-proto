@@ -167,7 +167,7 @@ def parse_field(f):
         field["type_cpp"] = type_name_to_cpp(f.type_name) + "*"
         field["type_cpp_lower"] = type_name_to_cpp(f.type_name, lower=True)
         field["type_is_message"] = True
-        field["type_is_allocated"] = field["repeated"]
+        field["type_is_allocated"] = True
         field["type_is_primitive"] = False
     elif field_type == Field.TYPE_GROUP:
         raise TypeError("Unsupported type 'group'")
