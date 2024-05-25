@@ -52,6 +52,7 @@ def clean_extension_src_dir(dir):
 # copy generated .h files from src/ to include/
 def move_extension_includes():
 	for r, d, f in os.walk(EXTENSION_DIR_SRC, topdown=True):
+		try_delete(d, "protobuf-c-text")
 		for file in f:
 			if file.endswith(".h"):
 				src_file = os.path.join(r, file)
