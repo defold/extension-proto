@@ -25,6 +25,24 @@
       returns:
       - name: msg
         type: table
+
+    - name: encode_{{package_lower}}_{{name_lower}}_totext
+      type: function
+      parameters:
+      - name: msg
+        type: table
+      returns:
+      - name: msg
+        type: string
+
+    - name: decode_{{package_lower}}_{{name_lower}}_fromtext
+      type: function
+      parameters:
+      - name: msg
+        type: string
+      returns:
+      - name: msg
+        type: table
 {{/nested}}
 {{/messages}}
 

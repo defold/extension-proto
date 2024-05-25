@@ -24,6 +24,24 @@
       - name: msg
         type: table
 
+    - name: encode_testp3_scalars_totext
+      type: function
+      parameters:
+      - name: msg
+        type: table
+      returns:
+      - name: msg
+        type: string
+
+    - name: decode_testp3_scalars_fromtext
+      type: function
+      parameters:
+      - name: msg
+        type: string
+      returns:
+      - name: msg
+        type: table
+
 #*****************************************************************************************************
 
     - name: encode_testp3_outer
@@ -36,6 +54,24 @@
         type: string
 
     - name: decode_testp3_outer
+      type: function
+      parameters:
+      - name: msg
+        type: string
+      returns:
+      - name: msg
+        type: table
+
+    - name: encode_testp3_outer_totext
+      type: function
+      parameters:
+      - name: msg
+        type: table
+      returns:
+      - name: msg
+        type: string
+
+    - name: decode_testp3_outer_fromtext
       type: function
       parameters:
       - name: msg
@@ -64,6 +100,24 @@
       - name: msg
         type: table
 
+    - name: encode_testp3_basic_totext
+      type: function
+      parameters:
+      - name: msg
+        type: table
+      returns:
+      - name: msg
+        type: string
+
+    - name: decode_testp3_basic_fromtext
+      type: function
+      parameters:
+      - name: msg
+        type: string
+      returns:
+      - name: msg
+        type: table
+
 #*****************************************************************************************************
 
     - name: encode_testp3_container
@@ -76,6 +130,24 @@
         type: string
 
     - name: decode_testp3_container
+      type: function
+      parameters:
+      - name: msg
+        type: string
+      returns:
+      - name: msg
+        type: table
+
+    - name: encode_testp3_container_totext
+      type: function
+      parameters:
+      - name: msg
+        type: table
+      returns:
+      - name: msg
+        type: string
+
+    - name: decode_testp3_container_fromtext
       type: function
       parameters:
       - name: msg
@@ -104,6 +176,24 @@
       - name: msg
         type: table
 
+    - name: encode_testp3_oneof_totext
+      type: function
+      parameters:
+      - name: msg
+        type: table
+      returns:
+      - name: msg
+        type: string
+
+    - name: decode_testp3_oneof_fromtext
+      type: function
+      parameters:
+      - name: msg
+        type: string
+      returns:
+      - name: msg
+        type: table
+
 #*****************************************************************************************************
 
     - name: encode_testp2_scalars
@@ -116,6 +206,24 @@
         type: string
 
     - name: decode_testp2_scalars
+      type: function
+      parameters:
+      - name: msg
+        type: string
+      returns:
+      - name: msg
+        type: table
+
+    - name: encode_testp2_scalars_totext
+      type: function
+      parameters:
+      - name: msg
+        type: table
+      returns:
+      - name: msg
+        type: string
+
+    - name: decode_testp2_scalars_fromtext
       type: function
       parameters:
       - name: msg
@@ -144,6 +252,24 @@
       - name: msg
         type: table
 
+    - name: encode_testp2_outer_totext
+      type: function
+      parameters:
+      - name: msg
+        type: table
+      returns:
+      - name: msg
+        type: string
+
+    - name: decode_testp2_outer_fromtext
+      type: function
+      parameters:
+      - name: msg
+        type: string
+      returns:
+      - name: msg
+        type: table
+
 #*****************************************************************************************************
 
     - name: encode_testp2_basic
@@ -156,6 +282,24 @@
         type: string
 
     - name: decode_testp2_basic
+      type: function
+      parameters:
+      - name: msg
+        type: string
+      returns:
+      - name: msg
+        type: table
+
+    - name: encode_testp2_basic_totext
+      type: function
+      parameters:
+      - name: msg
+        type: table
+      returns:
+      - name: msg
+        type: string
+
+    - name: decode_testp2_basic_fromtext
       type: function
       parameters:
       - name: msg
@@ -184,6 +328,24 @@
       - name: msg
         type: table
 
+    - name: encode_testp2_container_totext
+      type: function
+      parameters:
+      - name: msg
+        type: table
+      returns:
+      - name: msg
+        type: string
+
+    - name: decode_testp2_container_fromtext
+      type: function
+      parameters:
+      - name: msg
+        type: string
+      returns:
+      - name: msg
+        type: table
+
 #*****************************************************************************************************
 
     - name: encode_testp2_oneof
@@ -196,6 +358,24 @@
         type: string
 
     - name: decode_testp2_oneof
+      type: function
+      parameters:
+      - name: msg
+        type: string
+      returns:
+      - name: msg
+        type: table
+
+    - name: encode_testp2_oneof_totext
+      type: function
+      parameters:
+      - name: msg
+        type: table
+      returns:
+      - name: msg
+        type: string
+
+    - name: decode_testp2_oneof_fromtext
       type: function
       parameters:
       - name: msg
