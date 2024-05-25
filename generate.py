@@ -41,7 +41,7 @@ def clean_extension_src_dir(dir):
 	for r, d, f in os.walk(dir, topdown=True):
 		try_delete(d, "protobuf-c")
 		try_delete(d, "protobuf-c-text")
-		try_delete(d, "config.h")
+		try_delete(f, "config.h")
 
 		for file in f:
 			os.remove(os.path.join(r, file))
