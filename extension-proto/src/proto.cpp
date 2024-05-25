@@ -2329,7 +2329,7 @@ static int DecodeTestp3__ScalarsFromText(lua_State* L)
     Testp3__Scalars *msg;
 
     msg = (Testp3__Scalars*)protobuf_c_text_from_string(
-         &testp3__scalars__descriptor, data, &tf_res, NULL);
+         &testp3__scalars__descriptor, (char*)data, &tf_res, NULL);
     if (msg != 0)
     {
         lua_pushtestp3__scalars(L, msg);
@@ -2400,7 +2400,7 @@ static int DecodeTestp3__OuterFromText(lua_State* L)
     Testp3__Outer *msg;
 
     msg = (Testp3__Outer*)protobuf_c_text_from_string(
-         &testp3__outer__descriptor, data, &tf_res, NULL);
+         &testp3__outer__descriptor, (char*)data, &tf_res, NULL);
     if (msg != 0)
     {
         lua_pushtestp3__outer(L, msg);
@@ -2471,7 +2471,7 @@ static int DecodeTestp3__BasicFromText(lua_State* L)
     Testp3__Basic *msg;
 
     msg = (Testp3__Basic*)protobuf_c_text_from_string(
-         &testp3__basic__descriptor, data, &tf_res, NULL);
+         &testp3__basic__descriptor, (char*)data, &tf_res, NULL);
     if (msg != 0)
     {
         lua_pushtestp3__basic(L, msg);
@@ -2542,7 +2542,7 @@ static int DecodeTestp3__ContainerFromText(lua_State* L)
     Testp3__Container *msg;
 
     msg = (Testp3__Container*)protobuf_c_text_from_string(
-         &testp3__container__descriptor, data, &tf_res, NULL);
+         &testp3__container__descriptor, (char*)data, &tf_res, NULL);
     if (msg != 0)
     {
         lua_pushtestp3__container(L, msg);
@@ -2613,7 +2613,7 @@ static int DecodeTestp3__OneOfFromText(lua_State* L)
     Testp3__OneOf *msg;
 
     msg = (Testp3__OneOf*)protobuf_c_text_from_string(
-         &testp3__one_of__descriptor, data, &tf_res, NULL);
+         &testp3__one_of__descriptor, (char*)data, &tf_res, NULL);
     if (msg != 0)
     {
         lua_pushtestp3__one_of(L, msg);
@@ -2684,7 +2684,7 @@ static int DecodeTestp2__ScalarsFromText(lua_State* L)
     Testp2__Scalars *msg;
 
     msg = (Testp2__Scalars*)protobuf_c_text_from_string(
-         &testp2__scalars__descriptor, data, &tf_res, NULL);
+         &testp2__scalars__descriptor, (char*)data, &tf_res, NULL);
     if (msg != 0)
     {
         lua_pushtestp2__scalars(L, msg);
@@ -2755,7 +2755,7 @@ static int DecodeTestp2__OuterFromText(lua_State* L)
     Testp2__Outer *msg;
 
     msg = (Testp2__Outer*)protobuf_c_text_from_string(
-         &testp2__outer__descriptor, data, &tf_res, NULL);
+         &testp2__outer__descriptor, (char*)data, &tf_res, NULL);
     if (msg != 0)
     {
         lua_pushtestp2__outer(L, msg);
@@ -2826,7 +2826,7 @@ static int DecodeTestp2__BasicFromText(lua_State* L)
     Testp2__Basic *msg;
 
     msg = (Testp2__Basic*)protobuf_c_text_from_string(
-         &testp2__basic__descriptor, data, &tf_res, NULL);
+         &testp2__basic__descriptor, (char*)data, &tf_res, NULL);
     if (msg != 0)
     {
         lua_pushtestp2__basic(L, msg);
@@ -2897,7 +2897,7 @@ static int DecodeTestp2__ContainerFromText(lua_State* L)
     Testp2__Container *msg;
 
     msg = (Testp2__Container*)protobuf_c_text_from_string(
-         &testp2__container__descriptor, data, &tf_res, NULL);
+         &testp2__container__descriptor, (char*)data, &tf_res, NULL);
     if (msg != 0)
     {
         lua_pushtestp2__container(L, msg);
@@ -2968,7 +2968,7 @@ static int DecodeTestp2__OneOfFromText(lua_State* L)
     Testp2__OneOf *msg;
 
     msg = (Testp2__OneOf*)protobuf_c_text_from_string(
-         &testp2__one_of__descriptor, data, &tf_res, NULL);
+         &testp2__one_of__descriptor, (char*)data, &tf_res, NULL);
     if (msg != 0)
     {
         lua_pushtestp2__one_of(L, msg);
