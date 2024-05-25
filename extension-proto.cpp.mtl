@@ -10,6 +10,7 @@
 {{#files}}
 #include "{{filename_h}}"
 {{/files}}
+#include "protobuf-c-text/protobuf-c-text.h"
 
 
 
@@ -395,6 +396,28 @@ static int Decode{{type_cpp}}(lua_State* L)
 
     return 1;
 }
+static int Decode{{type_cpp}}FromText(lua_State* L)
+{
+    DM_LUA_STACK_CHECK(L, 1);
+    const char* data = luaL_checkstring(L, 1);
+
+    ProtobufCTextError tf_res;
+    {{type_cpp}} *msg;
+
+    msg = ({{type_cpp}}*)protobuf_c_text_from_string(
+         &{{type_cpp_lower}}__descriptor, data, &tf_res, NULL);
+    if (msg != 0)
+    {
+        lua_push{{type_cpp_lower}}(L, msg);
+        {{type_cpp_lower}}__free_unpacked(msg, 0);
+    }
+    else
+    {
+        lua_pushnil(L);
+    }
+
+    return 1;
+}
 static int Encode{{type_cpp}}(lua_State* L)
 {
     DM_LUA_STACK_CHECK(L, 1);
@@ -411,6 +434,18 @@ static int Encode{{type_cpp}}(lua_State* L)
 
     return 1;
 }
+static int Encode{{type_cpp}}ToText(lua_State* L)
+{
+    DM_LUA_STACK_CHECK(L, 1);
+    {{type_cpp}} *msg = luaL_check{{type_cpp_lower}}(L, 1);
+
+    char* text = protobuf_c_text_to_string((ProtobufCMessage *)msg, NULL);
+    lua_pushstring(L, text);
+
+    free_{{type_cpp_lower}}(msg);
+
+    return 1;
+}
 
 {{/nested}}
 {{/messages}}
@@ -421,6 +456,8 @@ static const luaL_reg Module_methods[] =
     {{^nested}}
     {"encode_{{package_lower}}_{{name_lower}}", Encode{{type_cpp}} },
     {"decode_{{package_lower}}_{{name_lower}}", Decode{{type_cpp}} },
+    {"encode_{{package_lower}}_{{name_lower}}_totext", Encode{{type_cpp}}ToText },
+    {"decode_{{package_lower}}_{{name_lower}}_fromtext", Decode{{type_cpp}}FromText },
     {{/nested}}
     {{/messages}}
     {0,0}

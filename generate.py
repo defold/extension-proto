@@ -31,13 +31,17 @@ def call(args):
 		sys.exit(1)
 	return ret
 
+def try_delete(d, key):
+	try :
+		del d[d.index(key)]
+	except ValueError :
+		pass
 
 def clean_extension_src_dir(dir):
 	for r, d, f in os.walk(dir, topdown=True):
-		try :
-			del d[d.index("protobuf-c")]
-		except ValueError :
-			pass
+		try_delete(d, "protobuf-c")
+		try_delete(d, "protobuf-c-text")
+		try_delete(d, "config.h")
 
 		for file in f:
 			os.remove(os.path.join(r, file))

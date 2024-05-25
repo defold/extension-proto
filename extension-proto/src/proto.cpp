@@ -9,6 +9,7 @@
 
 #include "testproto3.pb-c.h"
 #include "testproto2.pb-c.h"
+#include "protobuf-c-text/protobuf-c-text.h"
 
 
 
@@ -2319,6 +2320,28 @@ static int DecodeTestp3__Scalars(lua_State* L)
 
     return 1;
 }
+static int DecodeTestp3__ScalarsFromText(lua_State* L)
+{
+    DM_LUA_STACK_CHECK(L, 1);
+    const char* data = luaL_checkstring(L, 1);
+
+    ProtobufCTextError tf_res;
+    Testp3__Scalars *msg;
+
+    msg = (Testp3__Scalars*)protobuf_c_text_from_string(
+         &testp3__scalars__descriptor, data, &tf_res, NULL);
+    if (msg != 0)
+    {
+        lua_pushtestp3__scalars(L, msg);
+        testp3__scalars__free_unpacked(msg, 0);
+    }
+    else
+    {
+        lua_pushnil(L);
+    }
+
+    return 1;
+}
 static int EncodeTestp3__Scalars(lua_State* L)
 {
     DM_LUA_STACK_CHECK(L, 1);
@@ -2335,6 +2358,18 @@ static int EncodeTestp3__Scalars(lua_State* L)
 
     return 1;
 }
+static int EncodeTestp3__ScalarsToText(lua_State* L)
+{
+    DM_LUA_STACK_CHECK(L, 1);
+    Testp3__Scalars *msg = luaL_checktestp3__scalars(L, 1);
+
+    char* text = protobuf_c_text_to_string((ProtobufCMessage *)msg, NULL);
+    lua_pushstring(L, text);
+
+    free_testp3__scalars(msg);
+
+    return 1;
+}
 
 // testproto3.proto
 static int DecodeTestp3__Outer(lua_State* L)
@@ -2344,6 +2379,28 @@ static int DecodeTestp3__Outer(lua_State* L)
     const char* data = luaL_checklstring(L, 1, &data_length);
 
     Testp3__Outer *msg = testp3__outer__unpack(0, data_length, (uint8_t*)data);
+    if (msg != 0)
+    {
+        lua_pushtestp3__outer(L, msg);
+        testp3__outer__free_unpacked(msg, 0);
+    }
+    else
+    {
+        lua_pushnil(L);
+    }
+
+    return 1;
+}
+static int DecodeTestp3__OuterFromText(lua_State* L)
+{
+    DM_LUA_STACK_CHECK(L, 1);
+    const char* data = luaL_checkstring(L, 1);
+
+    ProtobufCTextError tf_res;
+    Testp3__Outer *msg;
+
+    msg = (Testp3__Outer*)protobuf_c_text_from_string(
+         &testp3__outer__descriptor, data, &tf_res, NULL);
     if (msg != 0)
     {
         lua_pushtestp3__outer(L, msg);
@@ -2372,6 +2429,18 @@ static int EncodeTestp3__Outer(lua_State* L)
 
     return 1;
 }
+static int EncodeTestp3__OuterToText(lua_State* L)
+{
+    DM_LUA_STACK_CHECK(L, 1);
+    Testp3__Outer *msg = luaL_checktestp3__outer(L, 1);
+
+    char* text = protobuf_c_text_to_string((ProtobufCMessage *)msg, NULL);
+    lua_pushstring(L, text);
+
+    free_testp3__outer(msg);
+
+    return 1;
+}
 
 // testproto3.proto
 static int DecodeTestp3__Basic(lua_State* L)
@@ -2381,6 +2450,28 @@ static int DecodeTestp3__Basic(lua_State* L)
     const char* data = luaL_checklstring(L, 1, &data_length);
 
     Testp3__Basic *msg = testp3__basic__unpack(0, data_length, (uint8_t*)data);
+    if (msg != 0)
+    {
+        lua_pushtestp3__basic(L, msg);
+        testp3__basic__free_unpacked(msg, 0);
+    }
+    else
+    {
+        lua_pushnil(L);
+    }
+
+    return 1;
+}
+static int DecodeTestp3__BasicFromText(lua_State* L)
+{
+    DM_LUA_STACK_CHECK(L, 1);
+    const char* data = luaL_checkstring(L, 1);
+
+    ProtobufCTextError tf_res;
+    Testp3__Basic *msg;
+
+    msg = (Testp3__Basic*)protobuf_c_text_from_string(
+         &testp3__basic__descriptor, data, &tf_res, NULL);
     if (msg != 0)
     {
         lua_pushtestp3__basic(L, msg);
@@ -2409,6 +2500,18 @@ static int EncodeTestp3__Basic(lua_State* L)
 
     return 1;
 }
+static int EncodeTestp3__BasicToText(lua_State* L)
+{
+    DM_LUA_STACK_CHECK(L, 1);
+    Testp3__Basic *msg = luaL_checktestp3__basic(L, 1);
+
+    char* text = protobuf_c_text_to_string((ProtobufCMessage *)msg, NULL);
+    lua_pushstring(L, text);
+
+    free_testp3__basic(msg);
+
+    return 1;
+}
 
 // testproto3.proto
 static int DecodeTestp3__Container(lua_State* L)
@@ -2418,6 +2521,28 @@ static int DecodeTestp3__Container(lua_State* L)
     const char* data = luaL_checklstring(L, 1, &data_length);
 
     Testp3__Container *msg = testp3__container__unpack(0, data_length, (uint8_t*)data);
+    if (msg != 0)
+    {
+        lua_pushtestp3__container(L, msg);
+        testp3__container__free_unpacked(msg, 0);
+    }
+    else
+    {
+        lua_pushnil(L);
+    }
+
+    return 1;
+}
+static int DecodeTestp3__ContainerFromText(lua_State* L)
+{
+    DM_LUA_STACK_CHECK(L, 1);
+    const char* data = luaL_checkstring(L, 1);
+
+    ProtobufCTextError tf_res;
+    Testp3__Container *msg;
+
+    msg = (Testp3__Container*)protobuf_c_text_from_string(
+         &testp3__container__descriptor, data, &tf_res, NULL);
     if (msg != 0)
     {
         lua_pushtestp3__container(L, msg);
@@ -2446,6 +2571,18 @@ static int EncodeTestp3__Container(lua_State* L)
 
     return 1;
 }
+static int EncodeTestp3__ContainerToText(lua_State* L)
+{
+    DM_LUA_STACK_CHECK(L, 1);
+    Testp3__Container *msg = luaL_checktestp3__container(L, 1);
+
+    char* text = protobuf_c_text_to_string((ProtobufCMessage *)msg, NULL);
+    lua_pushstring(L, text);
+
+    free_testp3__container(msg);
+
+    return 1;
+}
 
 // testproto3.proto
 static int DecodeTestp3__OneOf(lua_State* L)
@@ -2455,6 +2592,28 @@ static int DecodeTestp3__OneOf(lua_State* L)
     const char* data = luaL_checklstring(L, 1, &data_length);
 
     Testp3__OneOf *msg = testp3__one_of__unpack(0, data_length, (uint8_t*)data);
+    if (msg != 0)
+    {
+        lua_pushtestp3__one_of(L, msg);
+        testp3__one_of__free_unpacked(msg, 0);
+    }
+    else
+    {
+        lua_pushnil(L);
+    }
+
+    return 1;
+}
+static int DecodeTestp3__OneOfFromText(lua_State* L)
+{
+    DM_LUA_STACK_CHECK(L, 1);
+    const char* data = luaL_checkstring(L, 1);
+
+    ProtobufCTextError tf_res;
+    Testp3__OneOf *msg;
+
+    msg = (Testp3__OneOf*)protobuf_c_text_from_string(
+         &testp3__one_of__descriptor, data, &tf_res, NULL);
     if (msg != 0)
     {
         lua_pushtestp3__one_of(L, msg);
@@ -2483,6 +2642,18 @@ static int EncodeTestp3__OneOf(lua_State* L)
 
     return 1;
 }
+static int EncodeTestp3__OneOfToText(lua_State* L)
+{
+    DM_LUA_STACK_CHECK(L, 1);
+    Testp3__OneOf *msg = luaL_checktestp3__one_of(L, 1);
+
+    char* text = protobuf_c_text_to_string((ProtobufCMessage *)msg, NULL);
+    lua_pushstring(L, text);
+
+    free_testp3__one_of(msg);
+
+    return 1;
+}
 
 // testproto2.proto
 static int DecodeTestp2__Scalars(lua_State* L)
@@ -2492,6 +2663,28 @@ static int DecodeTestp2__Scalars(lua_State* L)
     const char* data = luaL_checklstring(L, 1, &data_length);
 
     Testp2__Scalars *msg = testp2__scalars__unpack(0, data_length, (uint8_t*)data);
+    if (msg != 0)
+    {
+        lua_pushtestp2__scalars(L, msg);
+        testp2__scalars__free_unpacked(msg, 0);
+    }
+    else
+    {
+        lua_pushnil(L);
+    }
+
+    return 1;
+}
+static int DecodeTestp2__ScalarsFromText(lua_State* L)
+{
+    DM_LUA_STACK_CHECK(L, 1);
+    const char* data = luaL_checkstring(L, 1);
+
+    ProtobufCTextError tf_res;
+    Testp2__Scalars *msg;
+
+    msg = (Testp2__Scalars*)protobuf_c_text_from_string(
+         &testp2__scalars__descriptor, data, &tf_res, NULL);
     if (msg != 0)
     {
         lua_pushtestp2__scalars(L, msg);
@@ -2520,6 +2713,18 @@ static int EncodeTestp2__Scalars(lua_State* L)
 
     return 1;
 }
+static int EncodeTestp2__ScalarsToText(lua_State* L)
+{
+    DM_LUA_STACK_CHECK(L, 1);
+    Testp2__Scalars *msg = luaL_checktestp2__scalars(L, 1);
+
+    char* text = protobuf_c_text_to_string((ProtobufCMessage *)msg, NULL);
+    lua_pushstring(L, text);
+
+    free_testp2__scalars(msg);
+
+    return 1;
+}
 
 // testproto2.proto
 static int DecodeTestp2__Outer(lua_State* L)
@@ -2529,6 +2734,28 @@ static int DecodeTestp2__Outer(lua_State* L)
     const char* data = luaL_checklstring(L, 1, &data_length);
 
     Testp2__Outer *msg = testp2__outer__unpack(0, data_length, (uint8_t*)data);
+    if (msg != 0)
+    {
+        lua_pushtestp2__outer(L, msg);
+        testp2__outer__free_unpacked(msg, 0);
+    }
+    else
+    {
+        lua_pushnil(L);
+    }
+
+    return 1;
+}
+static int DecodeTestp2__OuterFromText(lua_State* L)
+{
+    DM_LUA_STACK_CHECK(L, 1);
+    const char* data = luaL_checkstring(L, 1);
+
+    ProtobufCTextError tf_res;
+    Testp2__Outer *msg;
+
+    msg = (Testp2__Outer*)protobuf_c_text_from_string(
+         &testp2__outer__descriptor, data, &tf_res, NULL);
     if (msg != 0)
     {
         lua_pushtestp2__outer(L, msg);
@@ -2557,6 +2784,18 @@ static int EncodeTestp2__Outer(lua_State* L)
 
     return 1;
 }
+static int EncodeTestp2__OuterToText(lua_State* L)
+{
+    DM_LUA_STACK_CHECK(L, 1);
+    Testp2__Outer *msg = luaL_checktestp2__outer(L, 1);
+
+    char* text = protobuf_c_text_to_string((ProtobufCMessage *)msg, NULL);
+    lua_pushstring(L, text);
+
+    free_testp2__outer(msg);
+
+    return 1;
+}
 
 // testproto2.proto
 static int DecodeTestp2__Basic(lua_State* L)
@@ -2566,6 +2805,28 @@ static int DecodeTestp2__Basic(lua_State* L)
     const char* data = luaL_checklstring(L, 1, &data_length);
 
     Testp2__Basic *msg = testp2__basic__unpack(0, data_length, (uint8_t*)data);
+    if (msg != 0)
+    {
+        lua_pushtestp2__basic(L, msg);
+        testp2__basic__free_unpacked(msg, 0);
+    }
+    else
+    {
+        lua_pushnil(L);
+    }
+
+    return 1;
+}
+static int DecodeTestp2__BasicFromText(lua_State* L)
+{
+    DM_LUA_STACK_CHECK(L, 1);
+    const char* data = luaL_checkstring(L, 1);
+
+    ProtobufCTextError tf_res;
+    Testp2__Basic *msg;
+
+    msg = (Testp2__Basic*)protobuf_c_text_from_string(
+         &testp2__basic__descriptor, data, &tf_res, NULL);
     if (msg != 0)
     {
         lua_pushtestp2__basic(L, msg);
@@ -2594,6 +2855,18 @@ static int EncodeTestp2__Basic(lua_State* L)
 
     return 1;
 }
+static int EncodeTestp2__BasicToText(lua_State* L)
+{
+    DM_LUA_STACK_CHECK(L, 1);
+    Testp2__Basic *msg = luaL_checktestp2__basic(L, 1);
+
+    char* text = protobuf_c_text_to_string((ProtobufCMessage *)msg, NULL);
+    lua_pushstring(L, text);
+
+    free_testp2__basic(msg);
+
+    return 1;
+}
 
 // testproto2.proto
 static int DecodeTestp2__Container(lua_State* L)
@@ -2603,6 +2876,28 @@ static int DecodeTestp2__Container(lua_State* L)
     const char* data = luaL_checklstring(L, 1, &data_length);
 
     Testp2__Container *msg = testp2__container__unpack(0, data_length, (uint8_t*)data);
+    if (msg != 0)
+    {
+        lua_pushtestp2__container(L, msg);
+        testp2__container__free_unpacked(msg, 0);
+    }
+    else
+    {
+        lua_pushnil(L);
+    }
+
+    return 1;
+}
+static int DecodeTestp2__ContainerFromText(lua_State* L)
+{
+    DM_LUA_STACK_CHECK(L, 1);
+    const char* data = luaL_checkstring(L, 1);
+
+    ProtobufCTextError tf_res;
+    Testp2__Container *msg;
+
+    msg = (Testp2__Container*)protobuf_c_text_from_string(
+         &testp2__container__descriptor, data, &tf_res, NULL);
     if (msg != 0)
     {
         lua_pushtestp2__container(L, msg);
@@ -2631,6 +2926,18 @@ static int EncodeTestp2__Container(lua_State* L)
 
     return 1;
 }
+static int EncodeTestp2__ContainerToText(lua_State* L)
+{
+    DM_LUA_STACK_CHECK(L, 1);
+    Testp2__Container *msg = luaL_checktestp2__container(L, 1);
+
+    char* text = protobuf_c_text_to_string((ProtobufCMessage *)msg, NULL);
+    lua_pushstring(L, text);
+
+    free_testp2__container(msg);
+
+    return 1;
+}
 
 // testproto2.proto
 static int DecodeTestp2__OneOf(lua_State* L)
@@ -2640,6 +2947,28 @@ static int DecodeTestp2__OneOf(lua_State* L)
     const char* data = luaL_checklstring(L, 1, &data_length);
 
     Testp2__OneOf *msg = testp2__one_of__unpack(0, data_length, (uint8_t*)data);
+    if (msg != 0)
+    {
+        lua_pushtestp2__one_of(L, msg);
+        testp2__one_of__free_unpacked(msg, 0);
+    }
+    else
+    {
+        lua_pushnil(L);
+    }
+
+    return 1;
+}
+static int DecodeTestp2__OneOfFromText(lua_State* L)
+{
+    DM_LUA_STACK_CHECK(L, 1);
+    const char* data = luaL_checkstring(L, 1);
+
+    ProtobufCTextError tf_res;
+    Testp2__OneOf *msg;
+
+    msg = (Testp2__OneOf*)protobuf_c_text_from_string(
+         &testp2__one_of__descriptor, data, &tf_res, NULL);
     if (msg != 0)
     {
         lua_pushtestp2__one_of(L, msg);
@@ -2668,30 +2997,62 @@ static int EncodeTestp2__OneOf(lua_State* L)
 
     return 1;
 }
+static int EncodeTestp2__OneOfToText(lua_State* L)
+{
+    DM_LUA_STACK_CHECK(L, 1);
+    Testp2__OneOf *msg = luaL_checktestp2__one_of(L, 1);
+
+    char* text = protobuf_c_text_to_string((ProtobufCMessage *)msg, NULL);
+    lua_pushstring(L, text);
+
+    free_testp2__one_of(msg);
+
+    return 1;
+}
 
 
 static const luaL_reg Module_methods[] =
 {
     {"encode_testp3_scalars", EncodeTestp3__Scalars },
     {"decode_testp3_scalars", DecodeTestp3__Scalars },
+    {"encode_testp3_scalars_totext", EncodeTestp3__ScalarsToText },
+    {"decode_testp3_scalars_fromtext", DecodeTestp3__ScalarsFromText },
     {"encode_testp3_outer", EncodeTestp3__Outer },
     {"decode_testp3_outer", DecodeTestp3__Outer },
+    {"encode_testp3_outer_totext", EncodeTestp3__OuterToText },
+    {"decode_testp3_outer_fromtext", DecodeTestp3__OuterFromText },
     {"encode_testp3_basic", EncodeTestp3__Basic },
     {"decode_testp3_basic", DecodeTestp3__Basic },
+    {"encode_testp3_basic_totext", EncodeTestp3__BasicToText },
+    {"decode_testp3_basic_fromtext", DecodeTestp3__BasicFromText },
     {"encode_testp3_container", EncodeTestp3__Container },
     {"decode_testp3_container", DecodeTestp3__Container },
+    {"encode_testp3_container_totext", EncodeTestp3__ContainerToText },
+    {"decode_testp3_container_fromtext", DecodeTestp3__ContainerFromText },
     {"encode_testp3_oneof", EncodeTestp3__OneOf },
     {"decode_testp3_oneof", DecodeTestp3__OneOf },
+    {"encode_testp3_oneof_totext", EncodeTestp3__OneOfToText },
+    {"decode_testp3_oneof_fromtext", DecodeTestp3__OneOfFromText },
     {"encode_testp2_scalars", EncodeTestp2__Scalars },
     {"decode_testp2_scalars", DecodeTestp2__Scalars },
+    {"encode_testp2_scalars_totext", EncodeTestp2__ScalarsToText },
+    {"decode_testp2_scalars_fromtext", DecodeTestp2__ScalarsFromText },
     {"encode_testp2_outer", EncodeTestp2__Outer },
     {"decode_testp2_outer", DecodeTestp2__Outer },
+    {"encode_testp2_outer_totext", EncodeTestp2__OuterToText },
+    {"decode_testp2_outer_fromtext", DecodeTestp2__OuterFromText },
     {"encode_testp2_basic", EncodeTestp2__Basic },
     {"decode_testp2_basic", DecodeTestp2__Basic },
+    {"encode_testp2_basic_totext", EncodeTestp2__BasicToText },
+    {"decode_testp2_basic_fromtext", DecodeTestp2__BasicFromText },
     {"encode_testp2_container", EncodeTestp2__Container },
     {"decode_testp2_container", DecodeTestp2__Container },
+    {"encode_testp2_container_totext", EncodeTestp2__ContainerToText },
+    {"decode_testp2_container_fromtext", DecodeTestp2__ContainerFromText },
     {"encode_testp2_oneof", EncodeTestp2__OneOf },
     {"decode_testp2_oneof", DecodeTestp2__OneOf },
+    {"encode_testp2_oneof_totext", EncodeTestp2__OneOfToText },
+    {"decode_testp2_oneof_fromtext", DecodeTestp2__OneOfFromText },
     {0,0}
 };
 
