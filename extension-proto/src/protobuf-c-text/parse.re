@@ -218,10 +218,10 @@ static void
 scanner_init_string(Scanner *scanner, char *buf)
 {
   memset(scanner, 0, sizeof(Scanner));
-  scanner->buffer = buf;
-  scanner->marker = buf;
-  scanner->cursor = buf;
-  scanner->limit = &buf[strlen(buf)];
+  scanner->buffer = (unsigned char*)buf;
+  scanner->marker = (unsigned char*)buf;
+  scanner->cursor = (unsigned char*)buf;
+  scanner->limit = (unsigned char*)&buf[strlen(buf)];
   scanner->line = 1;
 }
 
@@ -258,8 +258,8 @@ unesc_str(unsigned char *src, int len, ProtobufCAllocator *allocator)
   int i = 0, dst_len = 0;
   unsigned char oct[4];
 
-  dst_pbbd = PBC_ALLOC(sizeof(ProtobufCBinaryData));
-  dst = PBC_ALLOC(len + 1);
+  dst_pbbd = (ProtobufCBinaryData*)PBC_ALLOC(sizeof(ProtobufCBinaryData));
+  dst = (unsigned char*)PBC_ALLOC(len + 1);
   if (!dst_pbbd || !dst) {
     goto unesc_str_error;
   }
@@ -280,7 +280,7 @@ unesc_str(unsigned char *src, int len, ProtobufCAllocator *allocator)
               && (src[i+1] >= '0' && src[i+1] <= '7')
               && (src[i+2] >= '0' && src[i+2] <= '7')) {
             memcpy(oct, src + i, 3);
-            dst[dst_len++] = (unsigned char)strtoul(oct, NULL, 8);
+            dst[dst_len++] = (unsigned char)strtoul((const char*)oct, NULL, 8);
             i += 2;  /* Gets incremented again down below. */
           } else {
             /* Decoding a \0 failed or was cut off.. */
@@ -352,7 +352,7 @@ fill(Scanner *scanner, ProtobufCAllocator *allocator)
   if (scanner->f && !feof(scanner->f)) {
     oldlen = scanner->limit - scanner->token;
     len = CHUNK + oldlen;
-    buf = PBC_ALLOC(len);
+    buf = (char*)PBC_ALLOC(len);
     if (!buf) {
       return -1;
     }
@@ -364,12 +364,12 @@ fill(Scanner *scanner, ProtobufCAllocator *allocator)
       buf[len] = '\0';
     }
     /* Reset the world to use buf. */
-    scanner->cursor = &buf[scanner->cursor - scanner->token];
-    scanner->limit = buf + len;
-    scanner->token = buf;
+    scanner->cursor = (unsigned char*)&buf[scanner->cursor - scanner->token];
+    scanner->limit = (unsigned char*)buf + len;
+    scanner->token = (unsigned char*)buf;
     PBC_FREE(scanner->buffer);
-    scanner->buffer = buf;
-    scanner->marker = buf;
+    scanner->buffer = (unsigned char*)buf;
+    scanner->marker = (unsigned char*)buf;
   }
 
   return scanner->limit >= scanner->cursor? 1: 0;
@@ -417,7 +417,7 @@ token_start:
   WS = [ \t];
 
   I | F       {
-                t.number = PBC_ALLOC((scanner->cursor - scanner->token) + 1);
+                t.number = (char*)PBC_ALLOC((scanner->cursor - scanner->token) + 1);
                 if (!t.number) {
                   RETURN(TOK_MALLOC_ERR);
                 }
@@ -429,7 +429,7 @@ token_start:
   "true"      { t.boolean=true; RETURN(TOK_BOOLEAN); }
   "false"     { t.boolean=false; RETURN(TOK_BOOLEAN); }
   BW          {
-                t.bareword = PBC_ALLOC((scanner->cursor - scanner->token) + 1);
+                t.bareword = (char*)PBC_ALLOC((scanner->cursor - scanner->token) + 1);
                 if (!t.bareword) {
                   RETURN(TOK_MALLOC_ERR);
                 }
@@ -518,10 +518,10 @@ state_init(State *state,
   memset(state, 0, sizeof(State));
   state->allocator = allocator;
   state->scanner = scanner;
-  state->error_str = ST_ALLOC(STATE_ERROR_STR_MAX);
-  state->msgs = ST_ALLOC(10 * sizeof(ProtobufCMessage *));
+  state->error_str = (char*)ST_ALLOC(STATE_ERROR_STR_MAX);
+  state->msgs = (ProtobufCMessage**)ST_ALLOC(10 * sizeof(ProtobufCMessage *));
   state->max_msg = 10;
-  msg = ST_ALLOC(descriptor->sizeof_message);
+  msg = (ProtobufCMessage*)ST_ALLOC(descriptor->sizeof_message);
   if (!state->msgs || !msg || !state->error_str) {
     ST_FREE(state->error_str);
     ST_FREE(state->msgs);
@@ -697,7 +697,7 @@ state_assignment(State *state, Token *t)
           STRUCT_MEMBER(size_t, msg, state->field->quantifier_offset) += 1;
           n_members = STRUCT_MEMBER(size_t, msg,
                                     state->field->quantifier_offset);
-          tmp = local_realloc(
+          tmp = (ProtobufCMessage**)local_realloc(
               STRUCT_MEMBER(ProtobufCMessage *, msg, state->field->offset),
               (n_members - 1) * sizeof(ProtobufCMessage *),
               n_members * sizeof(ProtobufCMessage *),
@@ -716,7 +716,7 @@ state_assignment(State *state, Token *t)
           ProtobufCMessage **tmp_msgs;
 
           state->max_msg += 10;
-          tmp_msgs = local_realloc(
+          tmp_msgs = (ProtobufCMessage**)local_realloc(
               state->msgs, (state->current_msg) * sizeof(ProtobufCMessage *),
               (state->max_msg) * sizeof(ProtobufCMessage *),
               state->allocator);
@@ -726,7 +726,7 @@ state_assignment(State *state, Token *t)
           state->msgs = tmp_msgs;
         }
         state->msgs[state->current_msg]
-          = ST_ALLOC(((ProtobufCMessageDescriptor *)
+          = (ProtobufCMessage*)ST_ALLOC(((ProtobufCMessageDescriptor *)
                state->field->descriptor)->sizeof_message);
         if (!state->msgs[state->current_msg]) {
           return state_error(state, t, "Malloc failure.");
@@ -805,7 +805,7 @@ state_value(State *state, Token *t)
             STRUCT_MEMBER(size_t, msg, state->field->quantifier_offset) += 1;
             n_members = STRUCT_MEMBER(size_t, msg,
                 state->field->quantifier_offset);
-            tmp = local_realloc(
+            tmp = (int*)local_realloc(
                 STRUCT_MEMBER(int *, msg, state->field->offset),
                 (n_members - 1) * sizeof(int),
                 n_members * sizeof(int), state->allocator);
@@ -837,7 +837,7 @@ state_value(State *state, Token *t)
           STRUCT_MEMBER(size_t, msg, state->field->quantifier_offset) += 1;
           n_members = STRUCT_MEMBER(size_t, msg,
                                     state->field->quantifier_offset);
-          tmp = local_realloc(
+          tmp = (protobuf_c_boolean*)local_realloc(
               STRUCT_MEMBER(protobuf_c_boolean *, msg, state->field->offset),
               (n_members - 1) * sizeof(protobuf_c_boolean),
               n_members * sizeof(protobuf_c_boolean), state->allocator);
@@ -866,7 +866,7 @@ state_value(State *state, Token *t)
           STRUCT_MEMBER(size_t, msg, state->field->quantifier_offset) += 1;
           n_members = STRUCT_MEMBER(size_t, msg,
                                     state->field->quantifier_offset);
-          pbbd = local_realloc(
+          pbbd = (ProtobufCBinaryData*)local_realloc(
               STRUCT_MEMBER(ProtobufCBinaryData *, msg, state->field->offset),
               (n_members - 1) * sizeof(ProtobufCBinaryData),
               n_members * sizeof(ProtobufCBinaryData), state->allocator);
@@ -875,7 +875,7 @@ state_value(State *state, Token *t)
           }
           STRUCT_MEMBER(ProtobufCBinaryData *, msg, state->field->offset)
             = pbbd;
-          pbbd[n_members - 1].data = ST_ALLOC(t->qs->len);
+          pbbd[n_members - 1].data = (uint8_t*)ST_ALLOC(t->qs->len);
           if (!pbbd[n_members - 1].data) {
             return state_error(state, t, "Malloc failure.");
           }
@@ -885,7 +885,7 @@ state_value(State *state, Token *t)
         } else {
           pbbd = STRUCT_MEMBER_PTR(ProtobufCBinaryData, msg,
               state->field->offset);
-          pbbd->data = ST_ALLOC(t->qs->len);
+          pbbd->data = (uint8_t*)ST_ALLOC(t->qs->len);
           if (!pbbd->data) {
             return state_error(state, t, "Malloc failure.");
           }
@@ -910,7 +910,7 @@ state_value(State *state, Token *t)
           STRUCT_MEMBER(size_t, msg, state->field->quantifier_offset) += 1;
           n_members = STRUCT_MEMBER(size_t, msg,
                                     state->field->quantifier_offset);
-          s = local_realloc(
+          s = (unsigned char**)local_realloc(
               STRUCT_MEMBER(unsigned char **, msg, state->field->offset),
               (n_members - 1) * sizeof(unsigned char *),
               n_members * sizeof(unsigned char *), state->allocator);
@@ -918,7 +918,7 @@ state_value(State *state, Token *t)
             return state_error(state, t, "Malloc failure.");
           }
           STRUCT_MEMBER(unsigned char **, msg, state->field->offset) = s;
-          s[n_members - 1] = ST_ALLOC(t->qs->len + 1);
+          s[n_members - 1] = (unsigned char*)ST_ALLOC(t->qs->len + 1);
           if (!s[n_members - 1]) {
             return state_error(state, t, "Malloc failure.");
           }
@@ -928,7 +928,7 @@ state_value(State *state, Token *t)
         } else {
           unsigned char *s;
 
-          s = ST_ALLOC(t->qs->len + 1);
+          s = (unsigned char*)ST_ALLOC(t->qs->len + 1);
           if (!s) {
             return state_error(state, t, "Malloc failure.");
           }
@@ -960,7 +960,7 @@ state_value(State *state, Token *t)
             STRUCT_MEMBER(size_t, msg, state->field->quantifier_offset) += 1;
             n_members = STRUCT_MEMBER(size_t, msg,
                                       state->field->quantifier_offset);
-            vals = local_realloc(
+            vals = (uint32_t*)local_realloc(
                 STRUCT_MEMBER(uint32_t *, msg, state->field->offset),
                 (n_members - 1) * sizeof(uint32_t),
                 n_members * sizeof(uint32_t), state->allocator);
@@ -990,7 +990,7 @@ state_value(State *state, Token *t)
             STRUCT_MEMBER(size_t, msg, state->field->quantifier_offset) += 1;
             n_members = STRUCT_MEMBER(size_t, msg,
                                       state->field->quantifier_offset);
-            vals = local_realloc(
+            vals = (int32_t*)local_realloc(
                 STRUCT_MEMBER(int32_t *, msg, state->field->offset),
                 (n_members - 1) * sizeof(int32_t),
                 n_members * sizeof(int32_t), state->allocator);
@@ -1021,7 +1021,7 @@ state_value(State *state, Token *t)
             STRUCT_MEMBER(size_t, msg, state->field->quantifier_offset) += 1;
             n_members = STRUCT_MEMBER(size_t, msg,
                                       state->field->quantifier_offset);
-            vals = local_realloc(
+            vals = (uint64_t*)local_realloc(
                 STRUCT_MEMBER(uint64_t *, msg, state->field->offset),
                 (n_members - 1) * sizeof(uint64_t),
                 n_members * sizeof(uint64_t), state->allocator);
@@ -1051,7 +1051,7 @@ state_value(State *state, Token *t)
             STRUCT_MEMBER(size_t, msg, state->field->quantifier_offset) += 1;
             n_members = STRUCT_MEMBER(size_t, msg,
                                       state->field->quantifier_offset);
-            vals = local_realloc(
+            vals = (int64_t*)local_realloc(
                 STRUCT_MEMBER(int64_t *, msg, state->field->offset),
                 (n_members - 1) * sizeof(int64_t),
                 n_members * sizeof(int64_t), state->allocator);
@@ -1082,7 +1082,7 @@ state_value(State *state, Token *t)
               STRUCT_MEMBER(size_t, msg, state->field->quantifier_offset) += 1;
               n_members = STRUCT_MEMBER(size_t, msg,
                                         state->field->quantifier_offset);
-              vals = local_realloc(
+              vals = (float*)local_realloc(
                   STRUCT_MEMBER(float *, msg, state->field->offset),
                   (n_members - 1) * sizeof(float),
                   n_members * sizeof(float), state->allocator);
@@ -1114,7 +1114,7 @@ state_value(State *state, Token *t)
               STRUCT_MEMBER(size_t, msg, state->field->quantifier_offset) += 1;
               n_members = STRUCT_MEMBER(size_t, msg,
                                         state->field->quantifier_offset);
-              vals = local_realloc(
+              vals = (double*)local_realloc(
                   STRUCT_MEMBER(double *, msg, state->field->offset),
                   (n_members - 1) * sizeof(double),
                   n_members * sizeof(double), state->allocator);

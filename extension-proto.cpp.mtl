@@ -405,7 +405,7 @@ static int Decode{{type_cpp}}FromText(lua_State* L)
     {{type_cpp}} *msg;
 
     msg = ({{type_cpp}}*)protobuf_c_text_from_string(
-         &{{type_cpp_lower}}__descriptor, data, &tf_res, NULL);
+         &{{type_cpp_lower}}__descriptor, (char*)data, &tf_res, NULL);
     if (msg != 0)
     {
         lua_push{{type_cpp_lower}}(L, msg);

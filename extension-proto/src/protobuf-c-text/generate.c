@@ -10,6 +10,7 @@
  */
 
 #include <sys/types.h>
+#include <ctype.h> 
 #include <unistd.h>
 #include <stdarg.h>
 #include <stdio.h>
@@ -63,7 +64,7 @@ rs_append(ReturnString *rs, int guess,
   if (rs->allocated - rs->pos < guess * 2) {
     char *tmp;
 
-    tmp = PBC_ALLOC(rs->allocated + guess * 2);
+    tmp = (char*)PBC_ALLOC(rs->allocated + guess * 2);
     if (!tmp) {
       PBC_FREE(rs->s);
       rs->s = NULL;
@@ -112,7 +113,7 @@ esc_str(char *src, int len, ProtobufCAllocator *allocator)
       escapes++;
     }
   }
-  dst = PBC_ALLOC((escapes * 4) + ((len - escapes) * 2) + 1);
+  dst = (unsigned char*)PBC_ALLOC((escapes * 4) + ((len - escapes) * 2) + 1);
   if (!dst) {
     return NULL;
   }
@@ -148,7 +149,7 @@ esc_str(char *src, int len, ProtobufCAllocator *allocator)
       /* Escape with octal if !isprint. */
       default:
         if (!isprint(src[i])) {
-          dst_len += sprintf(dst + dst_len, "\\%03o", src[i]);
+          dst_len += sprintf((char*)dst + dst_len, "\\%03o", src[i]);
         } else {
           dst[dst_len++] = src[i];
         }
@@ -157,7 +158,7 @@ esc_str(char *src, int len, ProtobufCAllocator *allocator)
   }
   dst[dst_len] = '\0';
 
-  return dst;
+  return (char*)dst;
 }
 
 /** Internal function to back API function.
@@ -266,14 +267,14 @@ protobuf_c_text_to_string_internal(ReturnString *rs,
           for (j = 0; j < quantifier_offset; j++) {
             rs_append(rs, level + strlen(f[i].name) + 20,
                 allocator,
-                "%*s%s: %lu\n",
+                "%*s%s: %llu\n",
                 level, "", f[i].name,
                 STRUCT_MEMBER(uint64_t *, m, f[i].offset)[j]);
           }
         } else {
           rs_append(rs, level + strlen(f[i].name) + 20,
               allocator,
-              "%*s%s: %lu\n",
+              "%*s%s: %llu\n",
               level, "", f[i].name,
               STRUCT_MEMBER(uint64_t, m, f[i].offset));
         }
@@ -284,14 +285,14 @@ protobuf_c_text_to_string_internal(ReturnString *rs,
           for (j = 0; j < quantifier_offset; j++) {
             rs_append(rs, level + strlen(f[i].name) + 20,
                 allocator,
-                "%*s%s: %ld\n",
+                "%*s%s: %lld\n",
                 level, "", f[i].name,
                 STRUCT_MEMBER(int64_t *, m, f[i].offset)[j]);
           }
         } else {
           rs_append(rs, level + strlen(f[i].name) + 20,
               allocator,
-              "%*s%s: %ld\n",
+              "%*s%s: %lld\n",
               level, "", f[i].name,
               STRUCT_MEMBER(int64_t, m, f[i].offset));
         }
