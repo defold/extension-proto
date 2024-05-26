@@ -741,6 +741,10 @@ state_assignment(State *state, Token *t)
         } else {
           STRUCT_MEMBER(ProtobufCMessage *, msg, state->field->offset)
             = state->msgs[state->current_msg];
+          /* Set the field as the assigned oneof */
+          if (0 != (state->field->flags & PROTOBUF_C_FIELD_FLAG_ONEOF)) {
+            STRUCT_MEMBER(uint32_t, msg, state->field->quantifier_offset) = state->field->id;
+          }
           return STATE_OPEN;
         }
 
@@ -789,6 +793,12 @@ state_value(State *state, Token *t)
             state->field->quantifier_offset) = 1;
     }
   }
+
+  /* Set the field as the assigned oneof */
+  if (0 != (state->field->flags & PROTOBUF_C_FIELD_FLAG_ONEOF)) {
+    STRUCT_MEMBER(uint32_t, msg, state->field->quantifier_offset) = state->field->id;
+  }
+
   switch (t->id) {
     case TOK_BAREWORD:
       if (state->field->type == PROTOBUF_C_TYPE_ENUM) {

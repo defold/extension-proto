@@ -194,6 +194,14 @@ protobuf_c_text_to_string_internal(ReturnString *rs,
       return;
     }
 
+    if (0 != (f[i].flags & PROTOBUF_C_FIELD_FLAG_ONEOF) &&
+        f[i].id != STRUCT_MEMBER(uint32_t, m, f[i].quantifier_offset))
+    {
+      /* This is not the selected oneof, skip it */
+      continue;
+    }
+
+
     /* Decide if something needs to be done for this field. */
     switch (f[i].label) {
       case PROTOBUF_C_LABEL_OPTIONAL:

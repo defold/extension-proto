@@ -53,11 +53,17 @@ local function test_proto2()
 		local encoded_scalars = proto.encode_testp2_scalars(SCALARS)
 		assert(encoded_scalars)
 		assert(#encoded_scalars > 0)
+		local encoded_scalars_t = proto.encode_testp2_scalars_totext(SCALARS)
+		assert(encoded_scalars_t)
+		assert(#encoded_scalars_t > 0)
 
 		print("Decoding scalars")
 		local decoded_scalars = proto.decode_testp2_scalars(encoded_scalars)
 		pprint(decoded_scalars)
 		assert_scalars(decoded_scalars)
+		local decoded_scalars_t = proto.decode_testp2_scalars_fromtext(encoded_scalars_t)
+		pprint(decoded_scalars_t)
+		assert_scalars(decoded_scalars_t)
 	end
 
 	local function test_basics()
@@ -71,6 +77,13 @@ local function test_proto2()
 		local decoded_b2 = proto.decode_testp2_basic(encoded_b2)
 		assert_table(basic1, decoded_b1)
 		assert_table(basic2, decoded_b2)
+
+		local encoded_b1_t = proto.encode_testp2_basic_totext(basic1)
+		local encoded_b2_t = proto.encode_testp2_basic_totext(basic2)
+		local decoded_b1_t = proto.decode_testp2_basic_fromtext(encoded_b1_t)
+		local decoded_b2_t = proto.decode_testp2_basic_fromtext(encoded_b2_t)
+		assert_table(basic1, decoded_b1_t)
+		assert_table(basic2, decoded_b2_t)
 	end
 
 	local function test_nested()
@@ -78,10 +91,16 @@ local function test_proto2()
 		local inner = { text = "inner" }
 		local middle = { text = "middle", inner = inner }
 		local outer = { text = "outer", middle = middle }
+
 		local encoded_outer = proto.encode_testp2_outer(outer)
 		local decoded_outer = proto.decode_testp2_outer(encoded_outer)
 		pprint(decoded_outer)
 		assert_table(outer, decoded_outer)
+
+		local encoded_outer_t = proto.encode_testp2_outer_totext(outer)
+		local decoded_outer_t = proto.decode_testp2_outer_fromtext(encoded_outer_t)
+		pprint(decoded_outer_t)
+		assert_table(outer, decoded_outer_t)
 	end
 	
 	local function test_container()
@@ -112,6 +131,13 @@ local function test_proto2()
 		assert_table(container, decoded_container)
 		assert(not decoded_container.optional_string2)
 		assert(not decoded_container.optional_basic2)
+
+		local encoded_container_t = proto.encode_testp2_container_totext(container)
+		local decoded_container_t = proto.decode_testp2_container_fromtext(encoded_container_t)
+		pprint(decoded_container_t)
+		assert_table(container, decoded_container_t)
+		assert(not decoded_container_t.optional_string2)
+		assert(not decoded_container_t.optional_basic2)
 	end	
 
 	local function test_oneoff()
@@ -121,16 +147,25 @@ local function test_proto2()
 			bar = true,
 		}
 
-		local encoded = proto.encode_testp3_oneof(msg)
-		local decoded = proto.decode_testp3_oneof(encoded)
+		local encoded = proto.encode_testp2_oneof(msg)
+		local decoded = proto.decode_testp2_oneof(encoded)
 		assert(decoded.name == nil)
 		assert(decoded.foo == nil)
 		assert(decoded.first_and_last)
 		assert(decoded.first_and_last.first == msg.first_and_last.first)
 		assert(decoded.first_and_last.last == msg.first_and_last.last)
 		assert(decoded.bar == msg.bar)
+
+		local encoded_t = proto.encode_testp2_oneof_totext(msg)
+		local decoded_t = proto.decode_testp2_oneof_fromtext(encoded_t)
+		assert(decoded_t.name == nil)
+		assert(decoded_t.foo == nil)
+		assert(decoded_t.first_and_last)
+		assert(decoded_t.first_and_last.first == msg.first_and_last.first)
+		assert(decoded_t.first_and_last.last == msg.first_and_last.last)
+		assert(decoded_t.bar == msg.bar)
 	end
-	
+
 	print("Testing proto2")
 	test_scalars()
 	test_basics()
@@ -259,7 +294,10 @@ local function test_proto3()
 	test_oneoff()
 end
 
-function update(self)
+function init(self)
 	test_proto2()
 	test_proto3()
+end
+
+function update(self, dt)
 end

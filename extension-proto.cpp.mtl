@@ -456,8 +456,10 @@ static const luaL_reg Module_methods[] =
     {{^nested}}
     {"encode_{{package_lower}}_{{name_lower}}", Encode{{type_cpp}} },
     {"decode_{{package_lower}}_{{name_lower}}", Decode{{type_cpp}} },
+    {{#is_proto2_syntax}}
     {"encode_{{package_lower}}_{{name_lower}}_totext", Encode{{type_cpp}}ToText },
     {"decode_{{package_lower}}_{{name_lower}}_fromtext", Decode{{type_cpp}}FromText },
+    {{/is_proto2_syntax}}
     {{/nested}}
     {{/messages}}
     {0,0}
