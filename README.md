@@ -45,7 +45,7 @@ The `generate.py` script uses the `protoc` compiler and the `protobuf-c` C-code 
 
 
 ## Run-time usage
-The extension provides Lua bindings to encode and decode the protobuf messages defined in the `proto/` folder. Example:
+The extension provides Lua bindings to encode and decode the protobuf messages defined in the `proto/` folder. The extension can encode and decode binary messages in protobuf 2 and protobuf 3 format. The extension can also encode and decode text messages in protobuf 2 format. Example:
 
 ```
 syntax = "proto2";
@@ -75,6 +75,15 @@ local decoded = proto.decode_person(msg)
 assert(person.id == decoded.id)
 assert(person.name == decoded.name)
 assert(person.email == decoded.email)
+
+-- encode Lua table to a text message
+local msg_totext = proto.encode_person_totext(person)
+
+-- decode from a text message to a Lua table
+local decoded_fromtext = proto.decode_person_fromtext(msg_totext)
+assert(person.id == decoded_fromtext.id)
+assert(person.name == decoded_fromtext.name)
+assert(person.email == decoded_fromtext.email)
 ```
 
 
@@ -104,6 +113,10 @@ assert(person.email == decoded.email)
 |       +-- protobuf-c
 |       |   |
 |       |   +-- protobuf-c.c               The protobuf c runtime source code
+|       |
+|       +-- protobuf-c-text
+|       |   |
+|       |   +-- ...                        The protobuf c text runtime source code
 |       |
 |       +-- proto.cpp                      (GENERATED) Extension source code
 |       +-- *-pb-c.c                       (GENERATED) Protobuf message source code
